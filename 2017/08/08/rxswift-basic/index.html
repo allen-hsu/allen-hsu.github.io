@@ -1,0 +1,832 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-tw">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="iOS,swift,rxswift,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="RxSwift 初心者入門 在之前我們稍微提過 RxSwift 這一個 framework ，也有稍微介紹了什麼是 Reactive Programming ，那這邊就來詳細談談如何學習以及使用 RxSwfit 吧。  使用 RxSwift 的 Playground首先我們先至 RxSwift Clone 整個 Project，接著我們這邊使用 Rx.Playground  做為入門的教學，按照官">
+<meta name="keywords" content="iOS,swift,rxswift">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxSwift 基本入門">
+<meta property="og:url" content="http://yoursite.com/2017/08/08/rxswift-basic/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="RxSwift 初心者入門 在之前我們稍微提過 RxSwift 這一個 framework ，也有稍微介紹了什麼是 Reactive Programming ，那這邊就來詳細談談如何學習以及使用 RxSwfit 吧。  使用 RxSwift 的 Playground首先我們先至 RxSwift Clone 整個 Project，接著我們這邊使用 Rx.Playground  做為入門的教學，按照官">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="http://i.imgur.com/qMAmugR.png">
+<meta property="og:updated_time" content="2017-08-09T16:01:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxSwift 基本入門">
+<meta name="twitter:description" content="RxSwift 初心者入門 在之前我們稍微提過 RxSwift 這一個 framework ，也有稍微介紹了什麼是 Reactive Programming ，那這邊就來詳細談談如何學習以及使用 RxSwfit 吧。  使用 RxSwift 的 Playground首先我們先至 RxSwift Clone 整個 Project，接著我們這邊使用 Rx.Playground  做為入門的教學，按照官">
+<meta name="twitter:image" content="http://i.imgur.com/qMAmugR.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/08/rxswift-basic/">
+
+
+
+
+
+  <title>RxSwift 基本入門 | AllenHsu的技術手扎</title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AllenHsu的技術手扎</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">學海無涯，努力做個永遠年輕的人</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            關於
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/08/rxswift-basic/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RxSwift 基本入門
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-08-08T23:22:31+08:00">
+                2017-08-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS-開發/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS 開發</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/08/rxswift-basic/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/08/08/rxswift-basic/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="RxSwift-初心者入門"><a href="#RxSwift-初心者入門" class="headerlink" title="RxSwift 初心者入門"></a>RxSwift 初心者入門</h3><blockquote>
+<p>在之前我們稍微提過 <code>RxSwift</code> 這一個 <code>framework</code> ，也有稍微介紹了什麼是 <code>Reactive Programming</code> ，那這邊就來詳細談談如何學習以及使用 <code>RxSwfit</code> 吧。</p>
+</blockquote>
+<h4 id="使用-RxSwift-的-Playground"><a href="#使用-RxSwift-的-Playground" class="headerlink" title="使用 RxSwift 的 Playground"></a>使用 RxSwift 的 Playground</h4><p>首先我們先至 <a href="&quot;https://github.com/ReactiveX/RxSwift&quot;">RxSwift</a> <code>Clone</code> 整個 <code>Project</code>，接著我們這邊使用 <code>Rx.Playground</code>  做為入門的教學，按照官網的操作如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">To use playgrounds:</span><br><span class="line"></span><br><span class="line">Open Rx.xcworkspace</span><br><span class="line">Build the RxSwift-macOS scheme</span><br><span class="line">Open Rx playground in the Rx.xcworkspace tree view.</span><br><span class="line">Choose View &gt; Debug Area &gt; Show Debug Area</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p><img src="http://i.imgur.com/qMAmugR.png" alt="Imgur"></p>
+<h4 id="為什麼我們需要使用-RxSwift"><a href="#為什麼我們需要使用-RxSwift" class="headerlink" title="為什麼我們需要使用 RxSwift"></a>為什麼我們需要使用 RxSwift</h4><blockquote>
+<p>我們編寫的大多數程式碼都會設計外部事件的響應。當一個使用者操控一個控制元件，我們需要寫一個 <code>@IBAction</code> 的對應處理。我們需要觀察鍵盤的位置的改變。當 URL sessions 回傳數據時，我們必須提供一個閉包去接受相對應的資料。我們使用 <code>KVO</code> 去檢測變數的變化。所有的這些各式各樣系統的變化使得我們必須去撰寫相對應的代碼，而使得我們的程式碼變的臃腫且複雜，如果有一個一致的系統處理我們所有的呼叫/響應的代碼，這樣我們的程式會不會變得更優雅且美好？Rx是這樣的一個系統，RxSwfit是一個建立在Swift語言上的官方實現版本。</p>
+</blockquote>
+<h4 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h4><blockquote>
+<p>Every <strong>Observable</strong> instance is just a sequence. </p>
+<p>每一個 <strong>Observable</strong> 就只是一個序列而已。</p>
+</blockquote>
+<p>觀察者模式 <code>Observer Pattern</code> 和序列 <code>sequence</code> 本質上是等價的，這在整個 Rx 框架(不僅只限於RxSwift)是很重要的一個基本概念。</p>
+<p><code>Observable</code> 相比 <code>Swift</code> 自帶的 <code>Sequence</code>  優勢在於，<code>RxSwift</code> 的 <code>Observable</code> 可以非同步的接受元素或者對象，這是整個 <code>RxSwift</code> 的核心。</p>
+<ul>
+<li>一個 <code>Observable</code> (<code>ObservableType</code>) 相當於一個 <code>Sequence</code>。</li>
+<li><code>ObservableType.subscribe(_:)</code>  相等於 <code>Sequence.makeIterator()</code>。</li>
+<li>Observer（callback）需要傳遞給ObservableType.subscribe方法來接受序列裡的元素，代替在返回的 <code>generator</code> 上呼叫 <code>next()</code> 方法。</li>
+</ul>
+<h4 id="關於-Observable"><a href="#關於-Observable" class="headerlink" title="關於 Observable"></a>關於 Observable</h4><blockquote>
+<p>在 ReactiveX 中，<code>Observable&lt;Element&gt;</code> 代表的是一個可觀察序列，從字面意思可以看出這是在觀察者模式中的被觀察者，它會向觀察對象發送事件序列：</p>
+<ul>
+<li>next(Element) : 新事件。</li>
+<li>error(ErrorType) : 帶有異常的事件完成序列。</li>
+<li>completed() : 正常事件完結序列。</li>
+</ul>
+</blockquote>
+<p>假如一個 <code>Observable</code>  發射一個 <code>next</code> 事件 ( <code>Event.next(Element)</code> )，那它能夠繼續發射更多的事件，假如 <code>Observable</code>  發射一個 <code>error</code> 事件<code>(Event.error(ErrorType))</code> 或者一個 <code>completed</code> 事件 <code>(Event.completed)</code>，那麼這個 <code>Observable</code>  將再也不能發送事件給訂閱者。</p>
+<p><code>Observable</code> 的序列概念，我們可以很容易地對他做出可視化， 像是下列的序列依樣。</p>
+<p>一個簡單的數字序列，<code>|</code> 符號代表正常中斷。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--1--2--3--4--5--6--|----&gt; // &quot;|&quot; = Terminates normally</span><br></pre></td></tr></table></figure>
+<p>一個字串序列，<code>X</code> 符號代表錯誤中斷</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--a--b--c--d--e--f--X----&gt; // &quot;X&quot; = Terminates with an error</span><br></pre></td></tr></table></figure>
+<p>也有可能是無限的序列，像是一個按鈕的操作序列</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--tap--tap----------tap--&gt; // &quot;|&quot; = Continues indefinitely, such as a sequence of button taps</span><br></pre></td></tr></table></figure>
+<p>上面這些示意圖都被稱為 <code>marble diagram</code> ，這邊有更多的 <code>marble diagram</code> 示意圖 :</p>
+<p><a href="&quot;http://rxmarbles.com/&quot;">RxJS Marbles</a></p>
+<h4 id="一個-Observable-的簡單例子"><a href="#一個-Observable-的簡單例子" class="headerlink" title="一個 Observable 的簡單例子"></a>一個 Observable 的簡單例子</h4><blockquote>
+<p> <code>Observable</code> 除非有訂閱者，否則不會執行他們的 <code>subscription closure</code> </p>
+<p> 下面的例子， <code>Observable</code> 的 <code>closure</code> 永遠不會被執行，因為沒有任何訂閱者。( <code>Rx.Playground</code> 中運行的範例)</p>
+</blockquote>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">example(<span class="string">"Observable with no subscribers"</span>) &#123;</span><br><span class="line">    <span class="number">_</span> = <span class="type">Observable</span>&lt;<span class="type">String</span>&gt;.create &#123; observerOfString -&gt; <span class="type">Disposable</span> <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"This will never be printed"</span>)</span><br><span class="line">        observerOfString.on(.next(<span class="string">"😬"</span>))</span><br><span class="line">        observerOfString.on(.completed)</span><br><span class="line">        <span class="keyword">return</span> <span class="type">Disposables</span>.create()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>輸出結果 : </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--- <span class="type">Observable</span> with no subscribers example ---</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在下面的例子， <code>closure</code> 當 <code>subscribe(_:)</code> 被調用時執行。</p>
+</blockquote>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">example(<span class="string">"Observable with subscriber"</span>) &#123;</span><br><span class="line">  <span class="number">_</span> = <span class="type">Observable</span>&lt;<span class="type">String</span>&gt;.create &#123; observerOfString <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"Observable created"</span>)</span><br><span class="line">            observerOfString.on(.next(<span class="string">"😉"</span>))</span><br><span class="line">            observerOfString.on(.completed)</span><br><span class="line">            <span class="keyword">return</span> <span class="type">Disposables</span>.create()</span><br><span class="line">        &#125;</span><br><span class="line">        .subscribe &#123; event <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(event)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>輸出結果 : </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">--- <span class="type">Observable</span> with subscriber example ---</span><br><span class="line"><span class="type">Observable</span> created</span><br><span class="line">next(😉)</span><br><span class="line">completed</span><br></pre></td></tr></table></figure>
+<p>這邊先不關心如何建立這些 <code>Observable</code> 的細節，我們將在後面會提到。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+            <a href="/tags/swift/" rel="tag"># swift</a>
+          
+            <a href="/tags/rxswift/" rel="tag"># rxswift</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/02/git-message-template-and-githook/" rel="next" title="如何使用 git commit template 與 git hooks 管理團隊的 git log">
+                <i class="fa fa-chevron-left"></i> 如何使用 git commit template 與 git hooks 管理團隊的 git log
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/13/rxswift-dispose/" rel="prev" title="RxSwift 的資源管理">
+                RxSwift 的資源管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Allen Hsu">
+          <p class="site-author-name" itemprop="name">Allen Hsu</p>
+           
+              <p class="site-description motion-element" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/allen-hsu/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/in/allenhsutw/" target="_blank" title="Linkedin">
+                  
+                    <i class="fa fa-fw fa-linkedin"></i>
+                  
+                  Linkedin
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#RxSwift-初心者入門"><span class="nav-number">1.</span> <span class="nav-text">RxSwift 初心者入門</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-RxSwift-的-Playground"><span class="nav-number">1.1.</span> <span class="nav-text">使用 RxSwift 的 Playground</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#為什麼我們需要使用-RxSwift"><span class="nav-number">1.2.</span> <span class="nav-text">為什麼我們需要使用 RxSwift</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#核心概念"><span class="nav-number">1.3.</span> <span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#關於-Observable"><span class="nav-number">1.4.</span> <span class="nav-text">關於 Observable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一個-Observable-的簡單例子"><span class="nav-number">1.5.</span> <span class="nav-text">一個 Observable 的簡單例子</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://allen-hsu.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/08/08/rxswift-basic/';
+          this.page.identifier = '2017/08/08/rxswift-basic/';
+          this.page.title = 'RxSwift 基本入門';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://allen-hsu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

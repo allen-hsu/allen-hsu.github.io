@@ -1,0 +1,2209 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-tw">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AllenHsu的技術手扎">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+<meta property="og:locale" content="zh-tw">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AllenHsu的技術手扎">
+<meta name="twitter:description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/">
+
+
+
+
+
+  <title>AllenHsu的技術手扎</title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left 
+   page-home 
+ ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AllenHsu的技術手扎</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">學海無涯，努力做個永遠年輕的人</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            關於
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/03/proxy-pattern/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/11/03/proxy-pattern/" itemprop="url">
+                  設計模式-代理模式(一)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-11-03T00:22:09+08:00">
+                2018-11-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/設計模式/" itemprop="url" rel="index">
+                    <span itemprop="name">設計模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/03/proxy-pattern/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/03/proxy-pattern/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="設計模式-代理模式-一"><a href="#設計模式-代理模式-一" class="headerlink" title="設計模式-代理模式(一)"></a>設計模式-代理模式(一)</h2><p>從出社會開始，因緣際會的讀了一本深入淺出設計模式(用Java實踐的)，當時就覺得設計模式很有趣，索幸用C++把裡面的範例都實踐了一遍，最近因為開始SSM的練習，為了了解Mybatis，想從裡面的設計模式開始著手導讀，知道裡面用了動態代理的模式，但這邊先不談動態代理，而是想先從簡單的靜態代理開始，在下一篇才會繼續深度探索Mybatis的動態代理怎麼實踐的，這邊就先拿靜態代理的設計模式來練練手吧。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/11/03/proxy-pattern/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/fast-slow-pointer/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/11/02/fast-slow-pointer/" itemprop="url">
+                  演算法練習 - 快慢指針
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-11-02T13:26:24+08:00">
+                2018-11-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/演算法/" itemprop="url" rel="index">
+                    <span itemprop="name">演算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/02/fast-slow-pointer/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/02/fast-slow-pointer/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="演算法練習-快慢指針"><a href="#演算法練習-快慢指針" class="headerlink" title="演算法練習 - 快慢指針"></a>演算法練習 - 快慢指針</h2><p>ㄓ</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/28/continuous-integration-continuous-delivery/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/10/28/continuous-integration-continuous-delivery/" itemprop="url">
+                  關於CI/CD的兩三事
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-10-28T21:26:21+08:00">
+                2018-10-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/持續集成/" itemprop="url" rel="index">
+                    <span itemprop="name">持續集成</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/28/continuous-integration-continuous-delivery/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/10/28/continuous-integration-continuous-delivery/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>CI/CD，全名叫做Continuous Integration / Continuous Delivery，中文名叫持續集成與持續交付，從2014年開始，得以有幸接觸了從零開始的CI/CD的搭建以及流程梳理，也有在一個已經既有的開發體系中，如何去逐步導入CI/CD的相關經驗，透過這篇文章分享一下自己多年以來對於CI/CD的經驗與心路歷程。</p>
+</blockquote>
+<h2 id="關於持續集成與持續交付"><a href="#關於持續集成與持續交付" class="headerlink" title="關於持續集成與持續交付"></a>關於持續集成與持續交付</h2><p>在目前軟體業界普遍以敏捷開發作為精神，必須透過連續的小型的開發循環(Sprint)來迭代我們的產品以及驗證需求，以這樣為前提之下，我們必須不斷地從需求、研發、測試、交付，中多個階段不斷地循環迭代。所以我們為了上述的概念，我們必須有了持續集成與持續交付。</p>
+<p>持續集成與持續交付，對於我個人的理解來說有以下來幾個重點。</p>
+<ul>
+<li>讓開發團隊可以在一個不斷提升開發品質的體系當中。</li>
+<li>從<strong><u>需求</u></strong>、<strong><u>研發</u></strong>、<strong><u>測試</u></strong>、<strong><u>交付</u></strong>四個階段中能夠有一套完整且嚴格的體系及框架。</li>
+<li>自動化節省時間 - 讓開發團隊從一些瑣事的泥沼中解放出來。</li>
+<li>減少風險 - 因為有了上述幾點，所以可以有效提升軟體品質，而不會因為迭代過快造成軟體工程的不穩定。</li>
+</ul>
+<h2 id="CI-CD-的建立與導入"><a href="#CI-CD-的建立與導入" class="headerlink" title="CI/CD 的建立與導入"></a>CI/CD 的建立與導入</h2><p>在過去的經驗當中，要在一個團隊一次導入這個概念其實是相對困難的，不管是重頭開始，或者是在一半的情況下想要導入，首先第一件很重要的事情其實是 『<strong>工具</strong>』。尤其是使用統一的工具，那麼就上面四個階段的部分先就工具做討論。</p>
+<p><strong><u>需求</u></strong> : </p>
+<p>Issue Tracking System，這邊泛指的是團隊內有沒有一個統一管理需求清單的地方，例如常見的JIRA、Asana、或者是開源的Redmine都是相當良好的管理需求的工具。再來是溝通工具，我們是不是需要一個溝通的工具，透過這個工具，可以即時的通知各個團隊內每個人目前現在的狀態，我們常見的像是使用Slack、DingTalk等等，一些好用的溝通工具，也可以讓我們在各個階段都可以收到一些自動化通知。</p>
+<p><strong><u>研發</u></strong> :</p>
+<p>在研發的部分，首先我們大家需要一套共同的代碼協作平台，常見的有gitHub、gitLab等等，這邊不做詳述，然後我們可能會需要一些代碼檢測工具，像是開發iOS，如果用的是Swift，我們會有一個Swift Lint去規範開發人員的Coding Style等。之後是代碼審核，為了提高軟體品質，我們需要透過Code Review去確保代碼的可讀性、穩固性等等，所以我們會有gerrit等Code Review的Tool，當然像gitHub或者gitLab本身也具備這樣的功能，之後我們還需要像是Jenkins、gitLab-CI這樣的CI/CD服務平台幫我們做自動化的建置與流程控制。</p>
+<p><strong><u>測試</u></strong> :</p>
+<p>在測試的部分，我們可以透過上述提到的Jenkins、gitLab-CI等相關CI/CD服務平台觸發我們的自動化測試的工作，在自動化測試的部分可能涉及了很多測試化框架選擇，然後還有一些測試報告的產出服務，當然還有關於代碼的靜態檢測，我們可以使用像SonarQube這樣的平台去分析代碼的質量。當然除了自動化測試之外，我們也需要一個Bug Tracking System，在一開始提到的JIRA、Redmine幾乎都具備了這樣的功能。</p>
+<p><strong><u>交付</u></strong> :</p>
+<p>之後便是交付及部署，這邊根據不同的平台(iOS/Android、後端、前端)會有不同的產出物，重要的是如何提供一個方便以及一致性的交付方式，去減少人工交付或者部署所產生的錯誤，所以我們可能會使用Docker建置一套可部署的環境，也可能透過像是Fabric這樣的App交付平台，讓我們的產出物可以自動上傳至平台並讓所有的測試人員以及產品人員可以拿到。</p>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><p>透過上述的幾個流程可以發現，工具只是一個最初步的開始方式，當你有了這些工具的導入，才能往後去思考後續的各步流程，例如git flow應該怎樣設計，交付以及部署要怎麼能夠有dev、staging、production環境的不同環境的區分，自動化測試導入之後應該寫多少的單元測試，這些每一個都是相當大的議題與討論，也會因為團隊的不同而有不同的策略，但是只有透過漸進式的方式，慢慢導入這些工具，漸漸優化自己的CI/CD流程，才能開始有相對穩健的軟體品質。這邊附上一張導入CI/CD之後的開發流程圖。</p>
+<p><img src="https://www.websequencediagrams.com/cgi-bin/cdraw?lz=dGl0bGUgQ0kvQ0QgU2VxdWVuY2UKCkRldmVsb3Blci0-R2l0OiBDcmVhdGUgUHVsbCBSZXF1ZXN0CkdpdC0-SmVua2luczogQnVpbGQgJiAoVGVzdCkKABEHLT5Tb25hcnF1YmU6U2NhbiBDb2RlCgALCQBYBldyaXRlIGNvbW1lbnQgYmFjawBWBlJldmlld2VyOk5vdGlmeSBQUgA6BSAAEgYKABcIAIEdBk1lcmdlAFkGAIEMDURlcGxveQCBBgpRQSBFbnYAEAcgRm9yIFFBIFRlc3QKCiNub3RlIHJpZ2h0IG9mIEJvYjogQm9iIHRoaW5rcyBhYm91dCBpdAoK&amp;s=napkin" alt="Alt"></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/30/solidity-storage-and-memory/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/04/30/solidity-storage-and-memory/" itemprop="url">
+                  solidity-storage-and-memory
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-04-30T10:45:33+08:00">
+                2018-04-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/30/solidity-storage-and-memory/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/04/30/solidity-storage-and-memory/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/22/rxjava-scheduler/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/04/22/rxjava-scheduler/" itemprop="url">
+                  Rxjava的線程切換與異步操作
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-04-22T16:35:26+08:00">
+                2018-04-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Rxjava/" itemprop="url" rel="index">
+                    <span itemprop="name">Rxjava</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/22/rxjava-scheduler/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/04/22/rxjava-scheduler/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Rxjava的線程切換與異步操作"><a href="#Rxjava的線程切換與異步操作" class="headerlink" title="Rxjava的線程切換與異步操作"></a>Rxjava的線程切換與異步操作</h2><p>傳統Android開發中，我們可以透過Handler/Thread等方式來做異步操作，那在RxJava中，假設我們想要做Thread的切換我們應該怎麼做呢?基本上是透過 <code>observeOn</code> 與 <code>subscribeOn</code> 這兩個操作符，去實作所謂的線程切換與異步操作。</p>
+<h3 id="observeOn-與-subscribeOn-。"><a href="#observeOn-與-subscribeOn-。" class="headerlink" title="observeOn 與 subscribeOn 。"></a>observeOn 與 subscribeOn 。</h3><p>什麼是 <code>observeOn</code> : </p>
+<blockquote>
+<p>specify the Scheduler on which an observer will observe this Observable</p>
+<p>指定一個觀察者在特定的 Scheduler 上觀察這個 Observable 。</p>
+</blockquote>
+<p>什麼是 <code>subscribeOn</code> :</p>
+<blockquote>
+<p>specify the Scheduler on which an Observable will operate</p>
+<p>指定這個 Observable 自身在哪一個特定的 Scheduler 上操作。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Observable.just(<span class="number">1</span>)</span><br><span class="line">    .map(integer -&gt; &#123;</span><br><span class="line">        Log.i(<span class="string">"Rxjava"</span>, <span class="string">"map-1:"</span>+Thread.currentThread().getName());</span><br><span class="line">        <span class="keyword">return</span> integer;</span><br><span class="line">    &#125;)</span><br><span class="line">    .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">    .subscribeOn(Schedulers.newThread())</span><br><span class="line">    .doOnSubscribe(s -&gt; &#123;</span><br><span class="line">        Log.i(<span class="string">"Rxjava"</span>,   <span class="string">"doOnSubscribe:"</span>+Thread.currentThread().getName());</span><br><span class="line">    &#125;)</span><br><span class="line">    .doOnNext(next -&gt; &#123;</span><br><span class="line">        Log.i(<span class="string">"Rxjava"</span>, <span class="string">"doOnNext:"</span>+Thread.currentThread().getName());</span><br><span class="line">    &#125;)</span><br><span class="line">    .subscribe(</span><br><span class="line">    x -&gt; &#123;</span><br><span class="line">        Log.i(<span class="string">"Rxjava"</span>, <span class="string">"next-1:"</span>+Thread.currentThread().getName());</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>以上面的代碼為例子，map的操作符會在newThread做操作，doOnSubscribe/doOnNext 都會在 mainThread做操作，透過這樣兩個簡單的操作符可以很簡單的去做Rxjava的線程調度。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/05/solidity-function-type/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/04/05/solidity-function-type/" itemprop="url">
+                  solidity_function_type
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-04-05T12:35:29+08:00">
+                2018-04-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/區塊鏈/" itemprop="url" rel="index">
+                    <span itemprop="name">區塊鏈</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/05/solidity-function-type/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/04/05/solidity-function-type/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Solidity函式常見修飾符"><a href="#Solidity函式常見修飾符" class="headerlink" title="Solidity函式常見修飾符"></a>Solidity函式常見修飾符</h2><p>在Solidity中有幾個常見的函示修飾符，這邊就來簡單介紹一下</p>
+<p><img src="https://i.imgur.com/mRuZF3l.png" alt="Imgur"></p>
+<ul>
+<li><p>public : 所有人都可以呼叫這個函式。</p>
+</li>
+<li><p>private : 只有合約能夠呼叫這個函式。</p>
+</li>
+<li><p>view/constant : 只會回傳資料，函式也不能修改任何變數或合約資料 </p>
+</li>
+<li><p>pure: 不能修改，也不能讀取合約內的資料。</p>
+</li>
+<li><p>payable: 當有人呼叫該函式，他們可能會發送 Ether。</p>
+</li>
+<li><p>returns (type) : 指該函式需要返回值，type為返回值的類型 。</p>
+<p>​</p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/05/solidity0x1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/04/05/solidity0x1/" itemprop="url">
+                  solidity0x1
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-04-05T10:30:38+08:00">
+                2018-04-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/區塊鏈/" itemprop="url" rel="index">
+                    <span itemprop="name">區塊鏈</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/05/solidity0x1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/04/05/solidity0x1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Solidity-0x1"><a href="#Solidity-0x1" class="headerlink" title="Solidity 0x1"></a>Solidity 0x1</h2><p>Solidity是什麼 ?</p>
+<blockquote>
+<p>根據維基百科描述，</p>
+<table>
+<thead>
+<tr>
+<th><a href="https://zh.wikipedia.org/wiki/File:Solidity_logo.svg" target="_blank" rel="noopener"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Solidity_logo.svg/200px-Solidity_logo.svg.png" alt="Solidity logo.svg"></a>Solidity的標誌</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://zh.wikipedia.org/wiki/%E7%B6%B2%E7%AB%99" target="_blank" rel="noopener">網站</a></td>
+<td><a href="http://github.com/ethereum/solidity" target="_blank" rel="noopener">github.com/ethereum/solidity</a></td>
+</tr>
+<tr>
+<td>啟發語言<a href="https://zh.wikipedia.org/wiki/JavaScript" target="_blank" rel="noopener">JavaScript</a>, <a href="https://zh.wikipedia.org/wiki/C%2B%2B" target="_blank" rel="noopener">C++</a>, <a href="https://zh.wikipedia.org/w/index.php?title=Python_(programming_language" target="_blank" rel="noopener">Python</a>&amp;action=edit&amp;redlink=1), <a href="https://zh.wikipedia.org/wiki/PowerShell" target="_blank" rel="noopener">PowerShell</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Solidity</strong>是一種合約導向式語言，可被應用於各種不同的區塊鏈平台上<a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-IBTimes12AUG2016-1" target="_blank" rel="noopener">[1]</a>，其主要開發者為Gavin Wood，Christian Reitwiessner，Alex Beregszaszi，Liana Husikyan，Yoichi Hirai和其他幾位早期以太坊核心貢獻者。<a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-:CoinDesk14Dec2016-2" target="_blank" rel="noopener">[2]</a><a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-:CCN09062016-3" target="_blank" rel="noopener">[3]</a>Solidity 可使程式開發人員能在區塊鏈上（例如以太坊）編寫智能合約</p>
+<ul>
+<li>Strongly Typed - 屬於一門強型別語言</li>
+<li>Similar to Javascript - 與Javascript非常類似(指的是syntax部分)。</li>
+</ul>
+</blockquote>
+<p>###Solidity 在 與智能合約。</p>
+<p><img src="https://i.imgur.com/XKlYaz1.png" alt="Imgur"></p>
+<p>我們使用 <code>Solidity</code> 編寫完的合約，透過 <code>Solidity Compiler</code> 會編譯出兩個文件，分別是 <code>Byte code</code> 與 <code>ABI</code>，<code>Byte code</code> 的文件將會被部署上 <code>Ethereum Net</code> ，所以真正在區塊鏈上的文件是 <code>Byte code</code>。<code>ABI</code> 對於編寫可以與智能合約交互的應用程式來說，是非常重要的。</p>
+<p>舉例來說 : </p>
+<p><img src="https://i.imgur.com/62GnEL3.png" alt="Imgur"></p>
+<p>我們在部署完智能合約之後，我們會需要透過Web前端，裡面會有一些Javascript的代碼，作為交互使用，Javascript並沒有能力能夠直接與 <code>Bytecode</code> 進行交互。我們就需要透過 <code>ABI</code> 與區塊鏈上的智能合約(ByteCode) 與其溝通而拿到目前智能合約內儲存的狀態或資料。</p>
+<p>###Solidity IDE - Remix</p>
+<p><a href="https://ethereum.github.io/browser-solidity/" target="_blank" rel="noopener">Remix</a> 是一個 Solidity Online的 Editor，可以用來編寫與測試 Solidity，也可以在上面直接發佈智能合約。</p>
+<h3 id="第一個智能合約-使用-Solidity"><a href="#第一個智能合約-使用-Solidity" class="headerlink" title="第一個智能合約 - 使用 Solidity"></a>第一個智能合約 - 使用 Solidity</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//每一個智能合約都必須定義，這邊指的是使用0.4.17或更高的編譯器版本</span></span><br><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.17</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//contract的修飾符關鍵字就像class一樣，定義這是一個合約</span></span><br><span class="line">contract Inbox &#123;</span><br><span class="line">    <span class="comment">//在這個合約裡面儲存一個string，並且是public，任何人都可以知道這個變量</span></span><br><span class="line">    string public message;</span><br><span class="line">    <span class="comment">//建構子，當這個合約被部署到區塊鏈上，會執行這個函式。</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">Inbox</span>(<span class="params">string initialMessage</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        message = initialMessage;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//改變這個合約中的message變量。</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">setMessage</span>(<span class="params">string newMessage</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        message = newMessage;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//取得這個合約中的message變量。</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">getMessage</span>(<span class="params"></span>) <span class="title">public</span> <span class="title">view</span> <span class="title">returns</span>(<span class="params">string</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> message;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>這樣就完成了一個簡單可以在區塊鏈上儲存字串訊息的智能合約。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/31/blockchain-0x1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/03/31/blockchain-0x1/" itemprop="url">
+                  blockchain_0x1
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-03-31T09:08:02+08:00">
+                2018-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/區塊鏈/" itemprop="url" rel="index">
+                    <span itemprop="name">區塊鏈</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/31/blockchain-0x1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/03/31/blockchain-0x1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="Blockchain-0x1"><a href="#Blockchain-0x1" class="headerlink" title="Blockchain 0x1"></a>Blockchain 0x1</h2><p>2018年算是區塊鏈(Blockchain)最火紅的一年，因為比特幣以及虛擬貨幣的市值大漲影響，所以連帶了讓 <code>Blockchain</code> 這個技術像閃電般的出現在眾人眼前，但是大家對於區塊鏈的理解大部分都落在比特幣以及加密貨幣，但是其實加密貨幣只是區塊鏈這個技術的應用之一，所以區塊鏈到底是什麼 ? </p>
+<blockquote>
+<p>用一句最簡單的例子來解釋，<strong>『區塊鏈是一個去中心化的分散式資料庫的技術』</strong>，</p>
+<p>每筆資料都會被寫錄在每個區塊中，而每個區塊中都有完整且相同的資料庫。由於每個區塊節點的資料庫都是相同的，由於上述的特點，所以區塊鏈有幾個最重要的特色。</p>
+<ul>
+<li>去中心化。<ul>
+<li>使用者不需要依賴任何的第三方管理機制或硬體雲端服務器，而是依賴分散在網路上各個完整個區塊節點，每個節點都擁有驗證、傳遞以及管理的能力。</li>
+</ul>
+</li>
+<li>不可竄改性。<ul>
+<li>區塊鏈透過密碼學的方式來保證每個區塊節點上已有的數據都不可能被串改。 </li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>Merkle Tree。</li>
+</ul>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/31/blockchain-0x1/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/16/goal-meeting/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/02/16/goal-meeting/" itemprop="url">
+                  人生的檢討會議
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-02-16T22:30:53+08:00">
+                2018-02-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/雜記/" itemprop="url" rel="index">
+                    <span itemprop="name">雜記</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/02/16/goal-meeting/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/02/16/goal-meeting/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="每個月和自己來一場-檢討會議"><a href="#每個月和自己來一場-檢討會議" class="headerlink" title="每個月和自己來一場 檢討會議"></a>每個月和自己來一場 檢討會議</h2><blockquote>
+<p>今天看到一篇文章蠻好的，順道記錄一下在這邊，給自己更有方向跟執行力，每天都忙到焦頭爛額的，好像可以好好透過這些方法讓自己更有目標與活力。</p>
+</blockquote>
+<h3 id="小時候，喜歡的是什麼"><a href="#小時候，喜歡的是什麼" class="headerlink" title="小時候，喜歡的是什麼?"></a>小時候，喜歡的是什麼?</h3><p>小時候，任誰都會遵照<code>WANT TO＝想做的事</code> 行動。可是隨著年紀增加， <code>HAVE TO＝非做不可的事</code> 占據了內心，這個問題是要讓 <code>WANT TO</code> 從我們的內心深處甦醒。</p>
+<h3 id="如果沒有限制，期望的是怎麼樣的未來在迎接未來的你"><a href="#如果沒有限制，期望的是怎麼樣的未來在迎接未來的你" class="headerlink" title="如果沒有限制，期望的是怎麼樣的未來在迎接未來的你?"></a>如果沒有限制，期望的是怎麼樣的未來在迎接未來的你?</h3><p>思考「自己想變成怎樣？」時，身邊會有各種條件，難以自由地發想。所以，會忍不住依賴過去的經驗和記憶、現在的狀態和情勢，預測、計劃未來。這個問題會讓你想起「未來在尋求什麼？」</p>
+<h3 id="什麼時候最耀眼，最開心"><a href="#什麼時候最耀眼，最開心" class="headerlink" title="什麼時候最耀眼，最開心?"></a>什麼時候最耀眼，最開心?</h3><p>光是訴說、寫下燦爛耀眼的人生高潮，自己當時的心情就會復甦，體溫上升，心情亢奮。那是一直推動往後人生的重要記憶。請經常想起，表露於外。</p>
+<h3 id="人生最痛苦的時候，是怎麼重新站起來的呢"><a href="#人生最痛苦的時候，是怎麼重新站起來的呢" class="headerlink" title="人生最痛苦的時候，是怎麼重新站起來的呢?"></a>人生最痛苦的時候，是怎麼重新站起來的呢?</h3><p>一旦說起痛苦的事實， 幾個小時都不夠。所以，請只想起「重新站起來的方法」。這個方法中，會有讓你進前的啟發。說不定也能以那個方法，解決眼前的問題</p>
+<h3 id="有30個你不認識的人。和他們打成一片的過程中，你會想替他們做什麼呢？"><a href="#有30個你不認識的人。和他們打成一片的過程中，你會想替他們做什麼呢？" class="headerlink" title="有30個你不認識的人。和他們打成一片的過程中，你會想替他們做什麼呢？"></a>有30個你不認識的人。和他們打成一片的過程中，你會想替他們做什麼呢？</h3><p>互不相識的一群人待在同一個房間。而隨著時間的經過，感情漸漸變得融洽。你想替所有人做的事情，就會是你最愛、擅長的事，因為這才能讓所有人開心。</p>
+<h3 id="自己擅長的事是什麼？不擅長的事是什麼？"><a href="#自己擅長的事是什麼？不擅長的事是什麼？" class="headerlink" title="自己擅長的事是什麼？不擅長的事是什麼？"></a>自己擅長的事是什麼？不擅長的事是什麼？</h3><p>擅長的事對你而言，是簡單的事。你可能會覺得這麼簡單的事，誰都做得到。不過，如果試著問熟人你擅長的事，說不定對方的答案會令你意外。不擅長的事是什麼呢？任誰都能輕易地回答這個問題。因此，要再附加一個問題。「擅長你不擅長的事的人是誰呢？」你身邊會有人對這件事感到開心。你不擅長的事，有可能是某人擅長的事。請誇獎、委託對方，使對方發揮那項能力。</p>
+<blockquote>
+<p>這個問題好難，因為感覺我現在不知道自己擅長些什麼。</p>
+</blockquote>
+<h3 id="該請誰幫忙呢？"><a href="#該請誰幫忙呢？" class="headerlink" title="該請誰幫忙呢？"></a>該請誰幫忙呢？</h3><p>諸事不順的人，總是想靠自己一個人設法解決問題。相對地，諸事順遂的人會習慣借助別人的力量。</p>
+<h3 id="臨終時，你會後悔什麼呢？"><a href="#臨終時，你會後悔什麼呢？" class="headerlink" title="臨終時，你會後悔什麼呢？"></a>臨終時，你會後悔什麼呢？</h3><p>如果平常過得很忙碌，就很難把時間用在重要的事情上。可是，假如想像已經「沒有」時間了的那一瞬間，你的心情如何呢？半途而廢的事情當中，什麼令你最後悔？回答這個問題之後，眼前的現實會看起來不一樣，或者判斷的標準會改變。</p>
+<blockquote>
+<p>這個問題也很難，感覺我的人生都在後悔中度過。</p>
+</blockquote>
+<h3 id="你現在想見的人是誰？"><a href="#你現在想見的人是誰？" class="headerlink" title="你現在想見的人是誰？"></a>你現在想見的人是誰？</h3><p>每天和一樣的人見面，很難和想見的人共度時光。可是，現在有該見面的人。有人該去見好幾次。這是人生的陷阱。那是誰呢？光是在腦中搜尋就會心跳加速。</p>
+<h3 id="你在人生中的什麼時候實現了夢想？"><a href="#你在人生中的什麼時候實現了夢想？" class="headerlink" title="你在人生中的什麼時候實現了夢想？"></a>你在人生中的什麼時候實現了夢想？</h3><p>在考試、感情、工作、運動、家人方面，實現了夢想，達成了目標。請試著想起當時湧現心頭的情緒。再度模擬體驗成功的事，會強化「實際行動就能實現」這種心情。</p>
+<h3 id="人生中最耀眼那一瞬間的情緒「在體內的哪一帶？呈現什麼形狀？顏色？溫度？硬度？」"><a href="#人生中最耀眼那一瞬間的情緒「在體內的哪一帶？呈現什麼形狀？顏色？溫度？硬度？」" class="headerlink" title="人生中最耀眼那一瞬間的情緒「在體內的哪一帶？呈現什麼形狀？顏色？溫度？硬度？」"></a>人生中最耀眼那一瞬間的情緒「在體內的哪一帶？呈現什麼形狀？顏色？溫度？硬度？」</h3><p>重現實現夢想、達成目標時的情緒，經常會產生好結果。</p>
+<p>###「目標是什麼？」「什麼進展順利？」「什麼進展不順利？」「所以該做什麼呢？」「透過這些問題，獲得了什麼呢？」</p>
+<p>光是忽然對自己拋出問題，就能整理心情。</p>
+<p><a href="&quot;https://www.managertoday.com.tw/books/view/47000&quot;">參考出處</a> </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/31/2017-finish/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/12/31/2017-finish/" itemprop="url">
+                  2017年的回顧與總結
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-12-31T17:27:19+08:00">
+                2017-12-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/雜記/" itemprop="url" rel="index">
+                    <span itemprop="name">雜記</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/31/2017-finish/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/12/31/2017-finish/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="開始與結束"><a href="#開始與結束" class="headerlink" title="開始與結束"></a>開始與結束</h2><p>轉眼間2017年又要過了，過去每年嘗試著盡量在一個月寫一次的技術Blog，不管是給自己或者給別人看，中間也參考許多別人的技術Blog，希望可以透過寫作的方式提升自己對於技術的理解跟提升自身的技術、閱讀、寫作的能力，雖然還是很懶，不過總算是有了個開始，所以這篇是2017年對自己的年度回顧與檢討，希望在2018年可以再讓自己不管在工作、學業、感情、各方面都能更有成長。所以透過<code>想做的事情</code>、<code>已完成的事情</code>、<code>沒有完成的事情</code>來做個總檢討與2018年的展望。</p>
+<h3 id="2017想做的事情-已完成的事情-沒有完成的事情"><a href="#2017想做的事情-已完成的事情-沒有完成的事情" class="headerlink" title="2017想做的事情/已完成的事情/沒有完成的事情"></a>2017想做的事情/已完成的事情/沒有完成的事情</h3><ul>
+<li>刺青 - 完成 </li>
+<li>學會斜跑(衝浪的技巧) - 沒有完成</li>
+<li>考上北科在職專班 - 完成</li>
+<li>寫技術Blog - 完成(進行中)</li>
+<li>看完40部電影 - 完成(但不完美)</li>
+<li>看完10本書 - 沒有完成(7本)</li>
+<li>雅思考試 - 沒有完成</li>
+</ul>
+<p>回顧來看，除了最後兩項沒做到之外，前面的事情都做完了，沒有想到的事情是竟然10本書沒有看完，40部電影不出意料的都看完了，但是沒想到留在我腦海印象中的卻不多，刺青算是對自己身體與心靈上的一種特別意義，主要還是 <code>學會斜跑</code>  、 <code>北科在職專班</code>、這兩件事情特別仔細來回顧一下好了，先從斜跑這項運動 - <code>衝浪</code> 開始談起好了。</p>
+<h4 id="關於衝浪"><a href="#關於衝浪" class="headerlink" title="關於衝浪"></a>關於衝浪</h4><p>很有趣在2016年因緣際會接觸了衝浪這項運動，當初其實並不是真心對於這項運動的熱愛，而是某些需要轉換心境的原因，而衝浪是非常耗費體力的一項極限運動，所以剛好就成了一個發洩的出口，然後一開始又被周遭同好推坑，所以變成一開始就挑戰難度極高的短板，這邊就不詳述衝浪活動要幹嘛了，有興趣的人在自己google了，從一開始的連在板子上都無法平衡，也不會 <code>潛越越浪</code> 一直被浪打回來，到能夠划水到 <code>outside</code> 區，然後在板子上努力學著如何 <code>坐板</code> 平衡，然後努力的划水<code>追浪</code> ， 到可以<code>起乘</code>站到浪板上 ，這中間看起很簡單的過程，但是卻整整花了我一整年(2016年9月到2017年9月)，中間一度有想放棄過這項運動，但是衝著衝著卻發現，我喜愛台灣的海洋，它可以很美麗，也可以很凶險，與衝浪同好坐在海上觀浪邊聊天，看著海平面上陽光與海洋彼此襯托，從每次越浪嚐到的海水苦鹹，到坐板觀浪的耐心等待，至最後的划水追浪至起乘衝浪，這樣子的一次又一次嘗試，一次又一次的失敗，讓我能夠感覺到自己好像真正的活著，雖然我現在還是衝得很爛，不太會觀浪，滑水不夠快，但是我還是希望能夠去用身體感受這片土地與海洋帶給我們的美好。</p>
+<h4 id="關於在職專班"><a href="#關於在職專班" class="headerlink" title="關於在職專班"></a>關於在職專班</h4><p>這項也是很有趣，當初只是想讓自己忙碌一點，沒想到到最後變成工作學業蠟燭兩頭燒，在北科大中，認識了很多業界的同學，更讓自己感到自己的渺小，與自己唸書方式的不足，雖然是完成了考上，但是要到畢業可能還需要一段努力，這邊給我最大的收穫算是要去如何<code>學習跟管理自己的時間</code>，如何好好分配工作與學業的比例，以及上課時的吸收，由於是碩班，還有閱讀英文文章論文的能耐，我想都是在2018年非常好的課題。</p>
+<h3 id="2018年想做的事情"><a href="#2018年想做的事情" class="headerlink" title="2018年想做的事情"></a>2018年想做的事情</h3><p>還是回歸到這個Blog的本質，<code>技術</code>，在2017年算是轉換了一個不小的跑道，在管理方面也第一次嘗試管理15個人，這邊大概只能給自己打個60分，技術方面也碰觸了很多，像是 Android/iOS 更深一步的原生開發，新型的框架實現(MVVM)，FRP(RXJava)等，算是對自己一個不小的挑戰，在這邊給自己2018年的期許。</p>
+<ul>
+<li>技術方面 :<ul>
+<li>iOS : RxSwift、如何讓iOS與Android共用類似框架開發、ReactNative的學習。</li>
+<li>Android : 如何讓iOS與Android共用類似框架開發、ReactNative的學習、Kotlin的邁入。</li>
+<li>Web : 可以寫出一個簡單的Sideproject。</li>
+</ul>
+</li>
+<li>學業方面 :<ul>
+<li>投稿演討會論文。</li>
+</ul>
+</li>
+<li>個人精進方面 : <ul>
+<li>看40部電影(寫出5部的心得，因為今年看完40部留在腦海的卻沒幾部)。</li>
+<li>看5本書(一樣需要寫出心得)。</li>
+<li>斜跑穩定(今年斜跑算是有成功幾次，但是並不穩定)。</li>
+<li>英文能力的提升(雅思今年報考，且分數在5以上)。</li>
+</ul>
+</li>
+</ul>
+<h3 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h3><p>今年學習到了目標不是訂的大，訂的好跟自己能夠負擔，以及執行力才是最重要的，希望2018明年的我，看到這篇文章是能夠自豪的感覺都有把事情做完，而不是到了2018又發現自己成效力不佳，這是給自己2018年最大的課題。</p>
+<blockquote>
+<p>執行力</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Allen Hsu">
+          <p class="site-author-name" itemprop="name">Allen Hsu</p>
+           
+              <p class="site-description motion-element" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/allen-hsu/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/in/allenhsutw/" target="_blank" title="Linkedin">
+                  
+                    <i class="fa fa-fw fa-linkedin"></i>
+                  
+                  Linkedin
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://allen-hsu.disqus.com/count.js" async></script>
+    
+
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

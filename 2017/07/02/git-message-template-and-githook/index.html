@@ -1,0 +1,811 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-tw">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="git,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="為什麼需要規範團隊的 git log 在團隊開發中，我們常常會希望團隊遵循一個 git commit log 的規範，原因是我們希望在未來要查找之前的 log 時，可以透過這樣的方式可以很快的搜尋到想要的結果，也可以在 CI/CD 的流程中，透過規範的 git log 藉而產出一個有意義且能給 QA/PM/其他團隊成員觀看的 CHNAGELOG (版本更新內容)">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何使用 git commit template 與 git hooks 管理團隊的 git log">
+<meta property="og:url" content="http://yoursite.com/2017/07/02/git-message-template-and-githook/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="為什麼需要規範團隊的 git log 在團隊開發中，我們常常會希望團隊遵循一個 git commit log 的規範，原因是我們希望在未來要查找之前的 log 時，可以透過這樣的方式可以很快的搜尋到想要的結果，也可以在 CI/CD 的流程中，透過規範的 git log 藉而產出一個有意義且能給 QA/PM/其他團隊成員觀看的 CHNAGELOG (版本更新內容)">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2017-07-20T13:12:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何使用 git commit template 與 git hooks 管理團隊的 git log">
+<meta name="twitter:description" content="為什麼需要規範團隊的 git log 在團隊開發中，我們常常會希望團隊遵循一個 git commit log 的規範，原因是我們希望在未來要查找之前的 log 時，可以透過這樣的方式可以很快的搜尋到想要的結果，也可以在 CI/CD 的流程中，透過規範的 git log 藉而產出一個有意義且能給 QA/PM/其他團隊成員觀看的 CHNAGELOG (版本更新內容)">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/02/git-message-template-and-githook/">
+
+
+
+
+
+  <title>如何使用 git commit template 與 git hooks 管理團隊的 git log | AllenHsu的技術手扎</title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AllenHsu的技術手扎</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">學海無涯，努力做個永遠年輕的人</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            關於
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/02/git-message-template-and-githook/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                如何使用 git commit template 與 git hooks 管理團隊的 git log
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-07-02T16:50:14+08:00">
+                2017-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/02/git-message-template-and-githook/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/07/02/git-message-template-and-githook/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="為什麼需要規範團隊的-git-log"><a href="#為什麼需要規範團隊的-git-log" class="headerlink" title="為什麼需要規範團隊的 git log"></a>為什麼需要規範團隊的 git log</h2><blockquote>
+<p>在團隊開發中，我們常常會希望團隊遵循一個 git commit log 的規範，原因是我們希望在未來要查找之前的 log 時，可以透過這樣的方式可以很快的搜尋到想要的結果，也可以在 CI/CD 的流程中，透過規範的 git log 藉而產出一個有意義且能給 QA/PM/其他團隊成員觀看的 CHNAGELOG (版本更新內容)</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="如何管理與規範團隊的-git-log"><a href="#如何管理與規範團隊的-git-log" class="headerlink" title="如何管理與規範團隊的 git log"></a>如何管理與規範團隊的 git log</h3><p>通常我們會規範一些 <code>commit role</code> 的文件 ，希望團隊成員能夠去遵守，但是在每次 <code>commit</code> 時，開發成員都需要去確保自己的<code>commit log</code> 是否符合規範，是一件稍嫌困擾的事情，而且我們也不能確保每位成員都真的『 完全 』遵守我們的 commit 規範，這時候我們就可以利用 <code>commit template</code> 跟 <code>git hooks</code> 去達到讓成員 <code>commit</code> 時可以完全按照團隊的 <code>commit role</code> 跟確保這個 <code>commit</code> 是否完全符合規範。</p>
+<h3 id="關於-git-commit-template"><a href="#關於-git-commit-template" class="headerlink" title="關於 git commit template"></a>關於 git commit template</h3><p>在 git 中，我們可以設置模板文件，那麼當你每次 commit 的時候， git 會默認使用該文件的內容，例如：你創建了一個 template 文件 <code>$HOME/.gitmessage.txt</code> :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">subject line</span><br><span class="line"></span><br><span class="line">what happened</span><br><span class="line"></span><br><span class="line">[ticket: X]</span><br></pre></td></tr></table></figure>
+<p>接著我們設置 commit.template : </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git config --global commit.template <span class="variable">$HOME</span>/.gitmessage.txt</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git commit</span></span><br></pre></td></tr></table></figure>
+<p>這樣子每次提交的時候，默認都會出現你設置的模板文件，在這邊可以透過這個文件，讓每個成員都能很快的遵守團隊的 commit role 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">subject line</span><br><span class="line"></span><br><span class="line">what happened</span><br><span class="line"></span><br><span class="line">[ticket: X]</span><br><span class="line"># Please enter the commit message for your changes. Lines starting</span><br><span class="line"># with &apos;#&apos; will be ignored, and an empty message aborts the commit.</span><br><span class="line"># On branch master</span><br><span class="line"># Changes to be committed:</span><br><span class="line">#   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)</span><br><span class="line">#</span><br><span class="line"># modified:   lib/test.rb</span><br><span class="line">#</span><br><span class="line">~</span><br><span class="line">~</span><br><span class="line">&quot;.git/COMMIT_EDITMSG&quot; 14L, 297C</span><br></pre></td></tr></table></figure>
+<h3 id="關於-git-hooks"><a href="#關於-git-hooks" class="headerlink" title="關於 git hooks"></a>關於 git hooks</h3><p>git hooks 就像名字敘述一樣，當某些重要事件發生時，Git 有方法可以觸發自訂腳本， 在每個 Git repository 中都有一個 <code>.git/hooks</code> 目錄，裡面的內容大概像這樣：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">applypatch-msg.sample  pre-applypatch.sample      pre-push.sample</span><br><span class="line">commit-msg.sample      pre-commit.sample          pre-rebase.sample</span><br><span class="line">post-update.sample     prepare-commit-msg.sample  update.sample</span><br></pre></td></tr></table></figure>
+<ul>
+<li>pre-commit</li>
+<li>prepare-commit-msg</li>
+<li>commit-msg</li>
+<li>post-commit</li>
+<li>post-checkout</li>
+<li>pre-rebase</li>
+</ul>
+<p>上述為幾個較為有用的參考對應事件。<a href="&quot;http://githooks.com/&quot;">完整的事件對應</a>。</p>
+<p>所以我們可以在每次commit之前，去檢查這次的 <code>commit msg</code> 是否符合我們的 <code>commit role</code>，透過 <code>git hooks script</code> 的用法，可以讓不符合規範的 <code>commit msg</code> 報錯，這樣在團隊中可以很有效的去規範團隊成員的 <code>git msg</code>。</p>
+<p>這邊提供一個對應 <code>Aangular Js</code> 的 <code>git hook script</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">Git commit hook:</span></span><br><span class="line"><span class="string"> .git/hooks/commit-msg</span></span><br><span class="line"><span class="string"> Check commit message according to angularjs guidelines:</span></span><br><span class="line"><span class="string">  * https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">valid_commit_types = [<span class="string">'feat'</span>, <span class="string">'fix'</span>, <span class="string">'docs'</span>, <span class="string">'style'</span>, <span class="string">'refactor'</span>, <span class="string">'test'</span>, <span class="string">'chore'</span>, ]</span><br><span class="line">commit_file = sys.argv[<span class="number">1</span>]</span><br><span class="line">help_address = <span class="string">'https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(commit_file) <span class="keyword">as</span> commit:</span><br><span class="line">    lines = commit.readlines()</span><br><span class="line">    <span class="keyword">if</span> len(lines) == <span class="number">0</span>:</span><br><span class="line">        sys.stderr.write(<span class="string">"\nEmpty commit message\n"</span>)</span><br><span class="line">        sys.stderr.write(<span class="string">"\n - Refer commit guide: %s\n\n"</span> % help_address)</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># first line</span></span><br><span class="line">    line = lines[<span class="number">0</span>]</span><br><span class="line">    m = re.search(<span class="string">'^(.*)\((.*)\): (.*)$'</span>, line)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> m <span class="keyword">or</span> len(m.groups()) != <span class="number">3</span>:</span><br><span class="line">        sys.stderr.write(<span class="string">"\nFirst commit message line (header) does not follow format: type(scope): message\n"</span>)</span><br><span class="line">        sys.stderr.write(<span class="string">"\n - Refer commit guide: %s\n\n"</span> % help_address)</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br><span class="line">    commit_type, commit_scope, commit_message = m.groups()</span><br><span class="line">    <span class="keyword">if</span> commit_type <span class="keyword">not</span> <span class="keyword">in</span> valid_commit_types:</span><br><span class="line">        sys.stderr.write(<span class="string">"\nCommit type not in valid ones: %s\n"</span> % <span class="string">", "</span>.join(valid_commit_types))</span><br><span class="line">        sys.stderr.write(<span class="string">"\n - Refer commit guide: %s\n\n"</span> % help_address)</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> len(lines) &gt; <span class="number">1</span> <span class="keyword">and</span> lines[<span class="number">1</span>].strip():</span><br><span class="line">        sys.stderr.write(<span class="string">"\nSecond commit message line must be empty\n"</span>)</span><br><span class="line">        sys.stderr.write(<span class="string">"\n - Refer commit guide: %s\n\n"</span> % help_address)</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> len(lines) &gt; <span class="number">2</span> <span class="keyword">and</span> <span class="keyword">not</span> lines[<span class="number">2</span>].strip():</span><br><span class="line">        sys.stderr.write(<span class="string">"\nThird commit message line (body) must not be empty\n"</span>)</span><br><span class="line">        sys.stderr.write(<span class="string">"\n - Refer commit guide: %s\n\n"</span> % help_address)</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">sys.exit(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>當然， <code>git hooks</code> 還可以做到許多強大的功能，像是 <code>lint</code> 檢查，在 <code>commit</code> 前就運行單元測試，他本身就是一個非常強大的 <code>git plugin</code> ，在 <code>CI/CD</code> 的流程中，是非常有用的一個 <code>git</code> 功能，這次的介紹就到這邊。</p>
+<p>參考 :</p>
+<ul>
+<li><p><a href="&quot;http://www.ruanyifeng.com/blog/2016/01/commit_message_change_log.html&quot;">Commit message 和 Change log 编写指南</a></p>
+</li>
+<li><p><a href="&quot;https://gist.github.com/onjin/5442494&quot;">Angular Js 的 git hook script</a></p>
+</li>
+<li><p><a href="&quot;https://gist.github.com/stephenparish/9941e89d80e2bc58a153&quot;">Angular Js git commit template </a></p>
+</li>
+<li><p><a href="&quot;https://git-scm.com/book/zh-tw/v1/Git-%E5%AE%A2%E8%A3%BD%E5%8C%96-Git-Hooks&quot;">Git hooks</a></p>
+<p>​</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/git/" rel="tag"># git</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/25/android-layout-listview-recyclerview/" rel="next" title="Android 的 RecylerView (一)">
+                <i class="fa fa-chevron-left"></i> Android 的 RecylerView (一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/08/rxswift-basic/" rel="prev" title="RxSwift 基本入門">
+                RxSwift 基本入門 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Allen Hsu">
+          <p class="site-author-name" itemprop="name">Allen Hsu</p>
+           
+              <p class="site-description motion-element" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/allen-hsu/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/in/allenhsutw/" target="_blank" title="Linkedin">
+                  
+                    <i class="fa fa-fw fa-linkedin"></i>
+                  
+                  Linkedin
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#為什麼需要規範團隊的-git-log"><span class="nav-number">1.</span> <span class="nav-text">為什麼需要規範團隊的 git log</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何管理與規範團隊的-git-log"><span class="nav-number">1.1.</span> <span class="nav-text">如何管理與規範團隊的 git log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#關於-git-commit-template"><span class="nav-number">1.2.</span> <span class="nav-text">關於 git commit template</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#關於-git-hooks"><span class="nav-number">1.3.</span> <span class="nav-text">關於 git hooks</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://allen-hsu.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/07/02/git-message-template-and-githook/';
+          this.page.identifier = '2017/07/02/git-message-template-and-githook/';
+          this.page.title = '如何使用 git commit template 與 git hooks 管理團隊的 git log';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://allen-hsu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

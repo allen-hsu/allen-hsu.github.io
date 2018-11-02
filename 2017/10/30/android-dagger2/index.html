@@ -1,0 +1,824 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-tw">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="設計模式,Android,Dependency Injection,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="關於依賴注入在談 Dagger2 之前，我想先簡單介紹一下關於 依賴注入 。什麼是依賴注入? Dependency Injection (依賴注入) 簡稱 DI，用來降低程式碼的耦合度所使用。  當我們今天有一個 Class A 用到了 Class B 的物件，一般情況下，需要在 A 的代碼中顯示的 new 一個 B 的物件。這樣子Class A 的建構就依賴於 Class B了，當我們實現依賴注">
+<meta name="keywords" content="設計模式,Android,Dependency Injection">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android的依賴注入框架-Dagger2(一)">
+<meta property="og:url" content="http://yoursite.com/2017/10/30/android-dagger2/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="關於依賴注入在談 Dagger2 之前，我想先簡單介紹一下關於 依賴注入 。什麼是依賴注入? Dependency Injection (依賴注入) 簡稱 DI，用來降低程式碼的耦合度所使用。  當我們今天有一個 Class A 用到了 Class B 的物件，一般情況下，需要在 A 的代碼中顯示的 new 一個 B 的物件。這樣子Class A 的建構就依賴於 Class B了，當我們實現依賴注">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2017-11-01T11:51:52.957Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android的依賴注入框架-Dagger2(一)">
+<meta name="twitter:description" content="關於依賴注入在談 Dagger2 之前，我想先簡單介紹一下關於 依賴注入 。什麼是依賴注入? Dependency Injection (依賴注入) 簡稱 DI，用來降低程式碼的耦合度所使用。  當我們今天有一個 Class A 用到了 Class B 的物件，一般情況下，需要在 A 的代碼中顯示的 new 一個 B 的物件。這樣子Class A 的建構就依賴於 Class B了，當我們實現依賴注">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/30/android-dagger2/">
+
+
+
+
+
+  <title>Android的依賴注入框架-Dagger2(一) | AllenHsu的技術手扎</title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AllenHsu的技術手扎</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">學海無涯，努力做個永遠年輕的人</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            關於
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/30/android-dagger2/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android的依賴注入框架-Dagger2(一)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-10-30T17:20:45+08:00">
+                2017-10-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-開發/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 開發</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/30/android-dagger2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/10/30/android-dagger2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="關於依賴注入"><a href="#關於依賴注入" class="headerlink" title="關於依賴注入"></a>關於依賴注入</h2><p>在談 <code>Dagger2</code> 之前，我想先簡單介紹一下關於 <code>依賴注入</code> 。什麼是依賴注入? <code>Dependency Injection</code> (依賴注入) 簡稱 DI，用來降低程式碼的耦合度所使用。</p>
+<blockquote>
+<p>當我們今天有一個 Class A 用到了 Class B 的物件，一般情況下，需要在 A 的代碼中顯示的 new 一個 B 的物件。這樣子Class A 的建構就依賴於 Class B了，<br>當我們實現依賴注入之後 A 的代碼只需要定義一個私有的 B 物件，不需要直接<br>New 來獲得這個物件，而是透過相關的容器控制程式來將 B 物件在外部 new出來並注入到 A 類裡的參考中。</p>
+</blockquote>
+<p>依賴注入有如下實現方式：</p>
+<ul>
+<li>基於介面。實現特定介面以供外部容器注入所依值型別的物件。</li>
+<li>基於 set 方法。實現特定屬性的public set方法，來讓外部容器呼叫傳入所依值型別的物件。</li>
+<li>基於建構函式。實現特定參數的建構函式，在新建物件時傳入所依值型別的物件。</li>
+<li>基於註解。基於Java的註解功能，在私有變數前加「@Autowired」等註解，不需要顯式的定義以上三種代碼，便可以讓外部容器傳入對應的物件。該方案相當於定義了public的set方法，但是因為沒有真正的set方法，從而不會為了實現依賴注入導致暴露了不該暴露的介面（因為set方法只想讓容器存取來注入而並不希望其他依賴此類的物件存取）。</li>
+</ul>
+<a id="more"></a>
+<h3 id="Dagger2-簡介"><a href="#Dagger2-簡介" class="headerlink" title="Dagger2 簡介"></a>Dagger2 簡介</h3><blockquote>
+<p>Dagger is a fully static, compile-time dependency injection framework for both Java and Android. It is an adaptation of an earlier versioncreated by Square and now maintained by Google.<br>Dagger aims to address many of the development and performance issues that have plagued reflection-based solutions. More details can be found in this talk(slides) by +Gregory Kick.</p>
+</blockquote>
+<p>簡單來說 <code>Dagger2</code> 是原本 <code>Square</code> 開發出來給 <code>Java/Android</code> 的一個 <code>DI 框架</code>，然後現在主要維護者是 <code>Google</code>。</p>
+<p>在實際使用 <code>Dagger2</code> 之前，這邊先介紹幾個 <code>Dagger2</code> 中一些主要 <code>註解</code> 觀念與用法。</p>
+<ul>
+<li><strong>@Inject</strong></li>
+<li><strong>@Module</strong></li>
+<li><strong>@Providers</strong></li>
+<li><strong>@Component</strong></li>
+</ul>
+<h3 id="Inject"><a href="#Inject" class="headerlink" title="@Inject"></a>@Inject</h3><p><code>@Inject</code> 主要有兩個用法，當註解在需要依賴的變數時，讓 <code>Dagger2</code> 為其提供依賴，另一個是使用在建構子上，透過建構子讓Dagger2來使用(Dagger2透過 Inject 註解可以在需要這個 class 實體的時候來找到這個建構子並把相關實體 new 出來) 從而提供依賴。需要注意的當 <code>@Inject</code> 註解的建構子是帶參數的，像是 : </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class TestClass&#123;</span><br><span class="line">    @Inject</span><br><span class="line">    public TestClass(InjectClass injectClass)&#123;</span><br><span class="line">        //do something</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那麼 <code>Dagger2</code> 會在編譯時檢查，是否在 <code>Module</code> 類中有返回值是 <code>InjectClass</code> 的方法，或者 <code>InjectClass</code> 是否有被 <code>@Inject</code> 註解的建構子。如果沒有找到，就會再編譯期報錯。確保在編譯期就滿足對象之間的依賴關係。</p>
+<h3 id="Module"><a href="#Module" class="headerlink" title="@Module"></a>@Module</h3><p><code>@Module</code> 主要用來提供依賴類別。Module其實是一個<strong>簡單工廠模式</strong>，裡面包含了許多 <code>@Provider</code> 的方法，每個方法提供了該類別的實體 。</p>
+<h3 id="Provider"><a href="#Provider" class="headerlink" title="@Provider"></a>@Provider</h3><p><code>@Provider</code> 跟 <code>@Module</code> 是一對，<code>@Module</code> 是一個註解類別， <code>@Provider</code> 則是類別中提供實體的註解方法。Dagger2 會在需要建立實體時找到這個方法並呼叫，完成對象的實體化。像是下列例子， <code>providerFactory()</code> 會提供 <code>FactoryClass</code> 的實體。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ModuleClass</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Provides</span> </span><br><span class="line">    <span class="function">FactoryClass <span class="title">provideFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> FactoryClass(); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Component"><a href="#Component" class="headerlink" title="@Component"></a>@Component</h3><p><code>@Component</code> 主要是一個橋樑，在前面說到了 <code>@Module</code> 提供了依賴的實體， <code>@Inject</code> 標記了需要依賴的變數，而 <code>@Component</code> 則是將 <code>@Module</code> 提供的實體注入到標記 <code>@Inject</code> 的變數中。</p>
+<p><code>@Component</code> 主要的職責 :</p>
+<ul>
+<li>誰提供依賴的實體。</li>
+<li>此 Component 依賴哪些其他的 Component。</li>
+<li>此 Component 為誰提供依賴注入。</li>
+<li>此 Component 可以提供哪些依賴實體。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span>(modules = &#123;AppModule.class, TestModule.class&#125;，dependencies = &#123;DependciesComponent.class&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AppComponent</span></span>&#123;</span><br><span class="line">  <span class="keyword">void</span> inject（InjectActivity activity）；</span><br><span class="line">  <span class="function"><span class="keyword">public</span> ProviderClass <span class="title">getProviderClass</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>@Component</code> 標記一個 <code>Interface</code> ，從上面的例子對照上述的職責來看，此 <code>Component</code> 可以提供一個 <code>ProviderClass</code> 的實體。</p>
+<ul>
+<li><code>module</code> 就表示提供依賴的 <code>Module</code> 類別。</li>
+<li><code>dependencies</code> 表示該 <code>Component</code> 還依賴於其他的 <code>Component</code> 提供的依賴類別。</li>
+<li><code>inject</code> 方法表示該 <code>Component</code> 注入的目標為 <code>InjectActivity</code> 。</li>
+<li><code>getProviderClass</code> 方法透過此 <code>Componet</code> 介面，明確告訴外部這個<code>Component</code> 提供哪些依賴類別。</li>
+</ul>
+<p>最後被 <code>@Component</code> 註解的介面實現會由 <code>Dagger2</code> 自動產生，可以在 <code>app-build</code> 的目錄底下找到產生的代碼。</p>
+<h3 id="參考文獻"><a href="#參考文獻" class="headerlink" title="參考文獻"></a>參考文獻</h3><p><a href="https://ddnews.me/world/prycvggt.html" target="_blank" rel="noopener">https://ddnews.me/world/prycvggt.html</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/設計模式/" rel="tag"># 設計模式</a>
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/Dependency-Injection/" rel="tag"># Dependency Injection</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/10/ios-pop/" rel="next" title="Swift 中的 Strategy Pattern">
+                <i class="fa fa-chevron-left"></i> Swift 中的 Strategy Pattern
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/25/android-drgger2-start/" rel="prev" title="Android的依賴注入框架-Dagger2(二)">
+                Android的依賴注入框架-Dagger2(二) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Allen Hsu">
+          <p class="site-author-name" itemprop="name">Allen Hsu</p>
+           
+              <p class="site-description motion-element" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/allen-hsu/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/in/allenhsutw/" target="_blank" title="Linkedin">
+                  
+                    <i class="fa fa-fw fa-linkedin"></i>
+                  
+                  Linkedin
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#關於依賴注入"><span class="nav-number">1.</span> <span class="nav-text">關於依賴注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dagger2-簡介"><span class="nav-number">1.1.</span> <span class="nav-text">Dagger2 簡介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inject"><span class="nav-number">1.2.</span> <span class="nav-text">@Inject</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Module"><span class="nav-number">1.3.</span> <span class="nav-text">@Module</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Provider"><span class="nav-number">1.4.</span> <span class="nav-text">@Provider</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Component"><span class="nav-number">1.5.</span> <span class="nav-text">@Component</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#參考文獻"><span class="nav-number">1.6.</span> <span class="nav-text">參考文獻</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://allen-hsu.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/10/30/android-dagger2/';
+          this.page.identifier = '2017/10/30/android-dagger2/';
+          this.page.title = 'Android的依賴注入框架-Dagger2(一)';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://allen-hsu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
