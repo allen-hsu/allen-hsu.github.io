@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="iOS,Swift,">
+  <meta name="keywords" content="React,前端開發,">
 
 
 
@@ -90,20 +90,20 @@
 
 
 
-<meta name="description" content="class 與 struct在 Swift 中，有兩種不同的型別宣告，分別是 class 與 struct，那他們到底會有什麼差異呢 ? 什麼時候該使用 class ， 什麼時候使用 struct呢 ?  從上圖表格中我們可以發現兩者的差異。">
-<meta name="keywords" content="iOS,Swift">
+<meta name="description" content="React中的虛擬DOM詳解在 React 還沒出現前的前端開發，我們需要直接操作DOM結構，操作既複雜，兼容性又差，當我們有了jQuery之後，透過jQuery封裝的API，我們能夠更方便的操作DOM，但是DOM是很慢的，其元素非常巨大，頁面的性能問題常常會因為操作DOM而出現瓶頸，於是乎有什麼方法可以讓操作DOM的效率提升呢? ReactJs 提出了虛擬DOM的概念">
+<meta name="keywords" content="React,前端開發">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Swift class 與 struct 差異">
-<meta property="og:url" content="http://yoursite.com/2017/06/01/swift-class-vs-struct/index.html">
+<meta property="og:title" content="React中的虛擬DOM詳解">
+<meta property="og:url" content="http://yoursite.com/2018/12/22/react-virtual-dom/index.html">
 <meta property="og:site_name" content="AllenHsu的技術手扎">
-<meta property="og:description" content="class 與 struct在 Swift 中，有兩種不同的型別宣告，分別是 class 與 struct，那他們到底會有什麼差異呢 ? 什麼時候該使用 class ， 什麼時候使用 struct呢 ?  從上圖表格中我們可以發現兩者的差異。">
+<meta property="og:description" content="React中的虛擬DOM詳解在 React 還沒出現前的前端開發，我們需要直接操作DOM結構，操作既複雜，兼容性又差，當我們有了jQuery之後，透過jQuery封裝的API，我們能夠更方便的操作DOM，但是DOM是很慢的，其元素非常巨大，頁面的性能問題常常會因為操作DOM而出現瓶頸，於是乎有什麼方法可以讓操作DOM的效率提升呢? ReactJs 提出了虛擬DOM的概念">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:image" content="http://i.imgur.com/abipYLX.png">
-<meta property="og:updated_time" content="2017-07-20T13:11:52.000Z">
+<meta property="og:image" content="https://foio.github.io/images/vdom-diff.png">
+<meta property="og:updated_time" content="2018-12-23T15:03:06.941Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Swift class 與 struct 差異">
-<meta name="twitter:description" content="class 與 struct在 Swift 中，有兩種不同的型別宣告，分別是 class 與 struct，那他們到底會有什麼差異呢 ? 什麼時候該使用 class ， 什麼時候使用 struct呢 ?  從上圖表格中我們可以發現兩者的差異。">
-<meta name="twitter:image" content="http://i.imgur.com/abipYLX.png">
+<meta name="twitter:title" content="React中的虛擬DOM詳解">
+<meta name="twitter:description" content="React中的虛擬DOM詳解在 React 還沒出現前的前端開發，我們需要直接操作DOM結構，操作既複雜，兼容性又差，當我們有了jQuery之後，透過jQuery封裝的API，我們能夠更方便的操作DOM，但是DOM是很慢的，其元素非常巨大，頁面的性能問題常常會因為操作DOM而出現瓶頸，於是乎有什麼方法可以讓操作DOM的效率提升呢? ReactJs 提出了虛擬DOM的概念">
+<meta name="twitter:image" content="https://foio.github.io/images/vdom-diff.png">
 
 
 
@@ -131,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/06/01/swift-class-vs-struct/">
+  <link rel="canonical" href="http://yoursite.com/2018/12/22/react-virtual-dom/">
 
 
 
 
 
-  <title>Swift class 與 struct 差異 | AllenHsu的技術手扎</title>
+  <title>React中的虛擬DOM詳解 | AllenHsu的技術手扎</title>
 </head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-tw">
@@ -276,7 +276,7 @@
   
 
   <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/01/swift-class-vs-struct/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/react-virtual-dom/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Allen Hsu">
@@ -297,7 +297,7 @@
             
             
               
-                Swift class 與 struct 差異
+                React中的虛擬DOM詳解
               
             
           </h1>
@@ -312,8 +312,8 @@
               
                 <span class="post-meta-item-text">發表於</span>
               
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-06-01T22:40:07+08:00">
-                2017-06-01
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-12-22T01:05:57+08:00">
+                2018-12-22
               </time>
             
 
@@ -335,8 +335,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS-開發/" itemprop="url" rel="index">
-                    <span itemprop="name">iOS 開發</span>
+                  <a href="/categories/React/" itemprop="url" rel="index">
+                    <span itemprop="name">React</span>
                   </a>
                 </span>
 
@@ -353,8 +353,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/06/01/swift-class-vs-struct/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/06/01/swift-class-vs-struct/" itemprop="commentCount"></span>
+                <a href="/2018/12/22/react-virtual-dom/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/22/react-virtual-dom/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -379,23 +379,81 @@
       
 
       
-        <h2 id="class-與-struct"><a href="#class-與-struct" class="headerlink" title="class 與 struct"></a>class 與 struct</h2><p>在 Swift 中，有兩種不同的型別宣告，分別是 <code>class</code> 與 <code>struct</code>，那他們到底會有什麼差異呢 ? 什麼時候該使用 class ， 什麼時候使用 struct呢 ?</p>
-<p><img src="http://i.imgur.com/abipYLX.png" alt="Imgur"></p>
-<p>從上圖表格中我們可以發現兩者的差異。</p>
+        <h1 id="React中的虛擬DOM詳解"><a href="#React中的虛擬DOM詳解" class="headerlink" title="React中的虛擬DOM詳解"></a>React中的虛擬DOM詳解</h1><p>在 React 還沒出現前的前端開發，我們需要直接操作DOM結構，操作既複雜，兼容性又差，當我們有了jQuery之後，透過jQuery封裝的API，我們能夠更方便的操作DOM，但是DOM是很慢的，其元素非常巨大，頁面的性能問題常常會因為操作DOM而出現瓶頸，於是乎有什麼方法可以讓操作DOM的效率提升呢? ReactJs 提出了虛擬DOM的概念</p>
 <a id="more"></a>
-<h4 id="Copy-By-Reference-And-Copy-By-Value"><a href="#Copy-By-Reference-And-Copy-By-Value" class="headerlink" title="Copy By Reference And Copy By Value"></a>Copy By Reference And Copy By Value</h4><p>首先可以看到第一個差異性便是 <code>class</code> 是 <code>Copy By Reference</code> 、<code>strcut</code> 是 <code>Copy By Value</code> 。下面我們舉一個簡單的例子說明兩者的差異。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">number</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> num: <span class="type">Int</span></span><br><span class="line">  <span class="keyword">init</span> (num: <span class="type">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">self</span>.num = num</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = number (n: <span class="number">5</span>)</span><br><span class="line"><span class="keyword">var</span> b = a</span><br><span class="line">b.num = <span class="number">2</span></span><br></pre></td></tr></table></figure>
-<p>當將 呼叫 <code>b = a</code> 時，<code>b</code> 其實是 指向 <code>a</code> 的一個 <code>Reference</code>，他們其實參考到的都是同一段記憶體位置，所以當呼叫 <code>b.num = 2</code> 時，其實同時也讓 <code>a.num</code> 的值也等於 2 了，因為他們使用的是同一個 Reference 實體。</p>
-<p>接下來我們將 class 替換成 struct ：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">number</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> num: <span class="type">Int</span></span><br><span class="line">  <span class="keyword">init</span> (num: <span class="type">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">self</span>.num = num</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = number (n: <span class="number">5</span>)</span><br><span class="line"><span class="keyword">var</span> b = a</span><br><span class="line">b.num = <span class="number">2</span></span><br></pre></td></tr></table></figure>
-<p>但是由於 <code>Struct</code> 是 <code>Call By Value</code> ， 當呼叫 <code>b = a</code> 的時候，其實是將 a 的記憶體內容複製一份給 <code>b</code> ，所以 b 跟 a 是完全不同的記憶體位址，所以當修改<code>b</code>中的變數時，並不會對 <code>a</code> 中的變數有任何改變。</p>
-<h4 id="Swift-中的繼承"><a href="#Swift-中的繼承" class="headerlink" title="Swift 中的繼承"></a>Swift 中的繼承</h4><p>在其他有 struct 的語言中(像是C++)， struct 是可以被繼承的，但是在 Swift 中，只有 class 可以被繼承、 struct 是不可以被繼承的。</p>
-<h4 id="使用的時機"><a href="#使用的時機" class="headerlink" title="使用的時機"></a>使用的時機</h4><p>在 Apple 早期的 Swift 文件推薦開發者優先使用 class ; 一些近期的文件則推薦優先使用 struct。由於 class 物件是 reference type ， 所以會被儲存在記憶體中的 heap  ; struct 是 value type ，所以被存在 stack。根據一些線上的實測，越新版的 Swift ， struct 效能越顯著的強大。 但是到底要用 class 還是 struct ， 還是需要根據使用情境而斟酌選擇適合的。</p>
-<h4 id="其他共同的性質"><a href="#其他共同的性質" class="headerlink" title="其他共同的性質"></a>其他共同的性質</h4><ul>
-<li>都可以實作 <code>protocol</code></li>
-<li>都可使用 <code>extension</code> ，擴充 method</li>
-<li>都可以使用泛型(Generic)</li>
+<h2 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. 對複雜的DOM結構，提供一種方便操作的工作，使得開發效率提升</span><br><span class="line">2. 保證最小化的DOM操作，使得執行效率提升</span><br></pre></td></tr></table></figure>
+<p>假設今天當 ReactJs 沒有虛擬DOM的實現，我們必須要自己做，我們應該用什麼想法去設計這樣的功能呢? </p>
+<ol>
+<li><p>先有數據，透過State存放數據</p>
+</li>
+<li><p>JSX 模板，即Component中的 Render 函數 </p>
+</li>
+<li><p>數據 + 模板結合，生成真實DOM，來顯示 : </p>
+<ul>
+<li>React Render 函式中，會將數據跟模板相結合生成一個真實的DOM，並掛載在頁面上。</li>
 </ul>
+</li>
+<li><p>State 發生改變</p>
+</li>
+<li><p>假設以ReactJS的流程來看，又會執行一次步驟三</p>
+</li>
+</ol>
+<p>這樣其實簡單的實現思路就達成了，但是上面的流程有什麼樣的缺陷呢? </p>
+<ul>
+<li>第一次生成一個完整的DOM片段。</li>
+<li>第二次生成一個完整的DOM片段。</li>
+<li>第二次的DOM 替換第一次的DOM，非常耗性能。</li>
+</ul>
+<p>假設我們就上述思路去思考，有什麼方式或者流程可以優化的呢? 其實我們只要將變動的DOM做差異比對，更新局部有更新的DOM元素即可，修改後的思路如下 : </p>
+<ol>
+<li><p>State 數據</p>
+</li>
+<li><p>JSX 模板</p>
+</li>
+<li><p>數據 + 模板結合，生成真實DOM，來顯示</p>
+</li>
+<li><p>State 數據發生改變</p>
+</li>
+<li><p>數據 + 模板結合，生成真實的DOM，並不直接替換原始的DOM</p>
+</li>
+<li><p>新的DOM(DocumentFragment)和原始的DOM做比對，找差異</p>
+</li>
+<li><p>找出變化的元素</p>
+</li>
+<li><p>只用新的DOM中的有更新的元素，替換掉老的DOM中的既有元素</p>
+</li>
+</ol>
+<p>但上述的思路還有什麼缺陷呢 ? 雖然跟第一個方法比肯定有性能上的提升，但整體的性能的提升並不明顯。因為我們還是去操作原生DOM元素，在一開始文章開頭我們有提到，DOM的操作其實很慢，在上面的兩種方法中，其實還是真正的去操作了DOM元素，那麼我們就需要更近一步的思考了。</p>
+<h2 id="React-JS-的解決思路"><a href="#React-JS-的解決思路" class="headerlink" title="React JS 的解決思路"></a>React JS 的解決思路</h2><p>由於操作DOM元素很慢，所以ReactJS 想到了一個方法，如果我們將DOM的結構用 Javascript 的對象儲存，並在比對差異的時候是針對 Javascript 的對象操作(虛擬DOM)，所以我們去想一下 ReactJS 是怎麼實現的呢</p>
+<ol>
+<li><p>state數據</p>
+</li>
+<li><p>JSX模板</p>
+</li>
+<li><p>數據 + 模板結合，生成真實的DOM來顯示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id =&apos;abc&apos;&gt;&lt;span&gt;hello wordl&lt;/span&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>生成虛擬DOM</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&apos;div&apos;, &#123;id: &apos;abc&apos;&#125;, [&apos;span&apos;, &#123;&#125;, &apos;helloworld&apos;]]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>State 發生變化</p>
+</li>
+<li><p>數據 + 模板 生成新的虛擬DOM</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&apos;div&apos;, &#123;id: &apos;abc&apos;&#125;, [&apos;span&apos;, &#123;&#125;, &apos;bye bye&apos;]]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>比較原始虛擬DOM和新的虛擬DOM的區別，找到區別是span中內容。</p>
+<ul>
+<li><p>透過高效率的Diff算法，這邊不做太詳細的描述，因為DOM其實是一個樹狀結構，在React中，如果一個父節點底下有一個子節點的數據需要做改變，那麼這整個父節點之下的所有元素都會被記錄成有差異變化</p>
+<p><img src="https://foio.github.io/images/vdom-diff.png" alt="alt"></p>
+</li>
+</ul>
+</li>
+<li><p>直接操作dom，改變span中的內容。</p>
+</li>
+</ol>
+<p>那在上面的實現方式中，跟我們一開始如果不採用虛擬DOM相比，性能比又是如何呢? 其實我們在第四步的過程中，生成虛擬DOM會相對消耗一些性能，但是由於虛擬DOM是JS對象，JS對象的生成的性能消耗非常小，所以這一段我們基本可以忽略他，但是在第六步跟第七步，我們可以極大的提升性能，為什麼呢？因為我們在改變數據的同時，不需要再去生成相對複雜的DOM元素，而是一個JS對象，然後我們再比對差異的時候，也是透過JS對象的比對，去找到需要改變的元素，在這樣子的操作下，ReactJS 滿足了我們一開始所說的目的，既可以提高性能，也可以透過簡單的JSX模板的方式，去簡單的操作我們的DOM元素。</p>
+<p>參考 :</p>
+<p><a href="https://foio.github.io/virtual-dom/" target="_blank" rel="noopener">https://foio.github.io/virtual-dom/</a></p>
 
       
     </div>
@@ -425,9 +483,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/iOS/" rel="tag"># iOS</a>
+            <a href="/tags/React/" rel="tag"># React</a>
           
-            <a href="/tags/Swift/" rel="tag"># Swift</a>
+            <a href="/tags/前端開發/" rel="tag"># 前端開發</a>
           
         </div>
       
@@ -440,8 +498,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/05/17/android-layout-2/" rel="next" title="Android Layout 佈局 (二)">
-                <i class="fa fa-chevron-left"></i> Android Layout 佈局 (二)
+              <a href="/2018/12/18/react-component-props/" rel="next" title="React 組件的傳值">
+                <i class="fa fa-chevron-left"></i> React 組件的傳值
               </a>
             
           </div>
@@ -449,10 +507,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/06/02/ios-heap-vs-stack/" rel="prev" title="淺談 Heap 與 Stack">
-                淺談 Heap 與 Stack <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -606,7 +660,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#class-與-struct"><span class="nav-number">1.</span> <span class="nav-text">class 與 struct</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Copy-By-Reference-And-Copy-By-Value"><span class="nav-number">1.0.1.</span> <span class="nav-text">Copy By Reference And Copy By Value</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Swift-中的繼承"><span class="nav-number">1.0.2.</span> <span class="nav-text">Swift 中的繼承</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用的時機"><span class="nav-number">1.0.3.</span> <span class="nav-text">使用的時機</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他共同的性質"><span class="nav-number">1.0.4.</span> <span class="nav-text">其他共同的性質</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#React中的虛擬DOM詳解"><span class="nav-number">1.</span> <span class="nav-text">React中的虛擬DOM詳解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#核心思想"><span class="nav-number">1.1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-JS-的解決思路"><span class="nav-number">1.2.</span> <span class="nav-text">React JS 的解決思路</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -749,9 +803,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2017/06/01/swift-class-vs-struct/';
-          this.page.identifier = '2017/06/01/swift-class-vs-struct/';
-          this.page.title = 'Swift class 與 struct 差異';
+          this.page.url = 'http://yoursite.com/2018/12/22/react-virtual-dom/';
+          this.page.identifier = '2018/12/22/react-virtual-dom/';
+          this.page.title = 'React中的虛擬DOM詳解';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://allen-hsu.disqus.com/embed.js';
