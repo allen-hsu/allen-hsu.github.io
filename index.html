@@ -274,6 +274,188 @@
   
 
   <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/05/30/android-performance/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2021/05/30/android-performance/" itemprop="url">
+                  Android View渲染效能優化
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2021-05-30T12:01:27+08:00">
+                2021-05-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-開發/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 開發</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/05/30/android-performance/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/05/30/android-performance/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Android-View-渲染效能優化"><a href="#Android-View-渲染效能優化" class="headerlink" title="Android View 渲染效能優化"></a>Android View 渲染效能優化</h2><blockquote>
+<p>好久沒寫文章了，應該至少兩年多了，這兩年工作轉換了很多，現在又重回 Android 開發的行列，最近工作上剛好遇到需要優化一個頁面的渲染性能(解決卡頓問題)，所以剛好透過這篇文章來覆盤跟總結一下 Android 性能優化</p>
+</blockquote>
+<h3 id="造成-View-渲染緩慢的原因"><a href="#造成-View-渲染緩慢的原因" class="headerlink" title="造成 View 渲染緩慢的原因"></a>造成 View 渲染緩慢的原因</h3><p>在這個 Case 中，有幾個非常常見的 View 卡頓原因，這邊就列出這幾個常見的 Case</p>
+<h4 id="Layout-佈局過於複雜"><a href="#Layout-佈局過於複雜" class="headerlink" title="Layout 佈局過於複雜"></a>Layout 佈局過於複雜</h4><p>因為 inflate 需要花費的時間過久，如果你的 Layout 層次過於複雜的話，所以需要盡量減少 Layout 佈局的複雜度，善用<code>ConstraintLayout</code>去減少佈局的複雜度</p>
+<h4 id="RecycleView-頻繁全局刷新"><a href="#RecycleView-頻繁全局刷新" class="headerlink" title="RecycleView 頻繁全局刷新"></a>RecycleView 頻繁全局刷新</h4><p>這個蠻容易在開發過程中出現的一個錯誤，RecyclerView 主要的更新流程是透過</p>
+<blockquote>
+<p>GetData –&gt; setAdapter –&gt; 通知 RecyclerView 更新<br>在通知 RecyclerView 更新這個環節有許多的方法</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title">notifyDataSetChanged</span><span class="params">()</span></span></span><br><span class="line"><span class="function">Notify any registered observers that the data set has changed.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title">notifyItemChanged</span><span class="params">(<span class="keyword">int</span> position, Object payload)</span></span></span><br><span class="line"><span class="function">Notify any registered observers that the item at position has changed with an optional payload object.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title">notifyItemChanged</span><span class="params">(<span class="keyword">int</span> position)</span></span></span><br><span class="line"><span class="function">Notify any registered observers that the item at position has changed.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title">notifyItemInserted</span><span class="params">(<span class="keyword">int</span> position)</span></span></span><br><span class="line"><span class="function">Notify any registered observers that the item reflected at position has been newly inserted.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title">notifyItemMoved</span><span class="params">(<span class="keyword">int</span> fromPosition, <span class="keyword">int</span> toPosition)</span></span></span><br><span class="line"><span class="function">Notify any registered observers that the item reflected at fromPosition has been moved to toPosition.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title">notifyItemRangeChanged</span><span class="params">(<span class="keyword">int</span> positionStart, <span class="keyword">int</span> itemCount, Object payload)</span></span></span><br><span class="line"><span class="function">Notify any registered observers that the itemCount items starting at position positionStart have changed.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title">notifyItemRangeChanged</span><span class="params">(<span class="keyword">int</span> positionStart, <span class="keyword">int</span> itemCount)</span></span></span><br><span class="line"><span class="function">Notify any registered observers that the itemCount items starting at position positionStart have changed.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title">notifyItemRangeInserted</span><span class="params">(<span class="keyword">int</span> positionStart, <span class="keyword">int</span> itemCount)</span></span></span><br><span class="line"><span class="function">Notify any registered observers that the currently reflected itemCount items starting at positionStart have been newly inserted.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title">notifyItemRangeRemoved</span><span class="params">(<span class="keyword">int</span> positionStart, <span class="keyword">int</span> itemCount)</span></span></span><br><span class="line"><span class="function">Notify any registered observers that the itemCount items previously located at positionStart have been removed from the data set.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title">notifyItemRemoved</span><span class="params">(<span class="keyword">int</span> position)</span></span></span><br><span class="line"><span class="function">Notify any registered observers that the item previously located at position has been removed from the data set.</span></span><br></pre></td></tr></table></figure>
+<p>但是這邊常犯的錯誤是直接呼叫 <code>notifyDataSetChanged</code>，這個會直接使整個 RecyclerView 全局刷新，但我們有時候獲得的資料只是一小部分的改動，所以我們應該根據當下情況去使用其他的 function，或者使用 Android 官方提供的<code>DiffUtil</code>去幫助做資料更新的比對</p>
+<p>ref : <a href="https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil" target="_blank" rel="noopener">https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil</a></p>
+<h4 id="局部更新造成全局更新"><a href="#局部更新造成全局更新" class="headerlink" title="局部更新造成全局更新"></a>局部更新造成全局更新</h4><p>這個在這個 case 上，很容易發生的是在動態改變 text 內容的 TextView 之上，假設今天有一個場景，是有一個倒數計時的 UI 呈現，那麼就會定時地去更新該 TextView，但是如果 TextView 的 width 跟 height 是<code>wrap_content</code>，那就會造成這個 TextView 有機會的去更新全局的 UI。</p>
+<h4 id="onDraw-onMeasure-onLayout-時做了耗時操作"><a href="#onDraw-onMeasure-onLayout-時做了耗時操作" class="headerlink" title="onDraw, onMeasure, onLayout 時做了耗時操作"></a>onDraw, onMeasure, onLayout 時做了耗時操作</h4><p>這幾個關鍵函數，都應該只做他們的自我權責，不應該在這些 Function 裡面做不必要的耗時操作，尤其是 onDraw，這也會造成 UI 渲染的效能瓶頸</p>
+<h4 id="頻繁-Add-Remove"><a href="#頻繁-Add-Remove" class="headerlink" title="頻繁 Add/Remove"></a>頻繁 Add/Remove</h4><p>頻繁 Add/Remove 也是會觸發整個佈局的重新繪製，所以應該避免</p>
+<h3 id="如何找出緩慢的貧頸"><a href="#如何找出緩慢的貧頸" class="headerlink" title="如何找出緩慢的貧頸"></a>如何找出緩慢的貧頸</h3><p>上述就是常見的幾種錯誤使用方式，但是我們在開發的時候，可能會遇到難以查找是什麼原因造成整體重繪(有可能上述狀況都有，不好定義)，可以透過 Android 自帶的工具或者一些方式</p>
+<h4 id="在-RootView-的-requestLayout-print-stacktree"><a href="#在-RootView-的-requestLayout-print-stacktree" class="headerlink" title="在 RootView 的 requestLayout print stacktree"></a>在 RootView 的 requestLayout print stacktree</h4><p>可以複寫 RootView 的 requestLayout function，並且在裡面打印 stacktree，這樣可以查找出是哪一個 UI 元件呼叫 stacktree，</p>
+<h4 id="透過開發者工具測量速度"><a href="#透過開發者工具測量速度" class="headerlink" title="透過開發者工具測量速度"></a>透過開發者工具測量速度</h4><p>在開發者選項裡有一個”硬件加速渲染“，裡面有一個“調試 GPU 過度繪製”，這個會在屏幕上以顏色來區分 overdraw（過度繪製，也就是進行了不必要的繪製）的嚴重重度：</p>
+<ul>
+<li>藍色 1 倍 overdraw</li>
+<li>綠色 2 倍 overdraw</li>
+<li>紅色 3 倍 overdraw</li>
+<li>紫色 4 倍 overdraw</li>
+</ul>
+<p>在開發者選項面有一個是<code>監控</code><br>選擇<code>GPU使用情況</code>，選擇第二個<br><code>在螢幕上顯示條型</code>，就可以在手機上即時觀測到目前的使用情況</p>
+<p>參考文件 :</p>
+<ul>
+<li><a href="https://developer.android.com/topic/performance/rendering/optimizing-view-hierarchies" target="_blank" rel="noopener">https://developer.android.com/topic/performance/rendering/optimizing-view-hierarchies</a></li>
+<li><a href="https://developer.android.com/training/improving-layouts" target="_blank" rel="noopener">https://developer.android.com/training/improving-layouts</a></li>
+<li><a href="https://developer.android.com/topic/performance/vitals/render.html#custom-monitoring" target="_blank" rel="noopener">https://developer.android.com/topic/performance/vitals/render.html#custom-monitoring</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/react-virtual-dom/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1669,193 +1851,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/05/solidity0x1/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Allen Hsu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="AllenHsu的技術手扎">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2018/04/05/solidity0x1/" itemprop="url">
-                  solidity0x1
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-04-05T10:30:38+08:00">
-                2018-04-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/區塊鏈/" itemprop="url" rel="index">
-                    <span itemprop="name">區塊鏈</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/04/05/solidity0x1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/04/05/solidity0x1/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Solidity-0x1"><a href="#Solidity-0x1" class="headerlink" title="Solidity 0x1"></a>Solidity 0x1</h2><p>Solidity是什麼 ?</p>
-<blockquote>
-<p>根據維基百科描述，</p>
-<table>
-<thead>
-<tr>
-<th><a href="https://zh.wikipedia.org/wiki/File:Solidity_logo.svg" target="_blank" rel="noopener"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Solidity_logo.svg/200px-Solidity_logo.svg.png" alt="Solidity logo.svg"></a>Solidity的標誌</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://zh.wikipedia.org/wiki/%E7%B6%B2%E7%AB%99" target="_blank" rel="noopener">網站</a></td>
-<td><a href="http://github.com/ethereum/solidity" target="_blank" rel="noopener">github.com/ethereum/solidity</a></td>
-</tr>
-<tr>
-<td>啟發語言<a href="https://zh.wikipedia.org/wiki/JavaScript" target="_blank" rel="noopener">JavaScript</a>, <a href="https://zh.wikipedia.org/wiki/C%2B%2B" target="_blank" rel="noopener">C++</a>, <a href="https://zh.wikipedia.org/w/index.php?title=Python_(programming_language" target="_blank" rel="noopener">Python</a>&amp;action=edit&amp;redlink=1), <a href="https://zh.wikipedia.org/wiki/PowerShell" target="_blank" rel="noopener">PowerShell</a></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Solidity</strong>是一種合約導向式語言，可被應用於各種不同的區塊鏈平台上<a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-IBTimes12AUG2016-1" target="_blank" rel="noopener">[1]</a>，其主要開發者為Gavin Wood，Christian Reitwiessner，Alex Beregszaszi，Liana Husikyan，Yoichi Hirai和其他幾位早期以太坊核心貢獻者。<a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-:CoinDesk14Dec2016-2" target="_blank" rel="noopener">[2]</a><a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-:CCN09062016-3" target="_blank" rel="noopener">[3]</a>Solidity 可使程式開發人員能在區塊鏈上（例如以太坊）編寫智能合約</p>
-<ul>
-<li>Strongly Typed - 屬於一門強型別語言</li>
-<li>Similar to Javascript - 與Javascript非常類似(指的是syntax部分)。</li>
-</ul>
-</blockquote>
-<p>###Solidity 在 與智能合約。</p>
-<p><img src="https://i.imgur.com/XKlYaz1.png" alt="Imgur"></p>
-<p>我們使用 <code>Solidity</code> 編寫完的合約，透過 <code>Solidity Compiler</code> 會編譯出兩個文件，分別是 <code>Byte code</code> 與 <code>ABI</code>，<code>Byte code</code> 的文件將會被部署上 <code>Ethereum Net</code> ，所以真正在區塊鏈上的文件是 <code>Byte code</code>。<code>ABI</code> 對於編寫可以與智能合約交互的應用程式來說，是非常重要的。</p>
-<p>舉例來說 : </p>
-<p><img src="https://i.imgur.com/62GnEL3.png" alt="Imgur"></p>
-<p>我們在部署完智能合約之後，我們會需要透過Web前端，裡面會有一些Javascript的代碼，作為交互使用，Javascript並沒有能力能夠直接與 <code>Bytecode</code> 進行交互。我們就需要透過 <code>ABI</code> 與區塊鏈上的智能合約(ByteCode) 與其溝通而拿到目前智能合約內儲存的狀態或資料。</p>
-<p>###Solidity IDE - Remix</p>
-<p><a href="https://ethereum.github.io/browser-solidity/" target="_blank" rel="noopener">Remix</a> 是一個 Solidity Online的 Editor，可以用來編寫與測試 Solidity，也可以在上面直接發佈智能合約。</p>
-<h3 id="第一個智能合約-使用-Solidity"><a href="#第一個智能合約-使用-Solidity" class="headerlink" title="第一個智能合約 - 使用 Solidity"></a>第一個智能合約 - 使用 Solidity</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//每一個智能合約都必須定義，這邊指的是使用0.4.17或更高的編譯器版本</span></span><br><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.17</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//contract的修飾符關鍵字就像class一樣，定義這是一個合約</span></span><br><span class="line">contract Inbox &#123;</span><br><span class="line">    <span class="comment">//在這個合約裡面儲存一個string，並且是public，任何人都可以知道這個變量</span></span><br><span class="line">    string public message;</span><br><span class="line">    <span class="comment">//建構子，當這個合約被部署到區塊鏈上，會執行這個函式。</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">Inbox</span>(<span class="params">string initialMessage</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        message = initialMessage;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//改變這個合約中的message變量。</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">setMessage</span>(<span class="params">string newMessage</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        message = newMessage;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//取得這個合約中的message變量。</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">getMessage</span>(<span class="params"></span>) <span class="title">public</span> <span class="title">view</span> <span class="title">returns</span>(<span class="params">string</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> message;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>這樣就完成了一個簡單可以在區塊鏈上儲存字串訊息的智能合約。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1903,7 +1898,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">40</span>
                 <span class="site-state-item-name">文章</span>
               </a>
             </div>
@@ -1925,7 +1920,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">標籤</span>
               </a>
             </div>
@@ -1987,7 +1982,7 @@
         <div class="copyright">
   
   &copy;  2017 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

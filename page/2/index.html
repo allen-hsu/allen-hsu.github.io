@@ -274,6 +274,193 @@
   
 
   <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/05/solidity0x1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/04/05/solidity0x1/" itemprop="url">
+                  solidity0x1
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-04-05T10:30:38+08:00">
+                2018-04-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/區塊鏈/" itemprop="url" rel="index">
+                    <span itemprop="name">區塊鏈</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/05/solidity0x1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/04/05/solidity0x1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Solidity-0x1"><a href="#Solidity-0x1" class="headerlink" title="Solidity 0x1"></a>Solidity 0x1</h2><p>Solidity是什麼 ?</p>
+<blockquote>
+<p>根據維基百科描述，</p>
+<table>
+<thead>
+<tr>
+<th><a href="https://zh.wikipedia.org/wiki/File:Solidity_logo.svg" target="_blank" rel="noopener"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Solidity_logo.svg/200px-Solidity_logo.svg.png" alt="Solidity logo.svg"></a>Solidity的標誌</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://zh.wikipedia.org/wiki/%E7%B6%B2%E7%AB%99" target="_blank" rel="noopener">網站</a></td>
+<td><a href="http://github.com/ethereum/solidity" target="_blank" rel="noopener">github.com/ethereum/solidity</a></td>
+</tr>
+<tr>
+<td>啟發語言<a href="https://zh.wikipedia.org/wiki/JavaScript" target="_blank" rel="noopener">JavaScript</a>, <a href="https://zh.wikipedia.org/wiki/C%2B%2B" target="_blank" rel="noopener">C++</a>, <a href="https://zh.wikipedia.org/w/index.php?title=Python_(programming_language" target="_blank" rel="noopener">Python</a>&amp;action=edit&amp;redlink=1), <a href="https://zh.wikipedia.org/wiki/PowerShell" target="_blank" rel="noopener">PowerShell</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Solidity</strong>是一種合約導向式語言，可被應用於各種不同的區塊鏈平台上<a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-IBTimes12AUG2016-1" target="_blank" rel="noopener">[1]</a>，其主要開發者為Gavin Wood，Christian Reitwiessner，Alex Beregszaszi，Liana Husikyan，Yoichi Hirai和其他幾位早期以太坊核心貢獻者。<a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-:CoinDesk14Dec2016-2" target="_blank" rel="noopener">[2]</a><a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-:CCN09062016-3" target="_blank" rel="noopener">[3]</a>Solidity 可使程式開發人員能在區塊鏈上（例如以太坊）編寫智能合約</p>
+<ul>
+<li>Strongly Typed - 屬於一門強型別語言</li>
+<li>Similar to Javascript - 與Javascript非常類似(指的是syntax部分)。</li>
+</ul>
+</blockquote>
+<p>###Solidity 在 與智能合約。</p>
+<p><img src="https://i.imgur.com/XKlYaz1.png" alt="Imgur"></p>
+<p>我們使用 <code>Solidity</code> 編寫完的合約，透過 <code>Solidity Compiler</code> 會編譯出兩個文件，分別是 <code>Byte code</code> 與 <code>ABI</code>，<code>Byte code</code> 的文件將會被部署上 <code>Ethereum Net</code> ，所以真正在區塊鏈上的文件是 <code>Byte code</code>。<code>ABI</code> 對於編寫可以與智能合約交互的應用程式來說，是非常重要的。</p>
+<p>舉例來說 : </p>
+<p><img src="https://i.imgur.com/62GnEL3.png" alt="Imgur"></p>
+<p>我們在部署完智能合約之後，我們會需要透過Web前端，裡面會有一些Javascript的代碼，作為交互使用，Javascript並沒有能力能夠直接與 <code>Bytecode</code> 進行交互。我們就需要透過 <code>ABI</code> 與區塊鏈上的智能合約(ByteCode) 與其溝通而拿到目前智能合約內儲存的狀態或資料。</p>
+<p>###Solidity IDE - Remix</p>
+<p><a href="https://ethereum.github.io/browser-solidity/" target="_blank" rel="noopener">Remix</a> 是一個 Solidity Online的 Editor，可以用來編寫與測試 Solidity，也可以在上面直接發佈智能合約。</p>
+<h3 id="第一個智能合約-使用-Solidity"><a href="#第一個智能合約-使用-Solidity" class="headerlink" title="第一個智能合約 - 使用 Solidity"></a>第一個智能合約 - 使用 Solidity</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//每一個智能合約都必須定義，這邊指的是使用0.4.17或更高的編譯器版本</span></span><br><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.17</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//contract的修飾符關鍵字就像class一樣，定義這是一個合約</span></span><br><span class="line">contract Inbox &#123;</span><br><span class="line">    <span class="comment">//在這個合約裡面儲存一個string，並且是public，任何人都可以知道這個變量</span></span><br><span class="line">    string public message;</span><br><span class="line">    <span class="comment">//建構子，當這個合約被部署到區塊鏈上，會執行這個函式。</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">Inbox</span>(<span class="params">string initialMessage</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        message = initialMessage;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//改變這個合約中的message變量。</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">setMessage</span>(<span class="params">string newMessage</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        message = newMessage;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//取得這個合約中的message變量。</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">getMessage</span>(<span class="params"></span>) <span class="title">public</span> <span class="title">view</span> <span class="title">returns</span>(<span class="params">string</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> message;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>這樣就完成了一個簡單可以在區塊鏈上儲存字串訊息的智能合約。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/31/blockchain-0x1/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1758,164 +1945,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/19/rxjava-memory/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Allen Hsu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="AllenHsu的技術手扎">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/08/19/rxjava-memory/" itemprop="url">
-                  RxJava 的資源管理
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2017-08-19T15:18:51+08:00">
-                2017-08-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android-開發/" itemprop="url" rel="index">
-                    <span itemprop="name">Android 開發</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/08/19/rxjava-memory/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/08/19/rxjava-memory/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><blockquote>
-<p>前面介紹了關於 <a href="&quot;https://allen-hsu.github.io/2017/08/13/rxswift-dispose/&quot;">RxSwift 的資源管理</a>，這次要來介紹關於 <code>RxJava</code> 的部分，在 <code>RxJava</code> 中有一些第三方的資源管理像是 <a href="&quot;https://github.com/trello/RxLifecycle&quot;">RxLifecycle</a> 這種好用的第三方庫來幫忙在程式碼中，如果沒有及時的回收 Rx 相關的資源，會造成 <code>Activity/Fragment</code> 無法銷毀所導致的 <code>Memory Leak</code> ，<code>RxLifecycle</code> 的用法就是讓我們的 <code>Observable</code> 跟隨著 <code>Activity/Fragment</code> 的生命週期去取消訂閱，但是這樣就真的完美解決了 <code>RxJava</code> 的記憶體管理問題嗎 ? 我們來看看 <code>RxLifecycle</code> 的作者怎麼說。 </p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/08/19/rxjava-memory/#more" rel="contents">
-              閱讀全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1963,7 +1992,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">40</span>
                 <span class="site-state-item-name">文章</span>
               </a>
             </div>
@@ -1985,7 +2014,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">標籤</span>
               </a>
             </div>
@@ -2047,7 +2076,7 @@
         <div class="copyright">
   
   &copy;  2017 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
