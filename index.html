@@ -274,6 +274,176 @@
   
 
   <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/06/27/algorithm-patterns-1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2021/06/27/algorithm-patterns-1/" itemprop="url">
+                  algorithm-patterns
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2021-06-27T21:49:55+08:00">
+                2021-06-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Algorithm-練習/" itemprop="url" rel="index">
+                    <span itemprop="name">Algorithm 練習</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/06/27/algorithm-patterns-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/06/27/algorithm-patterns-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Algorithm-Patterns-Part1-Sliding-Window"><a href="#Algorithm-Patterns-Part1-Sliding-Window" class="headerlink" title="Algorithm Patterns Part1 - Sliding Window"></a>Algorithm Patterns Part1 - Sliding Window</h2><p>最近在練習演算法，發現過去以前的學習方式都是錯的，也在工作多年後發現，內功還是非常重要的，像是演算法、資料結構等等，所以打算系統化的學習演算法相關知識，朋友推薦了這篇文章(放在文章最下方的參考資料)，我覺得非常不錯，所以打算將自己閱讀過後的理解，整理成 Blog，當成是學習的 Output，廢話不多說，正文開始。</p>
+<h3 id="Sliding-Window"><a href="#Sliding-Window" class="headerlink" title="Sliding Window"></a>Sliding Window</h3><p>這次介紹的方式是一個稱為 <code>Sliding Window</code> 的模式，他通常會被拿來解哪些題目呢?</p>
+<ol>
+<li>輸入是線性的資料結構，像是 <code>Linked List</code>、<code>Array</code>、<code>String</code> 等，這種線性的資料結構</li>
+<li>要求去尋找最長，最短的 <code>sub string</code>，或者是 <code>subarray</code>，或者是預期的一個值</li>
+</ol>
+<p>再來是要怎麼應用這個 pattern 呢 ?</p>
+<ol>
+<li>首先先找到 <code>Sliding Window</code> 的一個大小，一開始我們可能會有一個 <code>windowsEnd</code></li>
+<li>並且根據情況，去調整 Window 的大小，或者 window 大小不變，需要平移整個 Window<br><img src="https://cdn.hackernoon.com/images/G9YRlqC9joZNTWsi1ul7tRkO6tv1-8i6d3wi0.jpg" alt="Imgur"></li>
+</ol>
+<p>我們直接拿 leetcode 上的一題來看<br><code>Maximum sum subarray of size ‘K’ (easy)</code></p>
+<blockquote>
+<p>Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.</p>
+</blockquote>
+<p>題目是這樣的，<code>給一組 integer的 array</code>，找到一組 <code>subarray</code>，且是有<code>最大的總和</code>，看是不是很符合一開始定義的兩個條件呢?<br>接著我們看代碼。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">maxSubArray</span><span class="params">(nums: <span class="type">IntArray</span>)</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (nums.size &lt;= <span class="number">1</span>) &#123;                     <span class="comment">// 1. 如果只有一個 int，直接回傳該數值</span></span><br><span class="line">        <span class="keyword">return</span> nums[<span class="number">0</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> maxValue = nums[<span class="number">0</span>]                    <span class="comment">// 2. 初始化一個放最終的最大總和</span></span><br><span class="line">    <span class="keyword">var</span> currentValue = nums[<span class="number">0</span>]                <span class="comment">// 3. 初始化一個存放目前window的總和</span></span><br><span class="line">    <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">1</span> until nums.size) &#123;            <span class="comment">// 4. 迭代整個array，其實就是移動windowEnd</span></span><br><span class="line">        currentValue += nums[i]               <span class="comment">// 5. 其實這邊就是類似把window的值相加起來</span></span><br><span class="line">        <span class="keyword">if</span> (nums[i] &gt; currentValue) &#123;         <span class="comment">// 6. 如果當下的陣列值比前面加起來的window總合還大</span></span><br><span class="line">            currentValue = nums[i]            <span class="comment">// 7. 把windowsStart指向新的位置</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (maxValue &lt; currentValue) &#123;        <span class="comment">// 8. 每次計算window sum，且把最大的value存起來</span></span><br><span class="line">            maxValue = currentValue</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    println(<span class="string">"maxSubArray: <span class="variable">$maxValue</span>"</span>)</span><br><span class="line">    <span class="keyword">return</span> maxValue</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上就是 SlideWindow 會用到的場景。這次的演算法介紹到這邊，謝謝大家的觀看。</p>
+<h3 id="參考文獻"><a href="#參考文獻" class="headerlink" title="參考文獻"></a>參考文獻</h3><p><a href="https://hackernoon.com/14-patterns-to-ace-any-coding-interview-question-c5bb3357f6ed" target="_blank" rel="noopener">https://hackernoon.com/14-patterns-to-ace-any-coding-interview-question-c5bb3357f6ed</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/05/30/android-performance/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1683,179 +1853,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/05/solidity-function-type/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Allen Hsu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="AllenHsu的技術手扎">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2018/04/05/solidity-function-type/" itemprop="url">
-                  solidity_function_type
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-04-05T12:35:29+08:00">
-                2018-04-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/區塊鏈/" itemprop="url" rel="index">
-                    <span itemprop="name">區塊鏈</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/04/05/solidity-function-type/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/04/05/solidity-function-type/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Solidity函式常見修飾符"><a href="#Solidity函式常見修飾符" class="headerlink" title="Solidity函式常見修飾符"></a>Solidity函式常見修飾符</h2><p>在Solidity中有幾個常見的函示修飾符，這邊就來簡單介紹一下</p>
-<p><img src="https://i.imgur.com/mRuZF3l.png" alt="Imgur"></p>
-<ul>
-<li><p>public : 所有人都可以呼叫這個函式。</p>
-</li>
-<li><p>private : 只有合約能夠呼叫這個函式。</p>
-</li>
-<li><p>view/constant : 只會回傳資料，函式也不能修改任何變數或合約資料 </p>
-</li>
-<li><p>pure: 不能修改，也不能讀取合約內的資料。</p>
-</li>
-<li><p>payable: 當有人呼叫該函式，他們可能會發送 Ether。</p>
-</li>
-<li><p>returns (type) : 指該函式需要返回值，type為返回值的類型 。</p>
-<p>​</p>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1898,7 +1900,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-count">41</span>
                 <span class="site-state-item-name">文章</span>
               </a>
             </div>
@@ -1909,7 +1911,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">分類</span>
               </a>
             </div>
@@ -1920,7 +1922,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-count">43</span>
                 <span class="site-state-item-name">標籤</span>
               </a>
             </div>
