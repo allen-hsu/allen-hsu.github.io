@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="RxSwift 初心者入門 在之前我們稍微提過 RxSwift 這一個 framework ，也有稍微介紹了什麼是 Reactive Programming ，那這邊就來詳細談談如何學習以及使用 RxSwfit 吧。  使用 RxSwift 的 Playground首先我們先至 RxSwift Clone 整個 Project，接著我們這邊使用 Rx.Playground  做為入門的教學，按照官">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxSwift 基本入門">
+<meta property="og:url" content="http://yoursite.com/2017/08/08/rxswift-basic/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="RxSwift 初心者入門 在之前我們稍微提過 RxSwift 這一個 framework ，也有稍微介紹了什麼是 Reactive Programming ，那這邊就來詳細談談如何學習以及使用 RxSwfit 吧。  使用 RxSwift 的 Playground首先我們先至 RxSwift Clone 整個 Project，接著我們這邊使用 Rx.Playground  做為入門的教學，按照官">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://i.imgur.com/qMAmugR.png">
+<meta property="article:published_time" content="2017-08-08T15:22:31.000Z">
+<meta property="article:modified_time" content="2022-02-28T06:26:25.921Z">
+<meta property="article:author" content="Allen Hsu">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="swift">
+<meta property="article:tag" content="rxswift">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://i.imgur.com/qMAmugR.png">
+
+
+<link rel="canonical" href="http://yoursite.com/2017/08/08/rxswift-basic/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-tw","comments":true,"permalink":"http://yoursite.com/2017/08/08/rxswift-basic/","path":"2017/08/08/rxswift-basic/","title":"RxSwift 基本入門"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RxSwift 基本入門 | AllenHsu的技術手扎</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">AllenHsu的技術手扎</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">學海無涯，努力做個永遠年輕的人</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#RxSwift-%E5%88%9D%E5%BF%83%E8%80%85%E5%85%A5%E9%96%80"><span class="nav-number">1.</span> <span class="nav-text">RxSwift 初心者入門</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-RxSwift-%E7%9A%84-Playground"><span class="nav-number">1.1.</span> <span class="nav-text">使用 RxSwift 的 Playground</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E6%88%91%E5%80%91%E9%9C%80%E8%A6%81%E4%BD%BF%E7%94%A8-RxSwift"><span class="nav-number">1.2.</span> <span class="nav-text">為什麼我們需要使用 RxSwift</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.3.</span> <span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%9C%E6%96%BC-Observable"><span class="nav-number">1.4.</span> <span class="nav-text">關於 Observable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E5%80%8B-Observable-%E7%9A%84%E7%B0%A1%E5%96%AE%E4%BE%8B%E5%AD%90"><span class="nav-number">1.5.</span> <span class="nav-text">一個 Observable 的簡單例子</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Allen Hsu</p>
+  <div class="site-description" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/08/rxswift-basic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RxSwift 基本入門
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-08-08 23:22:31" itemprop="dateCreated datePublished" datetime="2017-08-08T23:22:31+08:00">2017-08-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-28 14:26:25" itemprop="dateModified" datetime="2022-02-28T14:26:25+08:00">2022-02-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/iOS-%E9%96%8B%E7%99%BC/" itemprop="url" rel="index"><span itemprop="name">iOS 開發</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="RxSwift-初心者入門"><a href="#RxSwift-初心者入門" class="headerlink" title="RxSwift 初心者入門"></a>RxSwift 初心者入門</h3><blockquote>
+<p>在之前我們稍微提過 <code>RxSwift</code> 這一個 <code>framework</code> ，也有稍微介紹了什麼是 <code>Reactive Programming</code> ，那這邊就來詳細談談如何學習以及使用 <code>RxSwfit</code> 吧。</p>
+</blockquote>
+<h4 id="使用-RxSwift-的-Playground"><a href="#使用-RxSwift-的-Playground" class="headerlink" title="使用 RxSwift 的 Playground"></a>使用 RxSwift 的 Playground</h4><p>首先我們先至 <a href="%22https://github.com/ReactiveX/RxSwift%22">RxSwift</a> <code>Clone</code> 整個 <code>Project</code>，接著我們這邊使用 <code>Rx.Playground</code>  做為入門的教學，按照官網的操作如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">To use playgrounds:</span><br><span class="line"></span><br><span class="line">Open Rx.xcworkspace</span><br><span class="line">Build the RxSwift-macOS scheme</span><br><span class="line">Open Rx playground in the Rx.xcworkspace tree view.</span><br><span class="line">Choose View &gt; Debug Area &gt; Show Debug Area</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p><img src="http://i.imgur.com/qMAmugR.png" alt="Imgur"></p>
+<h4 id="為什麼我們需要使用-RxSwift"><a href="#為什麼我們需要使用-RxSwift" class="headerlink" title="為什麼我們需要使用 RxSwift"></a>為什麼我們需要使用 RxSwift</h4><blockquote>
+<p>我們編寫的大多數程式碼都會設計外部事件的響應。當一個使用者操控一個控制元件，我們需要寫一個 <code>@IBAction</code> 的對應處理。我們需要觀察鍵盤的位置的改變。當 URL sessions 回傳數據時，我們必須提供一個閉包去接受相對應的資料。我們使用 <code>KVO</code> 去檢測變數的變化。所有的這些各式各樣系統的變化使得我們必須去撰寫相對應的代碼，而使得我們的程式碼變的臃腫且複雜，如果有一個一致的系統處理我們所有的呼叫&#x2F;響應的代碼，這樣我們的程式會不會變得更優雅且美好？Rx是這樣的一個系統，RxSwfit是一個建立在Swift語言上的官方實現版本。</p>
+</blockquote>
+<h4 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h4><blockquote>
+<p>Every <strong>Observable</strong> instance is just a sequence. </p>
+<p>每一個 <strong>Observable</strong> 就只是一個序列而已。</p>
+</blockquote>
+<p>觀察者模式 <code>Observer Pattern</code> 和序列 <code>sequence</code> 本質上是等價的，這在整個 Rx 框架(不僅只限於RxSwift)是很重要的一個基本概念。</p>
+<p><code>Observable</code> 相比 <code>Swift</code> 自帶的 <code>Sequence</code>  優勢在於，<code>RxSwift</code> 的 <code>Observable</code> 可以非同步的接受元素或者對象，這是整個 <code>RxSwift</code> 的核心。</p>
+<ul>
+<li>一個 <code>Observable</code> (<code>ObservableType</code>) 相當於一個 <code>Sequence</code>。</li>
+<li><code>ObservableType.subscribe(_:)</code>  相等於 <code> Sequence.makeIterator()</code>。</li>
+<li>Observer（callback）需要傳遞給ObservableType.subscribe方法來接受序列裡的元素，代替在返回的 <code>generator</code> 上呼叫 <code>next()</code> 方法。</li>
+</ul>
+<h4 id="關於-Observable"><a href="#關於-Observable" class="headerlink" title="關於 Observable"></a>關於 Observable</h4><blockquote>
+<p>在 ReactiveX 中，<code>Observable&lt;Element&gt;</code> 代表的是一個可觀察序列，從字面意思可以看出這是在觀察者模式中的被觀察者，它會向觀察對象發送事件序列：</p>
+<ul>
+<li>next(Element) : 新事件。</li>
+<li>error(ErrorType) : 帶有異常的事件完成序列。</li>
+<li>completed() : 正常事件完結序列。</li>
+</ul>
+</blockquote>
+<p>假如一個 <code>Observable</code>  發射一個 <code>next</code> 事件 ( <code>Event.next(Element)</code> )，那它能夠繼續發射更多的事件，假如 <code>Observable</code>  發射一個 <code>error</code> 事件<code>(Event.error(ErrorType))</code> 或者一個 <code>completed</code> 事件 <code>(Event.completed)</code>，那麼這個 <code>Observable</code>  將再也不能發送事件給訂閱者。</p>
+<p><code>Observable</code> 的序列概念，我們可以很容易地對他做出可視化， 像是下列的序列依樣。</p>
+<p>一個簡單的數字序列，<code>|</code> 符號代表正常中斷。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--1--2--3--4--5--6--|----&gt; // &quot;|&quot; = Terminates normally</span><br></pre></td></tr></table></figure>
+
+<p>一個字串序列，<code>X</code> 符號代表錯誤中斷</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--a--b--c--d--e--f--X----&gt; // &quot;X&quot; = Terminates with an error</span><br></pre></td></tr></table></figure>
+
+<p>也有可能是無限的序列，像是一個按鈕的操作序列</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--tap--tap----------tap--&gt; // &quot;|&quot; = Continues indefinitely, such as a sequence of button taps</span><br></pre></td></tr></table></figure>
+
+<p>上面這些示意圖都被稱為 <code>marble diagram</code> ，這邊有更多的 <code>marble diagram</code> 示意圖 :</p>
+<p><a href="%22http://rxmarbles.com/%22">RxJS Marbles</a></p>
+<h4 id="一個-Observable-的簡單例子"><a href="#一個-Observable-的簡單例子" class="headerlink" title="一個 Observable 的簡單例子"></a>一個 Observable 的簡單例子</h4><blockquote>
+<p> <code>Observable</code> 除非有訂閱者，否則不會執行他們的 <code>subscription closure</code> </p>
+<p> 下面的例子， <code>Observable</code> 的 <code>closure</code> 永遠不會被執行，因為沒有任何訂閱者。( <code>Rx.Playground</code> 中運行的範例)</p>
+</blockquote>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">example(<span class="string">&quot;Observable with no subscribers&quot;</span>) &#123;</span><br><span class="line">    <span class="keyword">_</span> <span class="operator">=</span> <span class="type">Observable</span>&lt;<span class="type">String</span>&gt;.create &#123; observerOfString -&gt; <span class="type">Disposable</span> <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;This will never be printed&quot;</span>)</span><br><span class="line">        observerOfString.on(.next(<span class="string">&quot;😬&quot;</span>))</span><br><span class="line">        observerOfString.on(.completed)</span><br><span class="line">        <span class="keyword">return</span> <span class="type">Disposables</span>.create()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>輸出結果 : </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">---</span> <span class="type">Observable</span> with no subscribers example <span class="operator">---</span></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>在下面的例子， <code>closure</code> 當 <code>subscribe(_:)</code> 被調用時執行。</p>
+</blockquote>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">example(<span class="string">&quot;Observable with subscriber&quot;</span>) &#123;</span><br><span class="line">  <span class="keyword">_</span> <span class="operator">=</span> <span class="type">Observable</span>&lt;<span class="type">String</span>&gt;.create &#123; observerOfString <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Observable created&quot;</span>)</span><br><span class="line">            observerOfString.on(.next(<span class="string">&quot;😉&quot;</span>))</span><br><span class="line">            observerOfString.on(.completed)</span><br><span class="line">            <span class="keyword">return</span> <span class="type">Disposables</span>.create()</span><br><span class="line">        &#125;</span><br><span class="line">        .subscribe &#123; event <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(event)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>輸出結果 : </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">---</span> <span class="type">Observable</span> with subscriber example <span class="operator">---</span></span><br><span class="line"><span class="type">Observable</span> created</span><br><span class="line">next(😉)</span><br><span class="line">completed</span><br></pre></td></tr></table></figure>
+
+<p>這邊先不關心如何建立這些 <code>Observable</code> 的細節，我們將在後面會提到。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+              <a href="/tags/swift/" rel="tag"># swift</a>
+              <a href="/tags/rxswift/" rel="tag"># rxswift</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/07/02/git-message-template-and-githook/" rel="prev" title="如何使用 git commit template 與 git hooks 管理團隊的 git log">
+                  <i class="fa fa-chevron-left"></i> 如何使用 git commit template 與 git hooks 管理團隊的 git log
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/08/13/rxswift-dispose/" rel="next" title="RxSwift 的資源管理">
+                  RxSwift 的資源管理 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
