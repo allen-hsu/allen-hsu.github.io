@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="ListView - 定製介面 上一篇文章中，我們介紹了基本的 ListView 用法， 但是我們在專案中，常常會需要不只是顯示文字，而是圖片或者其他更豐富的 ListView 介面。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 的 ListView (二)">
+<meta property="og:url" content="http://yoursite.com/2017/06/19/android-layout-custom-listview/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="ListView - 定製介面 上一篇文章中，我們介紹了基本的 ListView 用法， 但是我們在專案中，常常會需要不只是顯示文字，而是圖片或者其他更豐富的 ListView 介面。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://i.imgur.com/hTw1R7s.jpg">
+<meta property="article:published_time" content="2017-06-19T14:52:46.000Z">
+<meta property="article:modified_time" content="2024-04-27T13:32:04.257Z">
+<meta property="article:author" content="Allen Hsu">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="layout">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://i.imgur.com/hTw1R7s.jpg">
+
+
+<link rel="canonical" href="http://yoursite.com/2017/06/19/android-layout-custom-listview/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-tw","comments":true,"permalink":"http://yoursite.com/2017/06/19/android-layout-custom-listview/","path":"2017/06/19/android-layout-custom-listview/","title":"Android 的 ListView (二)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Android 的 ListView (二) | AllenHsu的技術手扎</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">AllenHsu的技術手扎</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">學海無涯，努力做個永遠年輕的人</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ListView-%E5%AE%9A%E8%A3%BD%E4%BB%8B%E9%9D%A2"><span class="nav-number">1.</span> <span class="nav-text">ListView - 定製介面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A2%E8%A3%BD%E5%8C%96-Adpter"><span class="nav-number">1.1.</span> <span class="nav-text">客製化 Adpter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%9C%E6%96%BC-LayoutInflater"><span class="nav-number">1.2.</span> <span class="nav-text">關於 LayoutInflater</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">1.3.</span> <span class="nav-text">結論</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Allen Hsu</p>
+  <div class="site-description" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/19/android-layout-custom-listview/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Android 的 ListView (二) | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android 的 ListView (二)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-06-19 22:52:46" itemprop="dateCreated datePublished" datetime="2017-06-19T22:52:46+08:00">2017-06-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android-%E9%96%8B%E7%99%BC/" itemprop="url" rel="index"><span itemprop="name">Android 開發</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="ListView-定製介面"><a href="#ListView-定製介面" class="headerlink" title="ListView - 定製介面"></a>ListView - 定製介面</h2><blockquote>
+<p>上一篇文章中，我們介紹了基本的 ListView 用法， 但是我們在專案中，常常會需要不只是顯示文字，而是圖片或者其他更豐富的 ListView 介面。</p>
+</blockquote>
+<p><img src="http://i.imgur.com/hTw1R7s.jpg" alt="Imgur"></p>
+<span id="more"></span>
+<h3 id="客製化-Adpter"><a href="#客製化-Adpter" class="headerlink" title="客製化 Adpter"></a>客製化 Adpter</h3><p>首先我們需要定義一個類別，作為 ListView Adpter 的轉接類型。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Fruit</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> imageId;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Fruit</span><span class="params">(String name, <span class="type">int</span> imageId)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.imageId = imageId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getImageId</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> imageId;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Fruit</code> 有兩個變數，name 表示水果的名字， imageId 表示水果對應圖片的資源 id。接著我們需要一個自定義的佈局。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">LinearLayout</span> <span class="attr">xmlns:android</span>=<span class="string">&quot;http://schemas.android.com/apk/res/android&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">&quot;match_parent&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">&quot;wrap_content&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">ImageView</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:id</span>=<span class="string">&quot;@+id/fruit_image&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">&quot;wrap_content&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">&quot;wrap_content&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">TextView</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:id</span>=<span class="string">&quot;@+id/fruit_name&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">&quot;wrap_content&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">&quot;match_parent&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_gravity</span>=<span class="string">&quot;center&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_margin</span>=<span class="string">&quot;10dp&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在這個佈局中，我們定義了一個 ImageView 用來顯示水果的圖片，又定義一個 TextView 用來顯示水果的名稱。</p>
+<p>接著我們需要一個自定義的 Adpter ，這個自定義 Adpter 繼承自 ArrayAdapter ，並將泛型類別指定為 Fruit 類。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FruitAdapter</span> <span class="keyword">extends</span> <span class="title class_">ArrayAdapter</span>&lt;Fruit&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> resourceId;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">FruitAdapter</span><span class="params">(Context context, <span class="type">int</span> textViewResourceId, List&lt;Fruit&gt; objects)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(context, textViewResourceId, objects);</span><br><span class="line">        resourceId = textViewResourceId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> View <span class="title function_">getView</span><span class="params">(<span class="type">int</span> position, View convertView, ViewGroup parent)</span> &#123;</span><br><span class="line">        <span class="type">Fruit</span> <span class="variable">fruit</span> <span class="operator">=</span> getItem(position);</span><br><span class="line">        <span class="type">View</span> <span class="variable">view</span> <span class="operator">=</span> LayoutInflater.from(getContext()).inflate(resourceId, parent, <span class="literal">false</span>);</span><br><span class="line">        <span class="type">ImageView</span> <span class="variable">fruitImage</span> <span class="operator">=</span> (ImageView) view.findViewById(R.id.fruit_image);</span><br><span class="line">        <span class="type">TextView</span> <span class="variable">fruitName</span> <span class="operator">=</span> (TextView) view.findViewById(R.id.fruit_name);</span><br><span class="line">        fruitImage.setImageResource(fruit.getImageId());</span><br><span class="line">        fruitName.setText(fruit.getName());</span><br><span class="line">        <span class="keyword">return</span> view;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>FruitAdapter 覆寫了父類別的建構子，將 Context 、 ListView Child Item 佈局 id 還有資料內容都傳遞進來。又覆寫了 <code>getView()</code> ，這個 Function 會在每個 Child Item 被滾動到可視範圍內的時候呼叫。在 <code>getView()</code> 方法中， 首先通過 <code>getItem()</code> 得到目前的 <code>Fruit</code> 實體，然後使用 <code>LayoutInflater</code> 來將這個 Child Item 加入我們傳入的佈局中。</p>
+<h3 id="關於-LayoutInflater"><a href="#關於-LayoutInflater" class="headerlink" title="關於 LayoutInflater"></a>關於 LayoutInflater</h3><p>LayoutInflater 這個 class 主要功能是將user-defined layout的xml實體化為對應的View物件。有別於setContentView()，可以不用立即將View呈現到UI畫面，讓開發者可依需求在適當的時間或地方呈現出來。</p>
+<blockquote>
+<p>如何使用 LayoutInflater</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">View <span class="title function_">inflate</span><span class="params">(<span class="type">int</span> resource, ViewGroup root, <span class="type">boolean</span> attachToRoot)</span></span><br></pre></td></tr></table></figure>
+<p>這邊我們的三個參數設定為 false，因為一但 View 有了它的父節點佈局，那就再也不能添加到 ListView 中了。</p>
+<h3 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainActivity</span> <span class="keyword">extends</span> <span class="title class_">AppCompatActivity</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;Fruit&gt; fruitList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Fruit&gt;();</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        initFruits();</span><br><span class="line">        <span class="type">FruitAdapter</span> <span class="variable">adapter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FruitAdapter</span>(MainActivity.<span class="built_in">this</span>, R.layout.fruit_item, fruitList);</span><br><span class="line">        <span class="type">ListView</span> <span class="variable">listView</span> <span class="operator">=</span> (ListView)findViewById(R.id.list_view);</span><br><span class="line">        listView.setAdapter(adapter);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">initFruits</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">            <span class="type">Fruit</span> <span class="variable">apple</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Fruit</span>(<span class="string">&quot;蘋果&quot;</span>, R.drawable.apple_pic);</span><br><span class="line">            fruitList.add(apple);</span><br><span class="line">            <span class="type">Fruit</span> <span class="variable">banana</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Fruit</span>(<span class="string">&quot;香蕉&quot;</span>, R.drawable.banana_pic);</span><br><span class="line">            fruitList.add(banana);</span><br><span class="line">            <span class="type">Fruit</span> <span class="variable">orange</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Fruit</span>(<span class="string">&quot;橘子&quot;</span>, R.drawable.orange_pic);</span><br><span class="line">            fruitList.add(orange);</span><br><span class="line">            <span class="type">Fruit</span> <span class="variable">watermelon</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Fruit</span>(<span class="string">&quot;西瓜&quot;</span>, R.drawable.watermelon_pic);</span><br><span class="line">            fruitList.add(watermelon);</span><br><span class="line">            <span class="type">Fruit</span> <span class="variable">pear</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Fruit</span>(<span class="string">&quot;梨子&quot;</span>, R.drawable.pear_pic);</span><br><span class="line">            fruitList.add(pear);</span><br><span class="line">            <span class="type">Fruit</span> <span class="variable">grape</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Fruit</span>(<span class="string">&quot;葡萄&quot;</span>, R.drawable.grape_pic);</span><br><span class="line">            fruitList.add(grape);</span><br><span class="line">            <span class="type">Fruit</span> <span class="variable">pineapple</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Fruit</span>(<span class="string">&quot;鳳梨&quot;</span>, R.drawable.pineapple_pic);</span><br><span class="line">            fruitList.add(pineapple);</span><br><span class="line">            <span class="type">Fruit</span> <span class="variable">strawberry</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Fruit</span>(<span class="string">&quot;草莓&quot;</span>, R.drawable.strawberry_pic);</span><br><span class="line">            fruitList.add(strawberry);</span><br><span class="line">            <span class="type">Fruit</span> <span class="variable">cherry</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Fruit</span>(<span class="string">&quot;櫻桃&quot;</span>, R.drawable.cherry_pic);</span><br><span class="line">            fruitList.add(cherry);</span><br><span class="line">            <span class="type">Fruit</span> <span class="variable">mango</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Fruit</span>(<span class="string">&quot;芒果&quot;</span>, R.drawable.mango_pic);</span><br><span class="line">            fruitList.add(mango);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接著我們修改 MainActivity 的代碼，我們這邊加入了 <code>initFruits</code> 函式，用於初始化所有的水果數據。然後用 <code>for</code> 迴圈執行了兩次希望能夠有足夠的資料能讓 ListView 滑動。接著在 <code>onCreate</code> 建立 FruitAdapter 實體，並且將此實體傳給 ListView，這樣就完成了我們的客製化 ListView。 </p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Android/" rel="tag"># Android</a>
+              <a href="/tags/layout/" rel="tag"># layout</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/06/18/android-layout-listview/" rel="prev" title="Android 的 ListView (一)">
+                  <i class="fa fa-angle-left"></i> Android 的 ListView (一)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/06/24/android-layout-listview-performance/" rel="next" title="Android 的 ListView (三)">
+                  Android 的 ListView (三) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

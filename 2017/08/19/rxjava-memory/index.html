@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言 前面介紹了關於 RxSwift 的資源管理，這次要來介紹關於 RxJava 的部分，在 RxJava 中有一些第三方的資源管理像是 RxLifecycle 這種好用的第三方庫來幫忙在程式碼中，如果沒有及時的回收 Rx 相關的資源，會造成 Activity&#x2F;Fragment 無法銷毀所導致的 Memory Leak ，RxLifecycle 的用法就是讓我們的 Observable 跟隨著 A">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxJava 的資源管理">
+<meta property="og:url" content="http://yoursite.com/2017/08/19/rxjava-memory/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="前言 前面介紹了關於 RxSwift 的資源管理，這次要來介紹關於 RxJava 的部分，在 RxJava 中有一些第三方的資源管理像是 RxLifecycle 這種好用的第三方庫來幫忙在程式碼中，如果沒有及時的回收 Rx 相關的資源，會造成 Activity&#x2F;Fragment 無法銷毀所導致的 Memory Leak ，RxLifecycle 的用法就是讓我們的 Observable 跟隨著 A">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2017-08-19T07:18:51.000Z">
+<meta property="article:modified_time" content="2024-04-27T13:32:04.260Z">
+<meta property="article:author" content="Allen Hsu">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="RxJava">
+<meta property="article:tag" content="RxAndroid">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://yoursite.com/2017/08/19/rxjava-memory/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-tw","comments":true,"permalink":"http://yoursite.com/2017/08/19/rxjava-memory/","path":"2017/08/19/rxjava-memory/","title":"RxJava 的資源管理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RxJava 的資源管理 | AllenHsu的技術手扎</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">AllenHsu的技術手扎</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">學海無涯，努力做個永遠年輕的人</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E4%B8%8D%E8%A6%81%E7%94%A8-RxLifecycle"><span class="nav-number">1.1.</span> <span class="nav-text">為什麼不要用 RxLifecycle ?</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%B1%E4%BE%86"><span class="nav-number">2.</span> <span class="nav-text">由來</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%95%8F%E9%A1%8C"><span class="nav-number">2.1.</span> <span class="nav-text">問題</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%B4%E5%A5%BD%E7%9A%84%E8%A7%A3%E6%B1%BA%E6%96%B9%E5%BC%8F"><span class="nav-number">2.2.</span> <span class="nav-text">更好的解決方式</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Allen Hsu</p>
+  <div class="site-description" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/19/rxjava-memory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RxJava 的資源管理 | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RxJava 的資源管理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-08-19 15:18:51" itemprop="dateCreated datePublished" datetime="2017-08-19T15:18:51+08:00">2017-08-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android-%E9%96%8B%E7%99%BC/" itemprop="url" rel="index"><span itemprop="name">Android 開發</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><blockquote>
+<p>前面介紹了關於 <a href="&quot;https://allen-hsu.github.io/2017/08/13/rxswift-dispose/&quot;">RxSwift 的資源管理</a>，這次要來介紹關於 <code>RxJava</code> 的部分，在 <code>RxJava</code> 中有一些第三方的資源管理像是 <a href="&quot;https://github.com/trello/RxLifecycle&quot;">RxLifecycle</a> 這種好用的第三方庫來幫忙在程式碼中，如果沒有及時的回收 Rx 相關的資源，會造成 <code>Activity/Fragment</code> 無法銷毀所導致的 <code>Memory Leak</code> ，<code>RxLifecycle</code> 的用法就是讓我們的 <code>Observable</code> 跟隨著 <code>Activity/Fragment</code> 的生命週期去取消訂閱，但是這樣就真的完美解決了 <code>RxJava</code> 的記憶體管理問題嗎 ? 我們來看看 <code>RxLifecycle</code> 的作者怎麼說。 </p>
+</blockquote>
+<span id="more"></span>
+<h4 id="為什麼不要用-RxLifecycle"><a href="#為什麼不要用-RxLifecycle" class="headerlink" title="為什麼不要用 RxLifecycle ?"></a>為什麼不要用 RxLifecycle ?</h4><p>這是<code>RxLifecycle</code> 的作者 <a href="http://blog.danlew.net/author/dan-lew/">Dan Lew</a> 在 2017年8月所發表的文章 <a href="&quot;http://blog.danlew.net/2017/08/02/why-not-rxlifecycle/&quot;">Why Not RxLifecycle</a>，看完這篇文章加上自身專案目前所遇到的問題，只能說太晚作者才發這一篇了QQ，我們來看一下原文怎麼說的。</p>
+<h3 id="由來"><a href="#由來" class="headerlink" title="由來"></a>由來</h3><p>當 <code>Dan Lew</code> 在 <code>Trello</code> 工作時，他們一開始使用 <code>RxJava</code> 也遇到了 <code>Memeory leak</code> 相關的問題， 當你設定任何一個 <code>Subscriptions</code> 似乎都會造成 <code>Memory Leak</code> ，除非你明確定義的清除它，所以在使用它們的時候，不斷的重複訂閱與取消訂閱。</p>
+<p>手動處理取消訂閱是相當乏味的，在大多數情況下，我們希望我們的 <code>Fragment</code> 或者 <code>Activity</code> 生命週期結束時，我們所有的 <code>Subscriptions</code> 也跟著結束，因次  <code>RxLifecycle</code> 誕生了，使用 <code>RxLifecycle</code> 你只需要呼叫 <code>compose()</code> 並綁定到某些生命週期時發生。那麼看似完美的就不需要在乎 <code>Memory Leak</code> 了。</p>
+<h4 id="問題"><a href="#問題" class="headerlink" title="問題"></a>問題</h4><p>但是這樣綁定 <code>Activity/Fragment</code> 的生命週期這樣子的設計，隨著時間的發展，他出現越來越多致命的缺陷(在我們專案開發中，同樣有這樣子的感受)。</p>
+<ul>
+<li><p>由於<strong>自動檢測生命週期，導致代碼混淆</strong>，假設你在 <code>onStart()</code> 中訂閱，那麼以<code>RxLifecycle</code> 的機制，將會自動幫你在 <code>onStop()</code> 取消訂閱，這樣子並不是什麼大問題，但是，如果你在一個非 <code>Activity</code> 組件內部時呢？你必須讓你的這個組件擁有 <code>Activity</code> 的生命週期，然後希望它在生命週期中的正確的時機點訂閱，但是這不是保證的，更糟糕的是，當訂閱失敗時，通常是模糊的。<br>舉例來說。 假設你有一個 <code>Adapter</code> 它需要訂閱 <code>Observable</code> 和(在某個時機) 取消訂閱。 <code>RxLifecycle</code> 的關鍵問題是： 您如何知道自動取消訂閱在適當的時機發生 ? 當然我們可以使用更明確的 <code>bindUntilEvent()</code> 去避免這樣的自動訂閱問題，但是卻減少了 <code>RxLifecycle</code> 的實用性。</p>
+</li>
+<li><p><strong>Often times you end up manually handling the Subscription anyways.</strong>Let’s extend the <code>Adapter</code> example above. You’re listening to one data source, but then whoever is controlling the <code>Adapter</code> wants to send it a new one, so it passes it a new <code>Observable</code>. You want to unsubscribe from the last <code>Observable</code> before subscribing to the new one. None of this has anything to do with the lifecycle, and thus must be handled manually.</p>
+<p>Having to manually handle <code>Subscriptions</code> anyways means that RxLifecycle is just an extra headache. It’s confusing to developers - why are we using <code>unsubscribe()</code> in one place and RxLifecycle in another?</p>
+</li>
+<li><p><strong>RxLifecycle can only simulate Subscription.unsubscribe().</strong> Because of RxJava 1 limitations, it can (at most) simulate the stream ending due to <code>onComplete()</code>. 99% of the time this is fine, but it leaves open the door for developer mistakes due to subtle differences between <code>onComplete()</code> vs unsubscription.</p>
+</li>
+<li><p><strong>RxLifecycle throws exceptions for Single / Completable.</strong> Again, because we can only simulate the stream ending. <code>Single</code>/<code>Completable</code> either emit or error, so there’s no other choice. For a while we weren’t using anything except <code>Observable</code>, but now that we’re using other types this can cause problems.</p>
+</li>
+<li><p><strong>Subtle timing bugs require calling RxLifecycle late in the stream.</strong> It’s an avoidable issue, but again can lead to developer mistakes that are best avoided.</p>
+</li>
+<li><p><strong>RxLint cannot detect when you’re using RxLifecycle bindings.</strong> RxLint is a handy tool and using RxLifecycle lessens its utility.</p>
+</li>
+<li><p><strong>It generally requires subclassing Activity / Fragment.</strong> While not a requirement (since it’s implemented using interfaces), not subclassing leads to a lot of busywork reproducing what the library does. That’s fine most of the time, but every once in a while we need to use a specialized <code>Activity</code> or <code>Fragment</code> and that causes pain.</p>
+</li>
+</ul>
+<p>​    (Note that this minor problem can soon be fixed via Google’s <a href="https://developer.android.com/topic/libraries/architecture/lifecycle.html">lifecycle-aware components</a>.)</p>
+<p>以上這些問題都歸咎到了 <code>RxLifecycle</code> 的自動性質可能會產生複雜且意想不到的副作用以及後果，這樣違反了當初 <code>RxLifecycle</code> 被建立出來的本意。</p>
+<h4 id="更好的解決方式"><a href="#更好的解決方式" class="headerlink" title="更好的解決方式"></a>更好的解決方式</h4><p>這邊是作者最後開始做的改善，而不使用自己的 <code>RxLifecycle</code> 了。或許我們也應該去思考除了作者提出的解決方法，自己是不是能有一些更好的方式去處理我們的記憶體及 <code>Subscriptions</code> 管理，而不依賴 <code>RxLifecycle</code></p>
+<ul>
+<li><p><strong>Manually manage Subscriptions.</strong> That means hanging onto <code>Subscriptions</code> (or stuffing them into a <code>CompositeSubscription</code>) then manually calling <code>unsubscribe()</code> / <code>clear()</code> when appropriate.</p>
+<p>Now that I’m used to the idea it’s not so bad. Its explicit nature makes code easier to reason about. It doesn’t require me to think through a complex flow of logic or anticipate unexpected consequences. The extra boilerplate is worth the simplicity.</p>
+</li>
+<li><p><strong>Components pass their Subscriptions upwards until someone handles it.</strong>In other words, if a component is given an <code>Observable</code> from its parent but does not know when to unsubscribe, it passes the resulting <code>Subscription</code>upwards to the parent, since the parent should have a better grasp of the lifecycle.</p>
+<p>Let’s look at that <code>Adapter</code> example from before. We now provide a function <code>fun listen(data: Observable&lt;Data&gt;): Subscription</code>. That way the <code>Adapter</code> can listen to the <code>Observable</code>, but is not responsible for knowing when it needs to stop listening; that responsibility is explicitly given to the owner of the <code>Adapter</code>.</p>
+<p>This pattern can be applied repeatedly to as many layers as you want. You could have an <code>Activity</code> that creates a View that contains a <code>RecyclerView</code>that creates an <code>Adapter</code> that listens to an <code>Observable</code>… but as long as you pass that Subscription upwards at each layer, it will eventually make its way back to a parent (possibly the <code>Activity</code> itself) who knows when to unsubscribe.</p>
+</li>
+</ul>
+<p>Another subtle reason for the switch away from RxLifecycle is our adoption of Kotlin. Kotlin makes manually handling Subscriptions easier for two reasons:</p>
+<ul>
+<li><p>Unsubscribing from nullable <code>Subscriptions</code> is a simple one-liner. Before you had to check for nullability (or use a one-liner utility function). Annoying. Now you can just call <code>mySubscription?.unsubscribe()</code>.</p>
+</li>
+<li><p>A simple <code>CompositeSubscription</code> operator extension lets you use <code>+=</code> to add <code>Subscriptions</code>. Otherwise you need to wrap your whole <code>Observable</code> chain in parentheses, which is a huge pain formatting-wise.</p>
+<p>Here’s the extension in all its glory:</p>
+<p><code>operator fun CompositeSubscription.plusAssign(subscription: Subscription) = add(subscription)</code></p>
+<p>As a result, you can simply use a CompositeSubscription like so:</p>
+<p><code>compositeSubscription += Observable.just().etc().subscribe()</code></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Android/" rel="tag"># Android</a>
+              <a href="/tags/RxJava/" rel="tag"># RxJava</a>
+              <a href="/tags/RxAndroid/" rel="tag"># RxAndroid</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/08/13/rxswift-dispose/" rel="prev" title="RxSwift 的資源管理">
+                  <i class="fa fa-angle-left"></i> RxSwift 的資源管理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/09/03/android-recycleview-bug/" rel="next" title="RecyclerView-IndxeOutOfBoundsException">
+                  RecyclerView-IndxeOutOfBoundsException <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

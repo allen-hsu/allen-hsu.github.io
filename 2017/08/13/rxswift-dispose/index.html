@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="關於 RxSwift 的記憶體管理機制 在介紹關於 RxSwift 基本入門 中提到了一些 RxSwift 的核心概念 - Observable ，我們描述了事件訊息的種類，分別是 :  next 、error 、 completed ， 當這個 Observable 收到error 跟 completed 事件訊息時，那麼這個 Observable  將不會再接受其他的訂閱事件。 同時在這邊用來">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxSwift 的資源管理">
+<meta property="og:url" content="http://yoursite.com/2017/08/13/rxswift-dispose/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="關於 RxSwift 的記憶體管理機制 在介紹關於 RxSwift 基本入門 中提到了一些 RxSwift 的核心概念 - Observable ，我們描述了事件訊息的種類，分別是 :  next 、error 、 completed ， 當這個 Observable 收到error 跟 completed 事件訊息時，那麼這個 Observable  將不會再接受其他的訂閱事件。 同時在這邊用來">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2017-08-13T14:27:13.000Z">
+<meta property="article:modified_time" content="2024-04-27T13:32:04.261Z">
+<meta property="article:author" content="Allen Hsu">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="swift">
+<meta property="article:tag" content="rxswift">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://yoursite.com/2017/08/13/rxswift-dispose/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-tw","comments":true,"permalink":"http://yoursite.com/2017/08/13/rxswift-dispose/","path":"2017/08/13/rxswift-dispose/","title":"RxSwift 的資源管理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RxSwift 的資源管理 | AllenHsu的技術手扎</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">AllenHsu的技術手扎</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">學海無涯，努力做個永遠年輕的人</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%9C%E6%96%BC-RxSwift-%E7%9A%84%E8%A8%98%E6%86%B6%E9%AB%94%E7%AE%A1%E7%90%86%E6%A9%9F%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">關於 RxSwift 的記憶體管理機制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Disposing"><span class="nav-number">1.1.</span> <span class="nav-text">Disposing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dispose-Bags"><span class="nav-number">1.2.</span> <span class="nav-text">Dispose Bags</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Take-until"><span class="nav-number">1.3.</span> <span class="nav-text">Take until</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Allen Hsu</p>
+  <div class="site-description" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/13/rxswift-dispose/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RxSwift 的資源管理 | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RxSwift 的資源管理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-08-13 22:27:13" itemprop="dateCreated datePublished" datetime="2017-08-13T22:27:13+08:00">2017-08-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/iOS-%E9%96%8B%E7%99%BC/" itemprop="url" rel="index"><span itemprop="name">iOS 開發</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="關於-RxSwift-的記憶體管理機制"><a href="#關於-RxSwift-的記憶體管理機制" class="headerlink" title="關於 RxSwift 的記憶體管理機制"></a>關於 RxSwift 的記憶體管理機制</h3><blockquote>
+<p>在介紹關於 <a href="&quot;https://allen-hsu.github.io/2017/08/08/rxswift-basic/&quot;">RxSwift 基本入門</a> 中提到了一些 <code>RxSwift</code> 的核心概念 - <code>Observable</code> ，我們描述了事件訊息的種類，分別是 :  <code>next</code> 、<code>error</code> 、 <code>completed</code> ， 當這個 <code>Observable</code> 收到<code>error</code> 跟 <code>completed</code> 事件訊息時，那麼這個 <code>Observable</code>  將不會再接受其他的訂閱事件。 <strong>同時在這邊用來分派給此 <code>Observable</code> 的記憶體資源就一起被釋放掉了</strong>，我們可以將其視為類似 <code>ARC</code> 的自動記憶體釋放。 如果你想立刻將 <code>Observable</code> 關閉且立刻釋放資源，那麼你需要呼叫 <code>dispose</code> 函數，這邊我們可以理解為類似 <code>MRC</code> 的手動釋放。</p>
+</blockquote>
+<p>如果一個 <code>Observable</code> 在一定的時間內結束，即使不呼叫 <code>dispose</code> 或者使用 <code>DisposeBag</code> 也不會引發 <code>Memory Leak</code>。 如果一個 <code>Observable</code> 因為某些原因</p>
+<p>沒有結束，那記憶體將會永遠的不會被釋放，所以就算 根據 <code>Observable</code> 的運作原理，我們也會希望透過某些記憶體回收機制來確保不會產生 <code>Memory Leak</code> 的問題。</p>
+<p>下面將詳細介紹幾種 <code>RxSwift</code> 的記憶體管理機制。</p>
+<span id="more"></span>
+<h4 id="Disposing"><a href="#Disposing" class="headerlink" title="Disposing"></a>Disposing</h4><p>在一開始提到的，我們可以呼叫 <code>dispose</code> 方法，去直接關閉這個 <code>Observable</code>。</p>
+<p>下面是一個簡單的例子 : </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> subscription <span class="operator">=</span> <span class="type">Observable</span>&lt;<span class="type">Int</span>&gt;.interval(<span class="number">0.3</span>, scheduler: scheduler)</span><br><span class="line">    .subscribe &#123; event <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(event)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="type">NSThread</span>.sleep(forTimeInterval: <span class="number">2.0</span>)</span><br><span class="line">subscription.dispose()</span><br></pre></td></tr></table></figure>
+<p>Result : </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">5</span></span><br></pre></td></tr></table></figure>
+<p>不過這並不是一個好方法，手動呼叫 <code>dispose</code> 是一種不太好的編程習慣。更好的方法是使用像是 <code>DisposeBag</code> 或者一些其他的機制。</p>
+<p>如果在<code>dispose</code> 被執行之後，還會繼續執行 <code>subscribe</code> 中的代碼片段嗎 ? 像是在這個範例中，還會繼續  <code>print</code> 東西嗎 ? 答案是 : <strong>不一定</strong> 。</p>
+<blockquote>
+<p><strong>要視 scheduler 被訂閱時所在的執行緒以及 dispose 呼叫的執行緒 而定。</strong></p>
+</blockquote>
+<p>如果 <code>scheduler</code> 是一個  <code>serial scheduler</code> ，例如 : <code>MainScheduler</code> 並且 dispose 在同一個 <code>serial scheduler</code> 被呼叫，答案是<strong>不會</strong>，否則答案是<strong>會的</strong>。</p>
+<p>關於 <code>RxSwift</code> 的 <code>scheduler</code> 我們會在後面做更詳細的討論，假如你真的需要呼叫 <code>dispose</code>  ，那麼我們為了避免出現上述的狀況，我們必須詳細的告訴 <code>Observable</code> 訂閱的 <code>scheduler</code> 執行緒以及確保 <code>dispose</code> 呼叫的方法在同一執行緒。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//observeOn on MainScheduler(main thread)</span></span><br><span class="line"><span class="keyword">let</span> subscription <span class="operator">=</span> <span class="type">Observable</span>&lt;<span class="type">Int</span>&gt;.interval(<span class="number">0.3</span>, scheduler: scheduler)</span><br><span class="line">            .observeOn(<span class="type">MainScheduler</span>.instance)</span><br><span class="line">            .subscribe &#123; event <span class="keyword">in</span></span><br><span class="line">                <span class="built_in">print</span>(event)</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ....</span></span><br><span class="line"></span><br><span class="line">subscription.dispose()<span class="comment">// called from main thread</span></span><br></pre></td></tr></table></figure>
+<p>這樣就能確保在 <code>dispose</code> 之後不會在 print 出任何訊息了。</p>
+<h4 id="Dispose-Bags"><a href="#Dispose-Bags" class="headerlink" title="Dispose Bags"></a>Dispose Bags</h4><p><code>Dispose Bag</code> 在 <code>RxSwift</code> 中的作用與 <code>ARC</code> 類似。它就像是一個 <code>autoreleasepool</code> 一樣。當 <code>disposeBag</code> 被銷毀時，同時銷毀被加入這個 <code>disposeBag</code>  的 <code>Observable</code> 。</p>
+<blockquote>
+<p>基本的 disposeBag 使用方法。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">let disposeBag = DisposeBag()</span><br><span class="line">    </span><br><span class="line">    Observable&lt;Int&gt;.empty()</span><br><span class="line">        .subscribe &#123; event in</span><br><span class="line">            print(event)</span><br><span class="line">        &#125;</span><br><span class="line">        .disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+<p>當 <code>disposeBag</code> 的 <code>scope</code> 結束時，就會呼叫解構子，當 <code>Dispose Bag</code> 的解構子被呼叫的時候，他會對每個 <code>Observable</code> 呼叫 <code>dispose</code>  方法。</p>
+<blockquote>
+<p>如果你需要馬上清除記憶體，你可以立刻創建一個新的 <code>DisposeBag</code></p>
+</blockquote>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">self</span>.disposeBag <span class="operator">=</span> <span class="type">DisposeBag</span>()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果需要顯式的手動清理資源，那麼需要使用 <code>CompositeDisposable</code> 。</p>
+</blockquote>
+<h4 id="Take-until"><a href="#Take-until" class="headerlink" title="Take until"></a>Take until</h4><p>另外一種自動管理機制則是使用 <code>takeUntil</code> </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sequence</span><br><span class="line">    .takeUntil(<span class="keyword">self</span>.rx.deallocated)</span><br><span class="line">    .subscribe &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="variable">$0</span>)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>以上就是關於 <code>RxSwift</code> 的記憶體管理機制。這次介紹就到這邊結束，希望能讓大家對於 <code>RxSwift</code> 有更深一步的認識。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+              <a href="/tags/swift/" rel="tag"># swift</a>
+              <a href="/tags/rxswift/" rel="tag"># rxswift</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/08/08/rxswift-basic/" rel="prev" title="RxSwift 基本入門">
+                  <i class="fa fa-angle-left"></i> RxSwift 基本入門
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/08/19/rxjava-memory/" rel="next" title="RxJava 的資源管理">
+                  RxJava 的資源管理 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

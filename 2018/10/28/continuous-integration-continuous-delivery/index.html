@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="CI&#x2F;CD，全名叫做Continuous Integration &#x2F; Continuous Delivery，中文名叫持續集成與持續交付，從2014年開始，得以有幸接觸了從零開始的CI&#x2F;CD的搭建以及流程梳理，也有在一個已經既有的開發體系中，如何去逐步導入CI&#x2F;CD的相關經驗，透過這篇文章分享一下自己多年以來對於CI&#x2F;CD的經驗與心路歷程。  關於持續集成與持續交付在目前軟體業界普遍以敏捷開發作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="關於CI&#x2F;CD的兩三事">
+<meta property="og:url" content="http://yoursite.com/2018/10/28/continuous-integration-continuous-delivery/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="CI&#x2F;CD，全名叫做Continuous Integration &#x2F; Continuous Delivery，中文名叫持續集成與持續交付，從2014年開始，得以有幸接觸了從零開始的CI&#x2F;CD的搭建以及流程梳理，也有在一個已經既有的開發體系中，如何去逐步導入CI&#x2F;CD的相關經驗，透過這篇文章分享一下自己多年以來對於CI&#x2F;CD的經驗與心路歷程。  關於持續集成與持續交付在目前軟體業界普遍以敏捷開發作">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://www.websequencediagrams.com/cgi-bin/cdraw?lz=dGl0bGUgQ0kvQ0QgU2VxdWVuY2UKCkRldmVsb3Blci0-R2l0OiBDcmVhdGUgUHVsbCBSZXF1ZXN0CkdpdC0-SmVua2luczogQnVpbGQgJiAoVGVzdCkKABEHLT5Tb25hcnF1YmU6U2NhbiBDb2RlCgALCQBYBldyaXRlIGNvbW1lbnQgYmFjawBWBlJldmlld2VyOk5vdGlmeSBQUgA6BSAAEgYKABcIAIEdBk1lcmdlAFkGAIEMDURlcGxveQCBBgpRQSBFbnYAEAcgRm9yIFFBIFRlc3QKCiNub3RlIHJpZ2h0IG9mIEJvYjogQm9iIHRoaW5rcyBhYm91dCBpdAoK&amp;s=napkin">
+<meta property="article:published_time" content="2018-10-28T13:26:21.000Z">
+<meta property="article:modified_time" content="2024-04-27T13:32:04.259Z">
+<meta property="article:author" content="Allen Hsu">
+<meta property="article:tag" content="CI&#x2F;CD">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.websequencediagrams.com/cgi-bin/cdraw?lz=dGl0bGUgQ0kvQ0QgU2VxdWVuY2UKCkRldmVsb3Blci0-R2l0OiBDcmVhdGUgUHVsbCBSZXF1ZXN0CkdpdC0-SmVua2luczogQnVpbGQgJiAoVGVzdCkKABEHLT5Tb25hcnF1YmU6U2NhbiBDb2RlCgALCQBYBldyaXRlIGNvbW1lbnQgYmFjawBWBlJldmlld2VyOk5vdGlmeSBQUgA6BSAAEgYKABcIAIEdBk1lcmdlAFkGAIEMDURlcGxveQCBBgpRQSBFbnYAEAcgRm9yIFFBIFRlc3QKCiNub3RlIHJpZ2h0IG9mIEJvYjogQm9iIHRoaW5rcyBhYm91dCBpdAoK&amp;s=napkin">
+
+
+<link rel="canonical" href="http://yoursite.com/2018/10/28/continuous-integration-continuous-delivery/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-tw","comments":true,"permalink":"http://yoursite.com/2018/10/28/continuous-integration-continuous-delivery/","path":"2018/10/28/continuous-integration-continuous-delivery/","title":"關於CI/CD的兩三事"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>關於CI/CD的兩三事 | AllenHsu的技術手扎</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">AllenHsu的技術手扎</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">學海無涯，努力做個永遠年輕的人</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%9C%E6%96%BC%E6%8C%81%E7%BA%8C%E9%9B%86%E6%88%90%E8%88%87%E6%8C%81%E7%BA%8C%E4%BA%A4%E4%BB%98"><span class="nav-number">1.</span> <span class="nav-text">關於持續集成與持續交付</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CI-CD-%E7%9A%84%E5%BB%BA%E7%AB%8B%E8%88%87%E5%B0%8E%E5%85%A5"><span class="nav-number">2.</span> <span class="nav-text">CI&#x2F;CD 的建立與導入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%B5%90"><span class="nav-number">3.</span> <span class="nav-text">小結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Allen Hsu</p>
+  <div class="site-description" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/28/continuous-integration-continuous-delivery/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="關於CI/CD的兩三事 | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          關於CI/CD的兩三事
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-28 21:26:21" itemprop="dateCreated datePublished" datetime="2018-10-28T21:26:21+08:00">2018-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8C%81%E7%BA%8C%E9%9B%86%E6%88%90/" itemprop="url" rel="index"><span itemprop="name">持續集成</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>CI/CD，全名叫做Continuous Integration / Continuous Delivery，中文名叫持續集成與持續交付，從2014年開始，得以有幸接觸了從零開始的CI/CD的搭建以及流程梳理，也有在一個已經既有的開發體系中，如何去逐步導入CI/CD的相關經驗，透過這篇文章分享一下自己多年以來對於CI/CD的經驗與心路歷程。</p>
+</blockquote>
+<h2 id="關於持續集成與持續交付"><a href="#關於持續集成與持續交付" class="headerlink" title="關於持續集成與持續交付"></a>關於持續集成與持續交付</h2><p>在目前軟體業界普遍以敏捷開發作為精神，必須透過連續的小型的開發循環(Sprint)來迭代我們的產品以及驗證需求，以這樣為前提之下，我們必須不斷地從需求、研發、測試、交付，中多個階段不斷地循環迭代。所以我們為了上述的概念，我們必須有了持續集成與持續交付。</p>
+<p>持續集成與持續交付，對於我個人的理解來說有以下來幾個重點。</p>
+<ul>
+<li>讓開發團隊可以在一個不斷提升開發品質的體系當中。</li>
+<li>從<strong><u>需求</u></strong>、<strong><u>研發</u></strong>、<strong><u>測試</u></strong>、<strong><u>交付</u></strong>四個階段中能夠有一套完整且嚴格的體系及框架。</li>
+<li>自動化節省時間 - 讓開發團隊從一些瑣事的泥沼中解放出來。</li>
+<li>減少風險 - 因為有了上述幾點，所以可以有效提升軟體品質，而不會因為迭代過快造成軟體工程的不穩定。</li>
+</ul>
+<span id="more"></span>
+<h2 id="CI-CD-的建立與導入"><a href="#CI-CD-的建立與導入" class="headerlink" title="CI/CD 的建立與導入"></a>CI/CD 的建立與導入</h2><p>在過去的經驗當中，要在一個團隊一次導入這個概念其實是相對困難的，不管是重頭開始，或者是在一半的情況下想要導入，首先第一件很重要的事情其實是 『<strong>工具</strong>』。尤其是使用統一的工具，那麼就上面四個階段的部分先就工具做討論。</p>
+<p><strong><u>需求</u></strong> : </p>
+<p>Issue Tracking System，這邊泛指的是團隊內有沒有一個統一管理需求清單的地方，例如常見的JIRA、Asana、或者是開源的Redmine都是相當良好的管理需求的工具。再來是溝通工具，我們是不是需要一個溝通的工具，透過這個工具，可以即時的通知各個團隊內每個人目前現在的狀態，我們常見的像是使用Slack、DingTalk等等，一些好用的溝通工具，也可以讓我們在各個階段都可以收到一些自動化通知。</p>
+<p><strong><u>研發</u></strong> :</p>
+<p>在研發的部分，首先我們大家需要一套共同的代碼協作平台，常見的有gitHub、gitLab等等，這邊不做詳述，然後我們可能會需要一些代碼檢測工具，像是開發iOS，如果用的是Swift，我們會有一個Swift Lint去規範開發人員的Coding Style等。之後是代碼審核，為了提高軟體品質，我們需要透過Code Review去確保代碼的可讀性、穩固性等等，所以我們會有gerrit等Code Review的Tool，當然像gitHub或者gitLab本身也具備這樣的功能，之後我們還需要像是Jenkins、gitLab-CI這樣的CI/CD服務平台幫我們做自動化的建置與流程控制。</p>
+<p><strong><u>測試</u></strong> :</p>
+<p>在測試的部分，我們可以透過上述提到的Jenkins、gitLab-CI等相關CI/CD服務平台觸發我們的自動化測試的工作，在自動化測試的部分可能涉及了很多測試化框架選擇，然後還有一些測試報告的產出服務，當然還有關於代碼的靜態檢測，我們可以使用像SonarQube這樣的平台去分析代碼的質量。當然除了自動化測試之外，我們也需要一個Bug Tracking System，在一開始提到的JIRA、Redmine幾乎都具備了這樣的功能。</p>
+<p><strong><u>交付</u></strong> :</p>
+<p>之後便是交付及部署，這邊根據不同的平台(iOS/Android、後端、前端)會有不同的產出物，重要的是如何提供一個方便以及一致性的交付方式，去減少人工交付或者部署所產生的錯誤，所以我們可能會使用Docker建置一套可部署的環境，也可能透過像是Fabric這樣的App交付平台，讓我們的產出物可以自動上傳至平台並讓所有的測試人員以及產品人員可以拿到。</p>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><p>透過上述的幾個流程可以發現，工具只是一個最初步的開始方式，當你有了這些工具的導入，才能往後去思考後續的各步流程，例如git flow應該怎樣設計，交付以及部署要怎麼能夠有dev、staging、production環境的不同環境的區分，自動化測試導入之後應該寫多少的單元測試，這些每一個都是相當大的議題與討論，也會因為團隊的不同而有不同的策略，但是只有透過漸進式的方式，慢慢導入這些工具，漸漸優化自己的CI/CD流程，才能開始有相對穩健的軟體品質。這邊附上一張導入CI/CD之後的開發流程圖。</p>
+<p><img src="https://www.websequencediagrams.com/cgi-bin/cdraw?lz=dGl0bGUgQ0kvQ0QgU2VxdWVuY2UKCkRldmVsb3Blci0-R2l0OiBDcmVhdGUgUHVsbCBSZXF1ZXN0CkdpdC0-SmVua2luczogQnVpbGQgJiAoVGVzdCkKABEHLT5Tb25hcnF1YmU6U2NhbiBDb2RlCgALCQBYBldyaXRlIGNvbW1lbnQgYmFjawBWBlJldmlld2VyOk5vdGlmeSBQUgA6BSAAEgYKABcIAIEdBk1lcmdlAFkGAIEMDURlcGxveQCBBgpRQSBFbnYAEAcgRm9yIFFBIFRlc3QKCiNub3RlIHJpZ2h0IG9mIEJvYjogQm9iIHRoaW5rcyBhYm91dCBpdAoK&amp;s=napkin" alt="Alt"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CI-CD/" rel="tag"># CI/CD</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/04/30/solidity-storage-and-memory/" rel="prev" title="solidity-storage-and-memory">
+                  <i class="fa fa-angle-left"></i> solidity-storage-and-memory
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/11/02/fast-slow-pointer/" rel="next" title="演算法練習 - 快慢指針">
+                  演算法練習 - 快慢指針 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

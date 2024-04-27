@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Dagger2 起步走在上一篇簡單談論了 Dependency Injection 以及 Dagger2 的一些基礎，接下來就要用實例來告訴大家怎麼使用 Dagger2。 這裡先假設一個業務場景，我們在 BaseActivity 需要建立一個網路連線 NetworkManager 去跟後台做API的串接，這裡先不考慮其他架構性的問題，只希望能簡短的用一個實例來跟大家講解。然後我們為了再深入說明 C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android的依賴注入框架-Dagger2(二)">
+<meta property="og:url" content="http://yoursite.com/2017/11/25/android-drgger2-start/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="Dagger2 起步走在上一篇簡單談論了 Dependency Injection 以及 Dagger2 的一些基礎，接下來就要用實例來告訴大家怎麼使用 Dagger2。 這裡先假設一個業務場景，我們在 BaseActivity 需要建立一個網路連線 NetworkManager 去跟後台做API的串接，這裡先不考慮其他架構性的問題，只希望能簡短的用一個實例來跟大家講解。然後我們為了再深入說明 C">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2017-11-25T09:20:45.000Z">
+<meta property="article:modified_time" content="2024-04-27T13:32:04.257Z">
+<meta property="article:author" content="Allen Hsu">
+<meta property="article:tag" content="設計模式">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="Dependency Injection">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://yoursite.com/2017/11/25/android-drgger2-start/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-tw","comments":true,"permalink":"http://yoursite.com/2017/11/25/android-drgger2-start/","path":"2017/11/25/android-drgger2-start/","title":"Android的依賴注入框架-Dagger2(二)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Android的依賴注入框架-Dagger2(二) | AllenHsu的技術手扎</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">AllenHsu的技術手扎</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">學海無涯，努力做個永遠年輕的人</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dagger2-%E8%B5%B7%E6%AD%A5%E8%B5%B0"><span class="nav-number">1.</span> <span class="nav-text">Dagger2 起步走</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%9D%E8%B3%B4%E7%9A%84%E9%97%9C%E4%BF%82%E5%9C%96"><span class="nav-number">1.1.</span> <span class="nav-text">依賴的關係圖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E7%BE%A9-Module"><span class="nav-number">1.2.</span> <span class="nav-text">定義 Module</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E7%BE%A9-Component"><span class="nav-number">1.3.</span> <span class="nav-text">定義 Component</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-Component"><span class="nav-number">1.4.</span> <span class="nav-text">初始化 Component</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%85%A5"><span class="nav-number">1.5.</span> <span class="nav-text">注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">1.6.</span> <span class="nav-text">結論</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Allen Hsu</p>
+  <div class="site-description" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/25/android-drgger2-start/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Android的依賴注入框架-Dagger2(二) | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android的依賴注入框架-Dagger2(二)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-11-25 17:20:45" itemprop="dateCreated datePublished" datetime="2017-11-25T17:20:45+08:00">2017-11-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android-%E9%96%8B%E7%99%BC/" itemprop="url" rel="index"><span itemprop="name">Android 開發</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Dagger2-起步走"><a href="#Dagger2-起步走" class="headerlink" title="Dagger2 起步走"></a>Dagger2 起步走</h2><p>在上一篇簡單談論了 <code>Dependency Injection</code> 以及 <code>Dagger2</code> 的一些基礎，接下來就要用實例來告訴大家怎麼使用 <code>Dagger2</code>。</p>
+<p>這裡先假設一個業務場景，我們在 BaseActivity 需要建立一個網路連線 NetworkManager 去跟後台做API的串接，這裡先不考慮其他架構性的問題，只希望能簡短的用一個實例來跟大家講解。然後我們為了再深入說明 <code>Component</code> 之間的依賴關係，NetworkManager 建構需要依賴一個 HttpConnect 對象。</p>
+<span id="more"></span>
+<h3 id="依賴的關係圖"><a href="#依賴的關係圖" class="headerlink" title="依賴的關係圖"></a>依賴的關係圖</h3><p><code>BaseActivity</code> 依賴 —&gt; <code>NetworkManager</code> 依賴 —&gt; <code>HttpConnect</code></p>
+<p>所以我們一開始在 <code>BaseActivity</code> 標記 :</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BaseActivity</span> &#123;</span><br><span class="line">  <span class="meta">@Inject</span></span><br><span class="line">  NetworkManager networkManager;</span><br><span class="line">  </span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="定義-Module"><a href="#定義-Module" class="headerlink" title="定義 Module"></a>定義 Module</h3><p>定義 Module，提供對象依賴，這邊會加入該物件生命週期的標記，我們後面會再談在 <code>Dagger2</code> 中的生命週期有關的討論。我們假設 <code>NetworkManager</code> 跟 <code>HttpConnect</code> 在整個 App 中，應該只會有一個實例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NetworkModule</span> &#123;</span><br><span class="line">  <span class="meta">@Singleton</span></span><br><span class="line">  <span class="meta">@Provider</span></span><br><span class="line">  NetworkManager <span class="title function_">provideNetworkManager</span><span class="params">(HttpConnect connect)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HttpModule</span> &#123;</span><br><span class="line">  <span class="meta">@Singleton</span></span><br><span class="line">  <span class="meta">@Provider</span></span><br><span class="line">  HttpConnect <span class="title function_">provideHttpConnect</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">HttpConnect</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="定義-Component"><a href="#定義-Component" class="headerlink" title="定義 Component"></a>定義 Component</h3><p>定義完 <code>Module</code> 之後，我們需要 <code>Component</code> 把依賴關係連結起來。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Singleton</span></span><br><span class="line"><span class="meta">@Component</span>（modules = &#123;HttpModule.class&#125;）</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">HttpComponent</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> HttpConnect <span class="title function_">getHttpConnect</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Singleton</span></span><br><span class="line"><span class="meta">@Component</span>（modules = &#123;NetworkModule.class&#125;, dependencies = &#123;HttpComponent.class&#125;）</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">NetworkComponent</span>&#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">inject</span><span class="params">(BaseActivity baseActivity)</span>;</span><br><span class="line">    <span class="keyword">public</span> NetworkManager <span class="title function_">getNetworkManager</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因為 <code>HttpComponent</code> 不直接注入其他對象，所以裡面就不寫入</p>
+<p> <code>void inject(Target target)</code>。</p>
+<h3 id="初始化-Component"><a href="#初始化-Component" class="headerlink" title="初始化 Component"></a>初始化 Component</h3><p>接著我們編譯一下專案，<code>dagger2</code> 會自動生成這幾個類別：<code>DaggerHttpComponent</code></p>
+<p>、<code>DaggerNetworkComponent</code> 兩個類別。接著我們對他做初始化。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">httpComponent = DaggerHttpComponent.builder()</span><br><span class="line">        .httpModule(<span class="keyword">new</span> <span class="title class_">HttpModule</span>())</span><br><span class="line">        .build();</span><br><span class="line"></span><br><span class="line">networkComponent = DaggerNetworkComponent.builder()</span><br><span class="line">        .htppComponent(httpComponent)</span><br><span class="line">        .networkModule(<span class="keyword">new</span> <span class="title class_">NetworkModule</span>())</span><br><span class="line">        .build();</span><br></pre></td></tr></table></figure>
+<p> 由於 <code>NetworkComponent</code> 依賴 <code>HttpComponent</code> 所以初始化的時候需要傳入一個實例，如果 <code>Module</code> 沒有定義建構子，那個可以省略 <code>.httpModule(new HttpModule())</code> 與 <code>.networkModule(new NetworkModule())</code> ，如果有自定義需要傳參數的建構子，那麼就要根據你的需求，去決定是不是要建立有參數的 <code>Module</code> 實體。在什麼地方初始化，由自己控制，這裡寫在一起不代表所有 <code>Component</code> 都會在一起初始化，有的可能在 <code>Application</code> ，有的在 <code>Fragment</code> ，端看你怎麼定義 <code>Component</code> 的生命週期。</p>
+<h3 id="注入"><a href="#注入" class="headerlink" title="注入"></a>注入</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BaseActivity</span>&#123;</span><br><span class="line">  <span class="meta">@Inject</span></span><br><span class="line">  NetworkManager networkManager;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span> </span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">//假設 networkComponent 已初始化</span></span><br><span class="line">    networkComponent.inject(<span class="built_in">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在呼叫 <code>networkComponent.inject(this);</code> 之後，依賴這個 <code>Component</code> 的對象就都有了實體。</p>
+<h3 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h3><p>以上就是一些最簡單的 <code>Dagger2</code> 的使用方式，在後面我們會談到關於<strong>生命週期</strong>的相關討論，以及在 <code>Dagger2.11</code> 之後的版本新增的功能。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%A8%AD%E8%A8%88%E6%A8%A1%E5%BC%8F/" rel="tag"># 設計模式</a>
+              <a href="/tags/Android/" rel="tag"># Android</a>
+              <a href="/tags/Dependency-Injection/" rel="tag"># Dependency Injection</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/10/30/android-dagger2/" rel="prev" title="Android的依賴注入框架-Dagger2(一)">
+                  <i class="fa fa-angle-left"></i> Android的依賴注入框架-Dagger2(一)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/12/09/about-mvvm/" rel="next" title="MVVM的兩三事">
+                  MVVM的兩三事 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Solidity 0x1Solidity是什麼 ?  根據維基百科描述，    Solidity的標誌      網站 github.com&#x2F;ethereum&#x2F;solidity   啟發語言JavaScript, C++, Python&amp;action&#x3D;edit&amp;redlink&#x3D;1), PowerShell    Solidity是一種合約導向式語言，可被應用於各種不同的區塊鏈平台上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="solidity0x1">
+<meta property="og:url" content="http://yoursite.com/2018/04/05/solidity0x1/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="Solidity 0x1Solidity是什麼 ?  根據維基百科描述，    Solidity的標誌      網站 github.com&#x2F;ethereum&#x2F;solidity   啟發語言JavaScript, C++, Python&amp;action&#x3D;edit&amp;redlink&#x3D;1), PowerShell    Solidity是一種合約導向式語言，可被應用於各種不同的區塊鏈平台上">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Solidity_logo.svg/200px-Solidity_logo.svg.png">
+<meta property="og:image" content="https://i.imgur.com/XKlYaz1.png">
+<meta property="og:image" content="https://i.imgur.com/62GnEL3.png">
+<meta property="article:published_time" content="2018-04-05T02:30:38.000Z">
+<meta property="article:modified_time" content="2024-04-27T13:32:04.261Z">
+<meta property="article:author" content="Allen Hsu">
+<meta property="article:tag" content="區塊鏈">
+<meta property="article:tag" content="blockchain">
+<meta property="article:tag" content="solidity">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Solidity_logo.svg/200px-Solidity_logo.svg.png">
+
+
+<link rel="canonical" href="http://yoursite.com/2018/04/05/solidity0x1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-tw","comments":true,"permalink":"http://yoursite.com/2018/04/05/solidity0x1/","path":"2018/04/05/solidity0x1/","title":"solidity0x1"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>solidity0x1 | AllenHsu的技術手扎</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">AllenHsu的技術手扎</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">學海無涯，努力做個永遠年輕的人</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Solidity-0x1"><span class="nav-number">1.</span> <span class="nav-text">Solidity 0x1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E5%80%8B%E6%99%BA%E8%83%BD%E5%90%88%E7%B4%84-%E4%BD%BF%E7%94%A8-Solidity"><span class="nav-number">1.1.</span> <span class="nav-text">第一個智能合約 - 使用 Solidity</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Allen Hsu</p>
+  <div class="site-description" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/05/solidity0x1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="solidity0x1 | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          solidity0x1
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-04-05 10:30:38" itemprop="dateCreated datePublished" datetime="2018-04-05T10:30:38+08:00">2018-04-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8D%80%E5%A1%8A%E9%8F%88/" itemprop="url" rel="index"><span itemprop="name">區塊鏈</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Solidity-0x1"><a href="#Solidity-0x1" class="headerlink" title="Solidity 0x1"></a>Solidity 0x1</h2><p>Solidity是什麼 ?</p>
+<blockquote>
+<p>根據維基百科描述，</p>
+<table>
+<thead>
+<tr>
+<th><a href="https://zh.wikipedia.org/wiki/File:Solidity_logo.svg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Solidity_logo.svg/200px-Solidity_logo.svg.png" alt="Solidity logo.svg"></a>Solidity的標誌</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://zh.wikipedia.org/wiki/%E7%B6%B2%E7%AB%99">網站</a></td>
+<td><a href="http://github.com/ethereum/solidity">github.com/ethereum/solidity</a></td>
+</tr>
+<tr>
+<td>啟發語言<a href="https://zh.wikipedia.org/wiki/JavaScript">JavaScript</a>, <a href="https://zh.wikipedia.org/wiki/C%2B%2B">C++</a>, <a href="https://zh.wikipedia.org/w/index.php?title=Python_(programming_language">Python</a>&amp;action=edit&amp;redlink=1), <a href="https://zh.wikipedia.org/wiki/PowerShell">PowerShell</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Solidity</strong>是一種合約導向式語言，可被應用於各種不同的區塊鏈平台上<a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-IBTimes12AUG2016-1">[1]</a>，其主要開發者為Gavin Wood，Christian Reitwiessner，Alex Beregszaszi，Liana Husikyan，Yoichi Hirai和其他幾位早期以太坊核心貢獻者。<a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-:CoinDesk14Dec2016-2">[2]</a><a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-:CCN09062016-3">[3]</a>Solidity 可使程式開發人員能在區塊鏈上（例如以太坊）編寫智能合約</p>
+<ul>
+<li>Strongly Typed - 屬於一門強型別語言</li>
+<li>Similar to Javascript - 與Javascript非常類似(指的是syntax部分)。</li>
+</ul>
+</blockquote>
+<p>###Solidity 在 與智能合約。</p>
+<p><img src="https://i.imgur.com/XKlYaz1.png" alt="Imgur"></p>
+<p>我們使用 <code>Solidity</code> 編寫完的合約，透過 <code>Solidity Compiler</code> 會編譯出兩個文件，分別是 <code>Byte code</code> 與 <code>ABI</code>，<code>Byte code</code> 的文件將會被部署上 <code>Ethereum Net</code> ，所以真正在區塊鏈上的文件是 <code>Byte code</code>。<code>ABI</code> 對於編寫可以與智能合約交互的應用程式來說，是非常重要的。</p>
+<p>舉例來說 : </p>
+<p><img src="https://i.imgur.com/62GnEL3.png" alt="Imgur"></p>
+<p>我們在部署完智能合約之後，我們會需要透過Web前端，裡面會有一些Javascript的代碼，作為交互使用，Javascript並沒有能力能夠直接與 <code>Bytecode</code> 進行交互。我們就需要透過 <code>ABI</code> 與區塊鏈上的智能合約(ByteCode) 與其溝通而拿到目前智能合約內儲存的狀態或資料。</p>
+<p>###Solidity IDE - Remix</p>
+<p><a href="https://ethereum.github.io/browser-solidity/">Remix</a> 是一個 Solidity Online的 Editor，可以用來編寫與測試 Solidity，也可以在上面直接發佈智能合約。</p>
+<h3 id="第一個智能合約-使用-Solidity"><a href="#第一個智能合約-使用-Solidity" class="headerlink" title="第一個智能合約 - 使用 Solidity"></a>第一個智能合約 - 使用 Solidity</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//每一個智能合約都必須定義，這邊指的是使用0.4.17或更高的編譯器版本</span></span><br><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.17</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//contract的修飾符關鍵字就像class一樣，定義這是一個合約</span></span><br><span class="line">contract <span class="title class_">Inbox</span> &#123;</span><br><span class="line">    <span class="comment">//在這個合約裡面儲存一個string，並且是public，任何人都可以知道這個變量</span></span><br><span class="line">    string public message;</span><br><span class="line">    <span class="comment">//建構子，當這個合約被部署到區塊鏈上，會執行這個函式。</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">Inbox</span>(<span class="params">string initialMessage</span>) public &#123;</span><br><span class="line">        message = initialMessage;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//改變這個合約中的message變量。</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">setMessage</span>(<span class="params">string newMessage</span>) public &#123;</span><br><span class="line">        message = newMessage;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//取得這個合約中的message變量。</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">getMessage</span>(<span class="params"></span>) public view <span class="title function_">returns</span>(<span class="params">string</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> message;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>這樣就完成了一個簡單可以在區塊鏈上儲存字串訊息的智能合約。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8D%80%E5%A1%8A%E9%8F%88/" rel="tag"># 區塊鏈</a>
+              <a href="/tags/blockchain/" rel="tag"># blockchain</a>
+              <a href="/tags/solidity/" rel="tag"># solidity</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/03/31/blockchain-0x1/" rel="prev" title="blockchain_0x1">
+                  <i class="fa fa-angle-left"></i> blockchain_0x1
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/04/05/solidity-function-type/" rel="next" title="solidity_function_type">
+                  solidity_function_type <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

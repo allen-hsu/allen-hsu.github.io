@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="CAFFE2 https:&#x2F;&#x2F;caffe2.ai&#x2F;  在今年的 F8 開發者大會上，Facebook 正式宣佈開源內部使用的深度學習框架 - Caffe2。該框架可以用在 iOS、Android 跟樹莓派上訓練和部署模型。且 Facebook 已經與 NVIDIA 、 Qualcomm 、 Intel 、Amazon 、 Google等公司合作未來對雲端以及移動裝置的優化。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Caffe2入門">
+<meta property="og:url" content="http://yoursite.com/2017/04/23/caffe2-introduce/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="CAFFE2 https:&#x2F;&#x2F;caffe2.ai&#x2F;  在今年的 F8 開發者大會上，Facebook 正式宣佈開源內部使用的深度學習框架 - Caffe2。該框架可以用在 iOS、Android 跟樹莓派上訓練和部署模型。且 Facebook 已經與 NVIDIA 、 Qualcomm 、 Intel 、Amazon 、 Google等公司合作未來對雲端以及移動裝置的優化。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://i.imgur.com/tB4rk8x.png">
+<meta property="og:image" content="http://i.imgur.com/6mIMKNU.jpg">
+<meta property="article:published_time" content="2017-04-23T01:57:05.000Z">
+<meta property="article:modified_time" content="2024-04-27T13:32:04.258Z">
+<meta property="article:author" content="Allen Hsu">
+<meta property="article:tag" content="Deep Learning">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://i.imgur.com/tB4rk8x.png">
+
+
+<link rel="canonical" href="http://yoursite.com/2017/04/23/caffe2-introduce/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-tw","comments":true,"permalink":"http://yoursite.com/2017/04/23/caffe2-introduce/","path":"2017/04/23/caffe2-introduce/","title":"Caffe2入門"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Caffe2入門 | AllenHsu的技術手扎</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">AllenHsu的技術手扎</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">學海無涯，努力做個永遠年輕的人</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CAFFE2"><span class="nav-number">1.</span> <span class="nav-text">CAFFE2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-CAFFE2"><span class="nav-number">1.1.</span> <span class="nav-text">什麼是 CAFFE2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B7%A8%E5%AF%AB%E4%B8%80%E6%AC%A1%E4%BB%A3%E7%A2%BC%EF%BC%8C%E5%8D%B3%E5%8F%AF%E5%9C%A8%E5%90%84%E5%80%8B%E5%B9%B3%E5%8F%B0%E4%B8%AD%E9%81%8B%E8%A1%8C"><span class="nav-number">1.2.</span> <span class="nav-text">編寫一次代碼，即可在各個平台中運行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Model-Zoo"><span class="nav-number">1.3.</span> <span class="nav-text">Model Zoo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92%E7%9A%84%E6%87%89%E7%94%A8"><span class="nav-number">1.4.</span> <span class="nav-text">深度學習的應用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%96%8B%E5%A7%8B"><span class="nav-number">1.5.</span> <span class="nav-text">如何開始</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D"><span class="nav-number">1.5.1.</span> <span class="nav-text">安裝</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-iOS-Android-%E4%B8%8A%E6%95%B4%E5%90%88-Caffe2"><span class="nav-number">1.6.</span> <span class="nav-text">在 iOS&#x2F;Android 上整合 Caffe2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BB%BA%E7%BD%AE%E7%B7%A8%E8%AD%AF%E7%92%B0%E5%A2%83"><span class="nav-number">1.6.1.</span> <span class="nav-text">建置編譯環境</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Android-Studio"><span class="nav-number">1.6.1.1.</span> <span class="nav-text">Android Studio</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-Android-NDK"><span class="nav-number">1.6.1.2.</span> <span class="nav-text">安裝 Android NDK</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9B%B8%E4%BE%9D%E6%80%A7%E5%A5%97%E4%BB%B6"><span class="nav-number">1.6.1.3.</span> <span class="nav-text">相依性套件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%8B%E8%BC%89-AI-Camera-Demo-%E6%BA%90%E4%BB%A3%E7%A2%BC"><span class="nav-number">1.6.1.4.</span> <span class="nav-text">下載 AI Camera Demo 源代碼</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%81%8B%E8%A1%8C"><span class="nav-number">1.6.1.5.</span> <span class="nav-text">運行</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Troubleshooting-Android-Build"><span class="nav-number">1.6.1.6.</span> <span class="nav-text">Troubleshooting Android Build</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Allen Hsu</p>
+  <div class="site-description" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/23/caffe2-introduce/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Caffe2入門 | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Caffe2入門
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-04-23 09:57:05" itemprop="dateCreated datePublished" datetime="2017-04-23T09:57:05+08:00">2017-04-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E6%85%A7/" itemprop="url" rel="index"><span itemprop="name">人工智慧</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="CAFFE2"><a href="#CAFFE2" class="headerlink" title="CAFFE2"></a>CAFFE2</h2><blockquote>
+<p><a href="https://caffe2.ai/">https://caffe2.ai/</a></p>
+</blockquote>
+<p>在今年的 F8 開發者大會上，Facebook 正式宣佈開源內部使用的深度學習框架 - Caffe2。該框架可以用在 iOS、Android 跟樹莓派上訓練和部署模型。且 Facebook 已經與 NVIDIA 、 Qualcomm 、 Intel 、Amazon 、 Google等公司合作未來對雲端以及移動裝置的優化。</p>
+<span id="more"></span>
+<h3 id="什麼是-CAFFE2"><a href="#什麼是-CAFFE2" class="headerlink" title="什麼是 CAFFE2"></a>什麼是 CAFFE2</h3><ul>
+<li>一個兼具輕量化、模組化和高度擴展性的開源深度學習框架。</li>
+<li>提供 C++ 與 Python 的API。</li>
+</ul>
+<h3 id="編寫一次代碼，即可在各個平台中運行"><a href="#編寫一次代碼，即可在各個平台中運行" class="headerlink" title="編寫一次代碼，即可在各個平台中運行"></a>編寫一次代碼，即可在各個平台中運行</h3><p>在保有擴展性和高性能的同時， Caffe2 也強調了跨平台的方便性。Caffe2 從一開始就以性能、擴展、移動端部署做為主要設計目標。 Caffe2 的核心 C++ 函式庫能提供速度與跨平台，而其 Python 和 C++ API 可以讓使用者輕鬆的在 Linux 、 Ｗindwos 、 iOS 、 Android 甚至 Raspberry Pi 進行原型設計、訓練、和部署。</p>
+<h3 id="Model-Zoo"><a href="#Model-Zoo" class="headerlink" title="Model Zoo"></a>Model Zoo</h3><p>Model Zoo 像是一個模型 App Store 般，讓開發人員在該平台上提供已經訓練好的模型，讓入門人員可以使用這些模型快速建立展示用的應用程式並探索深入的學習功能，而不需要浪費時間和資源去做模型的訓練。你也可以重新創建和評估其他專案的結果，用來發展新的應用或者一起改進目前現有的模型。Caffe2 也提供一個讓開發商以及研究人員參與的社群，讓他們可以在上面分享  Caff Model Zoo 的工作。</p>
+<h3 id="深度學習的應用"><a href="#深度學習的應用" class="headerlink" title="深度學習的應用"></a>深度學習的應用</h3><p>深度學習和神經網路可以應用與解決任何問題。Caffe2 的深度學習應用主要是關於 CV 、 ChatBost、 IoT 、語音識別、翻譯以及醫療，還有其他一些沒有在下列圖中所提到的應用，像是廣告以及面向學術界研究人員的。</p>
+<p><img src="http://i.imgur.com/tB4rk8x.png" alt="Alt deep learning"></p>
+<h3 id="如何開始"><a href="#如何開始" class="headerlink" title="如何開始"></a>如何開始</h3><h4 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h4><blockquote>
+<p>參考官方網站的<a href="https://caffe2.ai/docs/getting-started.html?platform=mac&amp;configuration=compile">安裝文檔</a> 並且選擇你所需要的裝置平台。並且遵循官方文檔的步驟安裝好你的 Caffe2。</p>
+</blockquote>
+<h3 id="在-iOS-Android-上整合-Caffe2"><a href="#在-iOS-Android-上整合-Caffe2" class="headerlink" title="在 iOS/Android 上整合 Caffe2"></a>在 iOS/Android 上整合 Caffe2</h3><blockquote>
+<p>我們這邊使用官方所編寫好的一個<a href="https://caffe2.ai/docs/AI-Camera-demo-android.html">範例</a> AI Camera Demo<br><img src="http://i.imgur.com/6mIMKNU.jpg" alt="Alt example"></p>
+</blockquote>
+<h4 id="建置編譯環境"><a href="#建置編譯環境" class="headerlink" title="建置編譯環境"></a>建置編譯環境</h4><h5 id="Android-Studio"><a href="#Android-Studio" class="headerlink" title="Android Studio"></a>Android Studio</h5><p>我們使用Android來當範例，首先需要安裝<a href="https://developer.android.com/studio/index.html">Android Studio</a></p>
+<h5 id="安裝-Android-NDK"><a href="#安裝-Android-NDK" class="headerlink" title="安裝 Android NDK"></a>安裝 Android NDK</h5><p>因為 Caffe2 會用到 C++ ，在 Android 中我們要使用 C++ 則需要 NDK<br><a href="https://developer.android.com/ndk/index.html">Android NDK</a></p>
+<h5 id="相依性套件"><a href="#相依性套件" class="headerlink" title="相依性套件"></a>相依性套件</h5><p>Android 平台中，我們需要 Automake 跟 Libtool ，這邊使用 Homebrew 安裝。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install automake libtool</span><br></pre></td></tr></table></figure>
+<p>然後我們還需要 cmake 去編譯我們的 C++ lib。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install cmake</span><br></pre></td></tr></table></figure>
+<h5 id="下載-AI-Camera-Demo-源代碼"><a href="#下載-AI-Camera-Demo-源代碼" class="headerlink" title="下載 AI Camera Demo 源代碼"></a>下載 AI Camera Demo 源代碼</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/bwasti/AICamera.git</span><br><span class="line">git submodule init &amp;&amp; git submodule update</span><br><span class="line"><span class="built_in">cd</span> app/libs/caffe2</span><br><span class="line">git submodule init &amp;&amp; git submodule update</span><br></pre></td></tr></table></figure>
+<h5 id="運行"><a href="#運行" class="headerlink" title="運行"></a>運行</h5><h5 id="Troubleshooting-Android-Build"><a href="#Troubleshooting-Android-Build" class="headerlink" title="Troubleshooting Android Build"></a><a href="https://caffe2.ai/docs/AI-Camera-demo-android.html">Troubleshooting Android Build</a></h5>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/04/26/oh-my-zsh-introduce/" rel="next" title="iTerm2 與 zsh ( oh-my-zsh ) 設定">
+                  iTerm2 與 zsh ( oh-my-zsh ) 設定 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

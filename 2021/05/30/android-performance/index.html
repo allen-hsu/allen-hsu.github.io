@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Android View 渲染效能優化 好久沒寫文章了，應該至少兩年多了，這兩年工作轉換了很多，現在又重回 Android 開發的行列，最近工作上剛好遇到需要優化一個頁面的渲染性能(解決卡頓問題)，所以剛好透過這篇文章來覆盤跟總結一下 Android 性能優化  造成 View 渲染緩慢的原因在這個 Case 中，有幾個非常常見的 View 卡頓原因，這邊就列出這幾個常見的 Case Layout">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android View渲染效能優化">
+<meta property="og:url" content="http://yoursite.com/2021/05/30/android-performance/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="Android View 渲染效能優化 好久沒寫文章了，應該至少兩年多了，這兩年工作轉換了很多，現在又重回 Android 開發的行列，最近工作上剛好遇到需要優化一個頁面的渲染性能(解決卡頓問題)，所以剛好透過這篇文章來覆盤跟總結一下 Android 性能優化  造成 View 渲染緩慢的原因在這個 Case 中，有幾個非常常見的 View 卡頓原因，這邊就列出這幾個常見的 Case Layout">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2021-05-30T04:01:27.000Z">
+<meta property="article:modified_time" content="2024-04-27T13:32:04.258Z">
+<meta property="article:author" content="Allen Hsu">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="performance">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://yoursite.com/2021/05/30/android-performance/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-tw","comments":true,"permalink":"http://yoursite.com/2021/05/30/android-performance/","path":"2021/05/30/android-performance/","title":"Android View渲染效能優化"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Android View渲染效能優化 | AllenHsu的技術手扎</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">AllenHsu的技術手扎</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">學海無涯，努力做個永遠年輕的人</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-View-%E6%B8%B2%E6%9F%93%E6%95%88%E8%83%BD%E5%84%AA%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">Android View 渲染效能優化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%A0%E6%88%90-View-%E6%B8%B2%E6%9F%93%E7%B7%A9%E6%85%A2%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-number">1.1.</span> <span class="nav-text">造成 View 渲染緩慢的原因</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Layout-%E4%BD%88%E5%B1%80%E9%81%8E%E6%96%BC%E8%A4%87%E9%9B%9C"><span class="nav-number">1.1.1.</span> <span class="nav-text">Layout 佈局過於複雜</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RecycleView-%E9%A0%BB%E7%B9%81%E5%85%A8%E5%B1%80%E5%88%B7%E6%96%B0"><span class="nav-number">1.1.2.</span> <span class="nav-text">RecycleView 頻繁全局刷新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E9%80%A0%E6%88%90%E5%85%A8%E5%B1%80%E6%9B%B4%E6%96%B0"><span class="nav-number">1.1.3.</span> <span class="nav-text">局部更新造成全局更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#onDraw-onMeasure-onLayout-%E6%99%82%E5%81%9A%E4%BA%86%E8%80%97%E6%99%82%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.4.</span> <span class="nav-text">onDraw, onMeasure, onLayout 時做了耗時操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A0%BB%E7%B9%81-Add-Remove"><span class="nav-number">1.1.5.</span> <span class="nav-text">頻繁 Add&#x2F;Remove</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%89%BE%E5%87%BA%E7%B7%A9%E6%85%A2%E7%9A%84%E8%B2%A7%E9%A0%B8"><span class="nav-number">1.2.</span> <span class="nav-text">如何找出緩慢的貧頸</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8-RootView-%E7%9A%84-requestLayout-print-stacktree"><span class="nav-number">1.2.1.</span> <span class="nav-text">在 RootView 的 requestLayout print stacktree</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%8F%E9%81%8E%E9%96%8B%E7%99%BC%E8%80%85%E5%B7%A5%E5%85%B7%E6%B8%AC%E9%87%8F%E9%80%9F%E5%BA%A6"><span class="nav-number">1.2.2.</span> <span class="nav-text">透過開發者工具測量速度</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Allen Hsu</p>
+  <div class="site-description" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/05/30/android-performance/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Android View渲染效能優化 | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android View渲染效能優化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-30 12:01:27" itemprop="dateCreated datePublished" datetime="2021-05-30T12:01:27+08:00">2021-05-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android-%E9%96%8B%E7%99%BC/" itemprop="url" rel="index"><span itemprop="name">Android 開發</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Android-View-渲染效能優化"><a href="#Android-View-渲染效能優化" class="headerlink" title="Android View 渲染效能優化"></a>Android View 渲染效能優化</h2><blockquote>
+<p>好久沒寫文章了，應該至少兩年多了，這兩年工作轉換了很多，現在又重回 Android 開發的行列，最近工作上剛好遇到需要優化一個頁面的渲染性能(解決卡頓問題)，所以剛好透過這篇文章來覆盤跟總結一下 Android 性能優化</p>
+</blockquote>
+<h3 id="造成-View-渲染緩慢的原因"><a href="#造成-View-渲染緩慢的原因" class="headerlink" title="造成 View 渲染緩慢的原因"></a>造成 View 渲染緩慢的原因</h3><p>在這個 Case 中，有幾個非常常見的 View 卡頓原因，這邊就列出這幾個常見的 Case</p>
+<h4 id="Layout-佈局過於複雜"><a href="#Layout-佈局過於複雜" class="headerlink" title="Layout 佈局過於複雜"></a>Layout 佈局過於複雜</h4><p>因為 inflate 需要花費的時間過久，如果你的 Layout 層次過於複雜的話，所以需要盡量減少 Layout 佈局的複雜度，善用<code>ConstraintLayout</code>去減少佈局的複雜度</p>
+<h4 id="RecycleView-頻繁全局刷新"><a href="#RecycleView-頻繁全局刷新" class="headerlink" title="RecycleView 頻繁全局刷新"></a>RecycleView 頻繁全局刷新</h4><p>這個蠻容易在開發過程中出現的一個錯誤，RecyclerView 主要的更新流程是透過</p>
+<blockquote>
+<p>GetData –&gt; setAdapter –&gt; 通知 RecyclerView 更新<br>在通知 RecyclerView 更新這個環節有許多的方法</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title function_">notifyDataSetChanged</span><span class="params">()</span></span><br><span class="line">Notify any registered observers that the data set has changed.</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title function_">notifyItemChanged</span><span class="params">(<span class="type">int</span> position, Object payload)</span></span><br><span class="line">Notify any registered observers that the item at position has changed with an optional payload object.</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title function_">notifyItemChanged</span><span class="params">(<span class="type">int</span> position)</span></span><br><span class="line">Notify any registered observers that the item at position has changed.</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title function_">notifyItemInserted</span><span class="params">(<span class="type">int</span> position)</span></span><br><span class="line">Notify any registered observers that the item reflected at position has been newly inserted.</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title function_">notifyItemMoved</span><span class="params">(<span class="type">int</span> fromPosition, <span class="type">int</span> toPosition)</span></span><br><span class="line">Notify any registered observers that the item reflected at fromPosition has been moved to toPosition.</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title function_">notifyItemRangeChanged</span><span class="params">(<span class="type">int</span> positionStart, <span class="type">int</span> itemCount, Object payload)</span></span><br><span class="line">Notify any registered observers that the itemCount items starting at position positionStart have changed.</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title function_">notifyItemRangeChanged</span><span class="params">(<span class="type">int</span> positionStart, <span class="type">int</span> itemCount)</span></span><br><span class="line">Notify any registered observers that the itemCount items starting at position positionStart have changed.</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title function_">notifyItemRangeInserted</span><span class="params">(<span class="type">int</span> positionStart, <span class="type">int</span> itemCount)</span></span><br><span class="line">Notify any registered observers that the currently reflected itemCount items starting at positionStart have been newly inserted.</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title function_">notifyItemRangeRemoved</span><span class="params">(<span class="type">int</span> positionStart, <span class="type">int</span> itemCount)</span></span><br><span class="line">Notify any registered observers that the itemCount items previously located at positionStart have been removed from the data set.</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">void</span>	<span class="title function_">notifyItemRemoved</span><span class="params">(<span class="type">int</span> position)</span></span><br><span class="line">Notify any registered observers that the item previously located at position has been removed from the data set.</span><br></pre></td></tr></table></figure>
+<p>但是這邊常犯的錯誤是直接呼叫 <code>notifyDataSetChanged</code>，這個會直接使整個 RecyclerView 全局刷新，但我們有時候獲得的資料只是一小部分的改動，所以我們應該根據當下情況去使用其他的 function，或者使用 Android 官方提供的<code>DiffUtil</code>去幫助做資料更新的比對</p>
+<p>ref : <a href="https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil">https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil</a></p>
+<h4 id="局部更新造成全局更新"><a href="#局部更新造成全局更新" class="headerlink" title="局部更新造成全局更新"></a>局部更新造成全局更新</h4><p>這個在這個 case 上，很容易發生的是在動態改變 text 內容的 TextView 之上，假設今天有一個場景，是有一個倒數計時的 UI 呈現，那麼就會定時地去更新該 TextView，但是如果 TextView 的 width 跟 height 是<code>wrap_content</code>，那就會造成這個 TextView 有機會的去更新全局的 UI。</p>
+<h4 id="onDraw-onMeasure-onLayout-時做了耗時操作"><a href="#onDraw-onMeasure-onLayout-時做了耗時操作" class="headerlink" title="onDraw, onMeasure, onLayout 時做了耗時操作"></a>onDraw, onMeasure, onLayout 時做了耗時操作</h4><p>這幾個關鍵函數，都應該只做他們的自我權責，不應該在這些 Function 裡面做不必要的耗時操作，尤其是 onDraw，這也會造成 UI 渲染的效能瓶頸</p>
+<h4 id="頻繁-Add-Remove"><a href="#頻繁-Add-Remove" class="headerlink" title="頻繁 Add/Remove"></a>頻繁 Add/Remove</h4><p>頻繁 Add/Remove 也是會觸發整個佈局的重新繪製，所以應該避免</p>
+<h3 id="如何找出緩慢的貧頸"><a href="#如何找出緩慢的貧頸" class="headerlink" title="如何找出緩慢的貧頸"></a>如何找出緩慢的貧頸</h3><p>上述就是常見的幾種錯誤使用方式，但是我們在開發的時候，可能會遇到難以查找是什麼原因造成整體重繪(有可能上述狀況都有，不好定義)，可以透過 Android 自帶的工具或者一些方式</p>
+<h4 id="在-RootView-的-requestLayout-print-stacktree"><a href="#在-RootView-的-requestLayout-print-stacktree" class="headerlink" title="在 RootView 的 requestLayout print stacktree"></a>在 RootView 的 requestLayout print stacktree</h4><p>可以複寫 RootView 的 requestLayout function，並且在裡面打印 stacktree，這樣可以查找出是哪一個 UI 元件呼叫 stacktree，</p>
+<h4 id="透過開發者工具測量速度"><a href="#透過開發者工具測量速度" class="headerlink" title="透過開發者工具測量速度"></a>透過開發者工具測量速度</h4><p>在開發者選項裡有一個”硬件加速渲染“，裡面有一個“調試 GPU 過度繪製”，這個會在屏幕上以顏色來區分 overdraw（過度繪製，也就是進行了不必要的繪製）的嚴重重度：</p>
+<ul>
+<li>藍色 1 倍 overdraw</li>
+<li>綠色 2 倍 overdraw</li>
+<li>紅色 3 倍 overdraw</li>
+<li>紫色 4 倍 overdraw</li>
+</ul>
+<p>在開發者選項面有一個是<code>監控</code><br>選擇<code>GPU使用情況</code>，選擇第二個<br><code>在螢幕上顯示條型</code>，就可以在手機上即時觀測到目前的使用情況</p>
+<p>參考文件 :</p>
+<ul>
+<li><a href="https://developer.android.com/topic/performance/rendering/optimizing-view-hierarchies">https://developer.android.com/topic/performance/rendering/optimizing-view-hierarchies</a></li>
+<li><a href="https://developer.android.com/training/improving-layouts">https://developer.android.com/training/improving-layouts</a></li>
+<li><a href="https://developer.android.com/topic/performance/vitals/render.html#custom-monitoring">https://developer.android.com/topic/performance/vitals/render.html#custom-monitoring</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Android/" rel="tag"># Android</a>
+              <a href="/tags/performance/" rel="tag"># performance</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/12/22/react-virtual-dom/" rel="prev" title="React中的虛擬DOM詳解">
+                  <i class="fa fa-angle-left"></i> React中的虛擬DOM詳解
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

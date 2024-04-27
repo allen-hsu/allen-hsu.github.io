@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="class 與 struct在 Swift 中，有兩種不同的型別宣告，分別是 class 與 struct，那他們到底會有什麼差異呢 ? 什麼時候該使用 class ， 什麼時候使用 struct呢 ?  從上圖表格中我們可以發現兩者的差異。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift class 與 struct 差異">
+<meta property="og:url" content="http://yoursite.com/2017/06/01/swift-class-vs-struct/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="class 與 struct在 Swift 中，有兩種不同的型別宣告，分別是 class 與 struct，那他們到底會有什麼差異呢 ? 什麼時候該使用 class ， 什麼時候使用 struct呢 ?  從上圖表格中我們可以發現兩者的差異。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://i.imgur.com/abipYLX.png">
+<meta property="article:published_time" content="2017-06-01T14:40:07.000Z">
+<meta property="article:modified_time" content="2024-04-27T13:32:04.261Z">
+<meta property="article:author" content="Allen Hsu">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="Swift">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://i.imgur.com/abipYLX.png">
+
+
+<link rel="canonical" href="http://yoursite.com/2017/06/01/swift-class-vs-struct/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-tw","comments":true,"permalink":"http://yoursite.com/2017/06/01/swift-class-vs-struct/","path":"2017/06/01/swift-class-vs-struct/","title":"Swift class 與 struct 差異"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Swift class 與 struct 差異 | AllenHsu的技術手扎</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">AllenHsu的技術手扎</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">學海無涯，努力做個永遠年輕的人</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#class-%E8%88%87-struct"><span class="nav-number">1.</span> <span class="nav-text">class 與 struct</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Copy-By-Reference-And-Copy-By-Value"><span class="nav-number">1.0.1.</span> <span class="nav-text">Copy By Reference And Copy By Value</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Swift-%E4%B8%AD%E7%9A%84%E7%B9%BC%E6%89%BF"><span class="nav-number">1.0.2.</span> <span class="nav-text">Swift 中的繼承</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%9A%84%E6%99%82%E6%A9%9F"><span class="nav-number">1.0.3.</span> <span class="nav-text">使用的時機</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%85%B1%E5%90%8C%E7%9A%84%E6%80%A7%E8%B3%AA"><span class="nav-number">1.0.4.</span> <span class="nav-text">其他共同的性質</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Allen Hsu</p>
+  <div class="site-description" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/01/swift-class-vs-struct/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Swift class 與 struct 差異 | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Swift class 與 struct 差異
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-06-01 22:40:07" itemprop="dateCreated datePublished" datetime="2017-06-01T22:40:07+08:00">2017-06-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/iOS-%E9%96%8B%E7%99%BC/" itemprop="url" rel="index"><span itemprop="name">iOS 開發</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="class-與-struct"><a href="#class-與-struct" class="headerlink" title="class 與 struct"></a>class 與 struct</h2><p>在 Swift 中，有兩種不同的型別宣告，分別是 <code>class</code> 與 <code>struct</code>，那他們到底會有什麼差異呢 ? 什麼時候該使用 class ， 什麼時候使用 struct呢 ?</p>
+<p><img src="http://i.imgur.com/abipYLX.png" alt="Imgur"></p>
+<p>從上圖表格中我們可以發現兩者的差異。</p>
+<span id="more"></span>
+<h4 id="Copy-By-Reference-And-Copy-By-Value"><a href="#Copy-By-Reference-And-Copy-By-Value" class="headerlink" title="Copy By Reference And Copy By Value"></a>Copy By Reference And Copy By Value</h4><p>首先可以看到第一個差異性便是 <code>class</code> 是 <code>Copy By Reference</code> 、<code>strcut</code> 是 <code>Copy By Value</code> 。下面我們舉一個簡單的例子說明兩者的差異。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">number</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> num: <span class="type">Int</span></span><br><span class="line">  <span class="keyword">init</span> (<span class="params">num</span>: <span class="type">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">self</span>.num <span class="operator">=</span> num</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a <span class="operator">=</span> number (n: <span class="number">5</span>)</span><br><span class="line"><span class="keyword">var</span> b <span class="operator">=</span> a</span><br><span class="line">b.num <span class="operator">=</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>當將 呼叫 <code>b = a</code> 時，<code>b</code> 其實是 指向 <code>a</code> 的一個 <code>Reference</code>，他們其實參考到的都是同一段記憶體位置，所以當呼叫 <code>b.num = 2</code> 時，其實同時也讓 <code>a.num</code> 的值也等於 2 了，因為他們使用的是同一個 Reference 實體。</p>
+<p>接下來我們將 class 替換成 struct ：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">number</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> num: <span class="type">Int</span></span><br><span class="line">  <span class="keyword">init</span> (<span class="params">num</span>: <span class="type">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">self</span>.num <span class="operator">=</span> num</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a <span class="operator">=</span> number (n: <span class="number">5</span>)</span><br><span class="line"><span class="keyword">var</span> b <span class="operator">=</span> a</span><br><span class="line">b.num <span class="operator">=</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>但是由於 <code>Struct</code> 是 <code>Call By Value</code> ， 當呼叫 <code>b = a</code> 的時候，其實是將 a 的記憶體內容複製一份給 <code>b</code> ，所以 b 跟 a 是完全不同的記憶體位址，所以當修改<code>b</code>中的變數時，並不會對 <code>a</code> 中的變數有任何改變。</p>
+<h4 id="Swift-中的繼承"><a href="#Swift-中的繼承" class="headerlink" title="Swift 中的繼承"></a>Swift 中的繼承</h4><p>在其他有 struct 的語言中(像是C++)， struct 是可以被繼承的，但是在 Swift 中，只有 class 可以被繼承、 struct 是不可以被繼承的。</p>
+<h4 id="使用的時機"><a href="#使用的時機" class="headerlink" title="使用的時機"></a>使用的時機</h4><p>在 Apple 早期的 Swift 文件推薦開發者優先使用 class ; 一些近期的文件則推薦優先使用 struct。由於 class 物件是 reference type ， 所以會被儲存在記憶體中的 heap  ; struct 是 value type ，所以被存在 stack。根據一些線上的實測，越新版的 Swift ， struct 效能越顯著的強大。 但是到底要用 class 還是 struct ， 還是需要根據使用情境而斟酌選擇適合的。</p>
+<h4 id="其他共同的性質"><a href="#其他共同的性質" class="headerlink" title="其他共同的性質"></a>其他共同的性質</h4><ul>
+<li>都可以實作 <code>protocol</code></li>
+<li>都可使用 <code>extension</code> ，擴充 method</li>
+<li>都可以使用泛型(Generic)</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+              <a href="/tags/Swift/" rel="tag"># Swift</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/05/17/android-layout-2/" rel="prev" title="Android Layout 佈局 (二)">
+                  <i class="fa fa-angle-left"></i> Android Layout 佈局 (二)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/06/02/ios-heap-vs-stack/" rel="next" title="淺談 Heap 與 Stack">
+                  淺談 Heap 與 Stack <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
