@@ -236,6 +236,7 @@
 <li>基於註解。基於Java的註解功能，在私有變數前加「@Autowired」等註解，不需要顯式的定義以上三種代碼，便可以讓外部容器傳入對應的物件。該方案相當於定義了public的set方法，但是因為沒有真正的set方法，從而不會為了實現依賴注入導致暴露了不該暴露的介面（因為set方法只想讓容器存取來注入而並不希望其他依賴此類的物件存取）。</li>
 </ul>
 <span id="more"></span>
+
 <h3 id="Dagger2-簡介"><a href="#Dagger2-簡介" class="headerlink" title="Dagger2 簡介"></a>Dagger2 簡介</h3><blockquote>
 <p>Dagger is a fully static, compile-time dependency injection framework for both Java and Android. It is an adaptation of an earlier versioncreated by Square and now maintained by Google.<br>Dagger aims to address many of the development and performance issues that have plagued reflection-based solutions. More details can be found in this talk(slides) by +Gregory Kick.</p>
 </blockquote>
@@ -249,10 +250,14 @@
 </ul>
 <h3 id="Inject"><a href="#Inject" class="headerlink" title="@Inject"></a>@Inject</h3><p><code>@Inject</code> 主要有兩個用法，當註解在需要依賴的變數時，讓 <code>Dagger2</code> 為其提供依賴，另一個是使用在建構子上，透過建構子讓Dagger2來使用(Dagger2透過 Inject 註解可以在需要這個 class 實體的時候來找到這個建構子並把相關實體 new 出來) 從而提供依賴。需要注意的當 <code>@Inject</code> 註解的建構子是帶參數的，像是 : </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class TestClass&#123;</span><br><span class="line">    @Inject</span><br><span class="line">    public TestClass(InjectClass injectClass)&#123;</span><br><span class="line">        //do something</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>那麼 <code>Dagger2</code> 會在編譯時檢查，是否在 <code>Module</code> 類中有返回值是 <code>InjectClass</code> 的方法，或者 <code>InjectClass</code> 是否有被 <code>@Inject</code> 註解的建構子。如果沒有找到，就會再編譯期報錯。確保在編譯期就滿足對象之間的依賴關係。</p>
 <h3 id="Module"><a href="#Module" class="headerlink" title="@Module"></a>@Module</h3><p><code>@Module</code> 主要用來提供依賴類別。Module其實是一個<strong>簡單工廠模式</strong>，裡面包含了許多 <code>@Provider</code> 的方法，每個方法提供了該類別的實體 。</p>
 <h3 id="Provider"><a href="#Provider" class="headerlink" title="@Provider"></a>@Provider</h3><p><code>@Provider</code> 跟 <code>@Module</code> 是一對，<code>@Module</code> 是一個註解類別， <code>@Provider</code> 則是類別中提供實體的註解方法。Dagger2 會在需要建立實體時找到這個方法並呼叫，完成對象的實體化。像是下列例子， <code>providerFactory()</code> 會提供 <code>FactoryClass</code> 的實體。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ModuleClass</span> &#123;</span><br><span class="line">    <span class="meta">@Provides</span> </span><br><span class="line">    FactoryClass <span class="title function_">provideFactory</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">FactoryClass</span>(); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="Component"><a href="#Component" class="headerlink" title="@Component"></a>@Component</h3><p><code>@Component</code> 主要是一個橋樑，在前面說到了 <code>@Module</code> 提供了依賴的實體， <code>@Inject</code> 標記了需要依賴的變數，而 <code>@Component</code> 則是將 <code>@Module</code> 提供的實體注入到標記 <code>@Inject</code> 的變數中。</p>
 <p><code>@Component</code> 主要的職責 :</p>
 <ul>
@@ -262,6 +267,7 @@
 <li>此 Component 可以提供哪些依賴實體。</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component(modules = &#123;AppModule.class, TestModule.class&#125;，dependencies = &#123;DependciesComponent.class&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">AppComponent</span>&#123;</span><br><span class="line">  <span class="keyword">void</span> inject（InjectActivity activity）；</span><br><span class="line">  <span class="keyword">public</span> ProviderClass <span class="title function_">getProviderClass</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p><code>@Component</code> 標記一個 <code>Interface</code> ，從上面的例子對照上述的職責來看，此 <code>Component</code> 可以提供一個 <code>ProviderClass</code> 的實體。</p>
 <ul>
 <li><code>module</code> 就表示提供依賴的 <code>Module</code> 類別。</li>

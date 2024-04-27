@@ -228,24 +228,26 @@
 <p>用一句最簡單的例子來解釋，<strong>『區塊鏈是一個去中心化的分散式資料庫的技術』</strong>，</p>
 <p>每筆資料都會被寫錄在每個區塊中，而每個區塊中都有完整且相同的資料庫。由於每個區塊節點的資料庫都是相同的，由於上述的特點，所以區塊鏈有幾個最重要的特色。</p>
 <ul>
-<li>去中心化。<ul>
+<li><p>去中心化。</p>
+<ul>
 <li>使用者不需要依賴任何的第三方管理機制或硬體雲端服務器，而是依賴分散在網路上各個完整個區塊節點，每個節點都擁有驗證、傳遞以及管理的能力。</li>
 </ul>
 </li>
-<li>不可竄改性。<ul>
-<li>區塊鏈透過密碼學的方式來保證每個區塊節點上已有的數據都不可能被串改。 </li>
+<li><p>不可竄改性。</p>
+<ul>
+<li>區塊鏈透過密碼學的方式來保證每個區塊節點上已有的數據都不可能被串改。</li>
 </ul>
 </li>
-</ul>
-<ul>
-<li>Merkle Tree。</li>
+<li><p>Merkle Tree。</p>
+</li>
 </ul>
 </blockquote>
 <span id="more"></span>
+
 <h3 id="拜占庭將軍問題"><a href="#拜占庭將軍問題" class="headerlink" title="拜占庭將軍問題"></a>拜占庭將軍問題</h3><h4 id="概論"><a href="#概論" class="headerlink" title="概論"></a>概論</h4><p>由於區塊鏈的去中心化特色，整個系統中，並沒有一個權威的中心驗證，所以我們可能會遇到一個很關鍵的問題 - <code>拜占庭將軍問題</code> 。就是當去中心化之後，信息會面臨可信度跟準確性的問題，先來簡單描述一下 <code>拜占庭將軍問題</code> ，在維基百科提到：</p>
 <blockquote>
-<p><strong>拜占庭將軍問題</strong>（Byzantine Generals Problem），是由<a href="https://zh.wikipedia.org/wiki/%E8%8E%B1%E6%96%AF%E5%88%A9%C2%B7%E5%85%B0%E6%B3%A2%E7%89%B9">萊斯利·蘭波特</a>在其同名<a href="https://zh.wikipedia.org/wiki/%E8%AE%BA%E6%96%87">論文</a><a href="https://zh.wikipedia.org/wiki/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98#cite_note-BGP_Paper-1">[1]</a>中提出的<a href="https://zh.wikipedia.org/wiki/%E5%AF%B9%E7%AD%89%E7%BD%91%E7%BB%9C">分散式對等網路</a>通訊容錯問題。</p>
-<p>在<a href="https://zh.wikipedia.org/wiki/%E5%88%86%E5%B8%83%E5%BC%8F%E8%A8%88%E7%AE%97">分布式計算</a>中，不同的<a href="https://zh.wikipedia.org/wiki/%E8%A8%88%E7%AE%97%E6%A9%9F">電腦</a>通過通訊交換資訊達成共識而按照同一套協作策略行動。但有時候，系統中的成員電腦可能出錯而傳送錯誤的資訊，用於傳遞資訊的通訊網路也可能導致資訊損壞，使得網路中不同的成員關於全體協作的策略得出不同結論<a href="https://zh.wikipedia.org/wiki/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98#cite_note-DriscollHall2004-2">[2]</a>，從而破壞系統一致性<a href="https://zh.wikipedia.org/wiki/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98#cite_note-DriscollHall2003-3">[3]</a>。拜占庭將軍問題被認為是容錯性問題中最難的問題類型之一。</p>
+<p><strong>拜占庭將軍問題</strong>（Byzantine Generals Problem），是由<a href="https://zh.wikipedia.org/wiki/%E8%8E%B1%E6%96%AF%E5%88%A9%C2%B7%E5%85%B0%E6%B3%A2%E7%89%B9">萊斯利·蘭波特</a>在其同名<a href="https://zh.wikipedia.org/wiki/%E8%AE%BA%E6%96%87">論文</a>[<a href="https://zh.wikipedia.org/wiki/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98#cite_note-BGP_Paper-1">1]</a>中提出的<a href="https://zh.wikipedia.org/wiki/%E5%AF%B9%E7%AD%89%E7%BD%91%E7%BB%9C">分散式對等網路</a>通訊容錯問題。</p>
+<p>在<a href="https://zh.wikipedia.org/wiki/%E5%88%86%E5%B8%83%E5%BC%8F%E8%A8%88%E7%AE%97">分布式計算</a>中，不同的<a href="https://zh.wikipedia.org/wiki/%E8%A8%88%E7%AE%97%E6%A9%9F">電腦</a>通過通訊交換資訊達成共識而按照同一套協作策略行動。但有時候，系統中的成員電腦可能出錯而傳送錯誤的資訊，用於傳遞資訊的通訊網路也可能導致資訊損壞，使得網路中不同的成員關於全體協作的策略得出不同結論[<a href="https://zh.wikipedia.org/wiki/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98#cite_note-DriscollHall2004-2">2]</a>，從而破壞系統一致性[<a href="https://zh.wikipedia.org/wiki/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98#cite_note-DriscollHall2003-3">3]</a>。拜占庭將軍問題被認為是容錯性問題中最難的問題類型之一。</p>
 </blockquote>
 <p>拜占庭將軍問題的描述其實是這樣的，拜占庭羅馬帝國在軍事行動中，有一組拜占庭將軍分別率領軍隊共同攻打一座城市。</p>
 <p>為了簡化問題，將各支軍隊的行動策略限定為進攻或撤退，如果部分軍隊撤退可能會造成災難性後果，因此所有將軍必須透過投票來達成<strong>一致策略</strong>。</p>
@@ -254,7 +256,7 @@
 <p>簡單來說，就是當多數人決定進攻，那就上去進攻。但是當軍隊中有<strong>叛徒</strong>(例如某一支軍隊的將軍已被策反)，那怎麼保證最後投票的結果能夠反映真實的結果。而不會因為叛亂的人而造成不正常的結果。</p>
 <p>上述的故事對映到電腦系統裡，將軍便成了電腦，而信差就是通訊系統。</p>
 </blockquote>
-<h4 id="區塊鏈如何解決"><a href="#區塊鏈如何解決" class="headerlink" title="區塊鏈如何解決"></a>區塊鏈如何解決</h4><p>從上述的說明可以得知，當今天有人無意或惡意想要影響區塊鏈的資料一致性就會對區塊鏈造成危害。所以區塊鏈如何解決呢？中本聰在比特幣中引入 <strong>工作量證明的共識演算法 (POW : Proof of Work)</strong>。</p>
+<h4 id="區塊鏈如何解決"><a href="#區塊鏈如何解決" class="headerlink" title="區塊鏈如何解決"></a>區塊鏈如何解決</h4><p>從上述的說明可以得知，當今天有人無意或惡意想要影響區塊鏈的資料一致性就會對區塊鏈造成危害。所以區塊鏈如何解決呢？中本聰在比特幣中引入 **工作量證明的共識演算法 (POW : Proof of Work)**。</p>
 <p>這邊先不討論演算法的細節，簡單來說，中本聰讓惡意節點(叛徒)，而去攻擊整個區塊鏈網路，則需要付出相應的成本，而在 POW的機制下，就是要掌握整個區塊鏈50%以上的算力，簡單來說要有一半的惡意節點，所以這樣的成本非常高，也很難達成。加上POW的懲罰以及獎勵機制之下，用這些算力維護網路(良善節點)，其實所獲得的收益是高於破壞網路的。</p>
 <h3 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h3><p>在Blockchain 0x1 中，簡短的介紹了區塊鏈的特色，以及所使用的技術，區塊鏈是一個結合既有技術存在融合而產生的一個新技術，除了在虛擬貨幣上的應用之外，由於去中心化、不可竄改等特性，可以預想在未來會有更多更有意義的應用或產品的誕生。</p>
 

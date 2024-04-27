@@ -227,46 +227,45 @@
 <p>在記憶體中，負責動態分配記憶體的區塊有兩個，一個是 <code>Stack</code> ，另一個是 <code>Heap</code>。下面我們來稍微簡單瞭解一下兩者的差距。</p>
 </blockquote>
 <span id="more"></span>
+
 <table>
 <thead>
 <tr>
-<th style="text-align:center"></th>
-<th style="text-align:left">Heap</th>
-<th style="text-align:left">Stack</th>
+<th align="center"></th>
+<th align="left">Heap</th>
+<th align="left">Stack</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">結構</td>
-<td style="text-align:left">基於 LinkedList、Array、Tree。</td>
-<td style="text-align:left">Stack</td>
+<tbody><tr>
+<td align="center">結構</td>
+<td align="left">基於 LinkedList、Array、Tree。</td>
+<td align="left">Stack</td>
 </tr>
 <tr>
-<td style="text-align:center">特點</td>
-<td style="text-align:left">手動分配大小。隨時釋放空間，數據進出無先後順序</td>
-<td style="text-align:left">自動分配大小，自動釋放記憶體空間，數據先進先出。</td>
+<td align="center">特點</td>
+<td align="left">手動分配大小。隨時釋放空間，數據進出無先後順序</td>
+<td align="left">自動分配大小，自動釋放記憶體空間，數據先進先出。</td>
 </tr>
 <tr>
-<td style="text-align:center">存放對象</td>
-<td style="text-align:left">reference type如 class。引用計數、變數類型等訊息</td>
-<td style="text-align:left">reference value如 struct，enum，int。 function返回值，區域變數</td>
+<td align="center">存放對象</td>
+<td align="left">reference type如 class。引用計數、變數類型等訊息</td>
+<td align="left">reference value如 struct，enum，int。 function返回值，區域變數</td>
 </tr>
 <tr>
-<td style="text-align:center">操作</td>
-<td style="text-align:left">查詢之後分配/釋放，之後再做結合，複雜度高</td>
-<td style="text-align:left">依靠Stack Pointer移動來分配/釋放，複雜度低</td>
+<td align="center">操作</td>
+<td align="left">查詢之後分配&#x2F;釋放，之後再做結合，複雜度高</td>
+<td align="left">依靠Stack Pointer移動來分配&#x2F;釋放，複雜度低</td>
 </tr>
 <tr>
-<td style="text-align:center">執行緒</td>
-<td style="text-align:left">共享，多執行緒不安全</td>
-<td style="text-align:left">獨享，多執行緒安全</td>
+<td align="center">執行緒</td>
+<td align="left">共享，多執行緒不安全</td>
+<td align="left">獨享，多執行緒安全</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <h4 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h4><p>在 WWDC 中，Apple曾經提到 <strong>Heap的操作複雜度要遠遠超過Stack</strong>。所以大家在選擇資料結構時，盡量選擇像 <code>struct</code> 這種會儲存在 Stack 上的數據類型，而不是選擇 Heap類型。</p>
 <p>雖然現在 已經有 ARC 幫我們自動處理記憶體的分配與釋放的問題了，然而 Apple 依舊推薦使用像是 <code>struct</code> 和值類型， 是因為 Stack 的性能很高。雖然 Heap 可以更自由跟靈活的分配記憶體，但相對就要付出複雜度操作較高的代價。</p>
 <blockquote>
-<p>如果想要更進一步了解 Heap 的操作，可以參考 <a href="&quot;http://www.jianshu.com/p/aca50c5a9d64&quot;">Swift 開發中，為什麼要遠離 Heap</a>。</p>
+<p>如果想要更進一步了解 Heap 的操作，可以參考 <a href="%22http://www.jianshu.com/p/aca50c5a9d64%22">Swift 開發中，為什麼要遠離 Heap</a>。</p>
 </blockquote>
 
     </div>

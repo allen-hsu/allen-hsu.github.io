@@ -233,6 +233,7 @@
 </blockquote>
 <p>在今年的 F8 開發者大會上，Facebook 正式宣佈開源內部使用的深度學習框架 - Caffe2。該框架可以用在 iOS、Android 跟樹莓派上訓練和部署模型。且 Facebook 已經與 NVIDIA 、 Qualcomm 、 Intel 、Amazon 、 Google等公司合作未來對雲端以及移動裝置的優化。</p>
 <span id="more"></span>
+
 <h3 id="什麼是-CAFFE2"><a href="#什麼是-CAFFE2" class="headerlink" title="什麼是 CAFFE2"></a>什麼是 CAFFE2</h3><ul>
 <li>一個兼具輕量化、模組化和高度擴展性的開源深度學習框架。</li>
 <li>提供 C++ 與 Python 的API。</li>
@@ -242,17 +243,19 @@
 <h3 id="深度學習的應用"><a href="#深度學習的應用" class="headerlink" title="深度學習的應用"></a>深度學習的應用</h3><p>深度學習和神經網路可以應用與解決任何問題。Caffe2 的深度學習應用主要是關於 CV 、 ChatBost、 IoT 、語音識別、翻譯以及醫療，還有其他一些沒有在下列圖中所提到的應用，像是廣告以及面向學術界研究人員的。</p>
 <p><img src="http://i.imgur.com/tB4rk8x.png" alt="Alt deep learning"></p>
 <h3 id="如何開始"><a href="#如何開始" class="headerlink" title="如何開始"></a>如何開始</h3><h4 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h4><blockquote>
-<p>參考官方網站的<a href="https://caffe2.ai/docs/getting-started.html?platform=mac&amp;configuration=compile">安裝文檔</a> 並且選擇你所需要的裝置平台。並且遵循官方文檔的步驟安裝好你的 Caffe2。</p>
+<p>參考官方網站的<a href="https://caffe2.ai/docs/getting-started.html?platform=mac&configuration=compile">安裝文檔</a> 並且選擇你所需要的裝置平台。並且遵循官方文檔的步驟安裝好你的 Caffe2。</p>
 </blockquote>
-<h3 id="在-iOS-Android-上整合-Caffe2"><a href="#在-iOS-Android-上整合-Caffe2" class="headerlink" title="在 iOS/Android 上整合 Caffe2"></a>在 iOS/Android 上整合 Caffe2</h3><blockquote>
+<h3 id="在-iOS-Android-上整合-Caffe2"><a href="#在-iOS-Android-上整合-Caffe2" class="headerlink" title="在 iOS&#x2F;Android 上整合 Caffe2"></a>在 iOS&#x2F;Android 上整合 Caffe2</h3><blockquote>
 <p>我們這邊使用官方所編寫好的一個<a href="https://caffe2.ai/docs/AI-Camera-demo-android.html">範例</a> AI Camera Demo<br><img src="http://i.imgur.com/6mIMKNU.jpg" alt="Alt example"></p>
 </blockquote>
 <h4 id="建置編譯環境"><a href="#建置編譯環境" class="headerlink" title="建置編譯環境"></a>建置編譯環境</h4><h5 id="Android-Studio"><a href="#Android-Studio" class="headerlink" title="Android Studio"></a>Android Studio</h5><p>我們使用Android來當範例，首先需要安裝<a href="https://developer.android.com/studio/index.html">Android Studio</a></p>
 <h5 id="安裝-Android-NDK"><a href="#安裝-Android-NDK" class="headerlink" title="安裝 Android NDK"></a>安裝 Android NDK</h5><p>因為 Caffe2 會用到 C++ ，在 Android 中我們要使用 C++ 則需要 NDK<br><a href="https://developer.android.com/ndk/index.html">Android NDK</a></p>
 <h5 id="相依性套件"><a href="#相依性套件" class="headerlink" title="相依性套件"></a>相依性套件</h5><p>Android 平台中，我們需要 Automake 跟 Libtool ，這邊使用 Homebrew 安裝。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install automake libtool</span><br></pre></td></tr></table></figure>
+
 <p>然後我們還需要 cmake 去編譯我們的 C++ lib。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install cmake</span><br></pre></td></tr></table></figure>
+
 <h5 id="下載-AI-Camera-Demo-源代碼"><a href="#下載-AI-Camera-Demo-源代碼" class="headerlink" title="下載 AI Camera Demo 源代碼"></a>下載 AI Camera Demo 源代碼</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/bwasti/AICamera.git</span><br><span class="line">git submodule init &amp;&amp; git submodule update</span><br><span class="line"><span class="built_in">cd</span> app/libs/caffe2</span><br><span class="line">git submodule init &amp;&amp; git submodule update</span><br></pre></td></tr></table></figure>
 <h5 id="運行"><a href="#運行" class="headerlink" title="運行"></a>運行</h5><h5 id="Troubleshooting-Android-Build"><a href="#Troubleshooting-Android-Build" class="headerlink" title="Troubleshooting Android Build"></a><a href="https://caffe2.ai/docs/AI-Camera-demo-android.html">Troubleshooting Android Build</a></h5>
     </div>

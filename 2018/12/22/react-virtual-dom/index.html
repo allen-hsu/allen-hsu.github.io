@@ -227,7 +227,9 @@
     
     <div class="post-body" itemprop="articleBody"><h1 id="React中的虛擬DOM詳解"><a href="#React中的虛擬DOM詳解" class="headerlink" title="React中的虛擬DOM詳解"></a>React中的虛擬DOM詳解</h1><p>在 React 還沒出現前的前端開發，我們需要直接操作DOM結構，操作既複雜，兼容性又差，當我們有了jQuery之後，透過jQuery封裝的API，我們能夠更方便的操作DOM，但是DOM是很慢的，其元素非常巨大，頁面的性能問題常常會因為操作DOM而出現瓶頸，於是乎有什麼方法可以讓操作DOM的效率提升呢? ReactJs 提出了虛擬DOM的概念</p>
 <span id="more"></span>
+
 <h2 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. 對複雜的DOM結構，提供一種方便操作的工作，使得開發效率提升</span><br><span class="line">2. 保證最小化的DOM操作，使得執行效率提升</span><br></pre></td></tr></table></figure>
+
 <p>假設今天當 ReactJs 沒有虛擬DOM的實現，我們必須要自己做，我們應該用什麼想法去設計這樣的功能呢? </p>
 <ol>
 <li>先有數據，透過State存放數據</li>

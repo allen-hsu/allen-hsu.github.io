@@ -229,12 +229,14 @@
     <div class="post-body" itemprop="articleBody"><h3 id="RxSwift-初心者入門"><a href="#RxSwift-初心者入門" class="headerlink" title="RxSwift 初心者入門"></a>RxSwift 初心者入門</h3><blockquote>
 <p>在之前我們稍微提過 <code>RxSwift</code> 這一個 <code>framework</code> ，也有稍微介紹了什麼是 <code>Reactive Programming</code> ，那這邊就來詳細談談如何學習以及使用 <code>RxSwfit</code> 吧。</p>
 </blockquote>
-<h4 id="使用-RxSwift-的-Playground"><a href="#使用-RxSwift-的-Playground" class="headerlink" title="使用 RxSwift 的 Playground"></a>使用 RxSwift 的 Playground</h4><p>首先我們先至 <a href="&quot;https://github.com/ReactiveX/RxSwift&quot;">RxSwift</a> <code>Clone</code> 整個 <code>Project</code>，接著我們這邊使用 <code>Rx.Playground</code>  做為入門的教學，按照官網的操作如下</p>
+<h4 id="使用-RxSwift-的-Playground"><a href="#使用-RxSwift-的-Playground" class="headerlink" title="使用 RxSwift 的 Playground"></a>使用 RxSwift 的 Playground</h4><p>首先我們先至 <a href="%22https://github.com/ReactiveX/RxSwift%22">RxSwift</a> <code>Clone</code> 整個 <code>Project</code>，接著我們這邊使用 <code>Rx.Playground</code>  做為入門的教學，按照官網的操作如下</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">To use playgrounds:</span><br><span class="line"></span><br><span class="line">Open Rx.xcworkspace</span><br><span class="line">Build the RxSwift-macOS scheme</span><br><span class="line">Open Rx playground in the Rx.xcworkspace tree view.</span><br><span class="line">Choose View &gt; Debug Area &gt; Show Debug Area</span><br></pre></td></tr></table></figure>
+
 <span id="more"></span>
+
 <p><img src="http://i.imgur.com/qMAmugR.png" alt="Imgur"></p>
 <h4 id="為什麼我們需要使用-RxSwift"><a href="#為什麼我們需要使用-RxSwift" class="headerlink" title="為什麼我們需要使用 RxSwift"></a>為什麼我們需要使用 RxSwift</h4><blockquote>
-<p>我們編寫的大多數程式碼都會設計外部事件的響應。當一個使用者操控一個控制元件，我們需要寫一個 <code>@IBAction</code> 的對應處理。我們需要觀察鍵盤的位置的改變。當 URL sessions 回傳數據時，我們必須提供一個閉包去接受相對應的資料。我們使用 <code>KVO</code> 去檢測變數的變化。所有的這些各式各樣系統的變化使得我們必須去撰寫相對應的代碼，而使得我們的程式碼變的臃腫且複雜，如果有一個一致的系統處理我們所有的呼叫/響應的代碼，這樣我們的程式會不會變得更優雅且美好？Rx是這樣的一個系統，RxSwfit是一個建立在Swift語言上的官方實現版本。</p>
+<p>我們編寫的大多數程式碼都會設計外部事件的響應。當一個使用者操控一個控制元件，我們需要寫一個 <code>@IBAction</code> 的對應處理。我們需要觀察鍵盤的位置的改變。當 URL sessions 回傳數據時，我們必須提供一個閉包去接受相對應的資料。我們使用 <code>KVO</code> 去檢測變數的變化。所有的這些各式各樣系統的變化使得我們必須去撰寫相對應的代碼，而使得我們的程式碼變的臃腫且複雜，如果有一個一致的系統處理我們所有的呼叫&#x2F;響應的代碼，這樣我們的程式會不會變得更優雅且美好？Rx是這樣的一個系統，RxSwfit是一個建立在Swift語言上的官方實現版本。</p>
 </blockquote>
 <h4 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h4><blockquote>
 <p>Every <strong>Observable</strong> instance is just a sequence. </p>
@@ -244,7 +246,7 @@
 <p><code>Observable</code> 相比 <code>Swift</code> 自帶的 <code>Sequence</code>  優勢在於，<code>RxSwift</code> 的 <code>Observable</code> 可以非同步的接受元素或者對象，這是整個 <code>RxSwift</code> 的核心。</p>
 <ul>
 <li>一個 <code>Observable</code> (<code>ObservableType</code>) 相當於一個 <code>Sequence</code>。</li>
-<li><code>ObservableType.subscribe(_:)</code>  相等於 <code>Sequence.makeIterator()</code>。</li>
+<li><code>ObservableType.subscribe(_:)</code>  相等於 <code> Sequence.makeIterator()</code>。</li>
 <li>Observer（callback）需要傳遞給ObservableType.subscribe方法來接受序列裡的元素，代替在返回的 <code>generator</code> 上呼叫 <code>next()</code> 方法。</li>
 </ul>
 <h4 id="關於-Observable"><a href="#關於-Observable" class="headerlink" title="關於 Observable"></a>關於 Observable</h4><blockquote>
@@ -259,25 +261,34 @@
 <p><code>Observable</code> 的序列概念，我們可以很容易地對他做出可視化， 像是下列的序列依樣。</p>
 <p>一個簡單的數字序列，<code>|</code> 符號代表正常中斷。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--1--2--3--4--5--6--|----&gt; // &quot;|&quot; = Terminates normally</span><br></pre></td></tr></table></figure>
+
 <p>一個字串序列，<code>X</code> 符號代表錯誤中斷</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--a--b--c--d--e--f--X----&gt; // &quot;X&quot; = Terminates with an error</span><br></pre></td></tr></table></figure>
+
 <p>也有可能是無限的序列，像是一個按鈕的操作序列</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--tap--tap----------tap--&gt; // &quot;|&quot; = Continues indefinitely, such as a sequence of button taps</span><br></pre></td></tr></table></figure>
+
 <p>上面這些示意圖都被稱為 <code>marble diagram</code> ，這邊有更多的 <code>marble diagram</code> 示意圖 :</p>
-<p><a href="&quot;http://rxmarbles.com/&quot;">RxJS Marbles</a></p>
+<p><a href="%22http://rxmarbles.com/%22">RxJS Marbles</a></p>
 <h4 id="一個-Observable-的簡單例子"><a href="#一個-Observable-的簡單例子" class="headerlink" title="一個 Observable 的簡單例子"></a>一個 Observable 的簡單例子</h4><blockquote>
 <p> <code>Observable</code> 除非有訂閱者，否則不會執行他們的 <code>subscription closure</code> </p>
 <p> 下面的例子， <code>Observable</code> 的 <code>closure</code> 永遠不會被執行，因為沒有任何訂閱者。( <code>Rx.Playground</code> 中運行的範例)</p>
 </blockquote>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">example(<span class="string">&quot;Observable with no subscribers&quot;</span>) &#123;</span><br><span class="line">    <span class="keyword">_</span> <span class="operator">=</span> <span class="type">Observable</span>&lt;<span class="type">String</span>&gt;.create &#123; observerOfString -&gt; <span class="type">Disposable</span> <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;This will never be printed&quot;</span>)</span><br><span class="line">        observerOfString.on(.next(<span class="string">&quot;😬&quot;</span>))</span><br><span class="line">        observerOfString.on(.completed)</span><br><span class="line">        <span class="keyword">return</span> <span class="type">Disposables</span>.create()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>輸出結果 : </p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">---</span> <span class="type">Observable</span> with no subscribers example <span class="operator">---</span></span><br></pre></td></tr></table></figure>
+
+
+
 <blockquote>
 <p>在下面的例子， <code>closure</code> 當 <code>subscribe(_:)</code> 被調用時執行。</p>
 </blockquote>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">example(<span class="string">&quot;Observable with subscriber&quot;</span>) &#123;</span><br><span class="line">  <span class="keyword">_</span> <span class="operator">=</span> <span class="type">Observable</span>&lt;<span class="type">String</span>&gt;.create &#123; observerOfString <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Observable created&quot;</span>)</span><br><span class="line">            observerOfString.on(.next(<span class="string">&quot;😉&quot;</span>))</span><br><span class="line">            observerOfString.on(.completed)</span><br><span class="line">            <span class="keyword">return</span> <span class="type">Disposables</span>.create()</span><br><span class="line">        &#125;</span><br><span class="line">        .subscribe &#123; event <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(event)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>輸出結果 : </p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">---</span> <span class="type">Observable</span> with subscriber example <span class="operator">---</span></span><br><span class="line"><span class="type">Observable</span> created</span><br><span class="line">next(😉)</span><br><span class="line">completed</span><br></pre></td></tr></table></figure>
+
 <p>這邊先不關心如何建立這些 <code>Observable</code> 的細節，我們將在後面會提到。</p>
 
     </div>

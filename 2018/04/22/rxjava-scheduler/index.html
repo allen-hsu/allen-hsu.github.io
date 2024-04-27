@@ -20,12 +20,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Rxjava的線程切換與異步操作傳統Android開發中，我們可以透過Handler&#x2F;Thread等方式來做異步操作，那在RxJava中，假設我們想要做Thread的切換我們應該怎麼做呢?基本上是透過 observeOn 與 subscribeOn 這兩個操作符，去實作所謂的線程切換與異步操作。 observeOn 與 subscribeOn 。什麼是 observeOn :   specify">
+    <meta name="description" content="Rxjava的線程切換與異步操作傳統Android開發中，我們可以透過Handler&#x2F;Thread等方式來做異步操作，那在RxJava中，假設我們想要做Thread的切換我們應該怎麼做呢?基本上是透過 observeOn 與 subscribeOn 這兩個操作符，去實作所謂的線程切換與異步操作。 observeOn 與 subscribeOn 。什麼是 observeOn :   spe">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Rxjava的線程切換與異步操作">
 <meta property="og:url" content="http://yoursite.com/2018/04/22/rxjava-scheduler/index.html">
 <meta property="og:site_name" content="AllenHsu的技術手扎">
-<meta property="og:description" content="Rxjava的線程切換與異步操作傳統Android開發中，我們可以透過Handler&#x2F;Thread等方式來做異步操作，那在RxJava中，假設我們想要做Thread的切換我們應該怎麼做呢?基本上是透過 observeOn 與 subscribeOn 這兩個操作符，去實作所謂的線程切換與異步操作。 observeOn 與 subscribeOn 。什麼是 observeOn :   specify">
+<meta property="og:description" content="Rxjava的線程切換與異步操作傳統Android開發中，我們可以透過Handler&#x2F;Thread等方式來做異步操作，那在RxJava中，假設我們想要做Thread的切換我們應該怎麼做呢?基本上是透過 observeOn 與 subscribeOn 這兩個操作符，去實作所謂的線程切換與異步操作。 observeOn 與 subscribeOn 。什麼是 observeOn :   spe">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2018-04-22T08:35:26.000Z">
 <meta property="article:modified_time" content="2024-04-27T13:32:04.260Z">
@@ -223,7 +223,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="Rxjava的線程切換與異步操作"><a href="#Rxjava的線程切換與異步操作" class="headerlink" title="Rxjava的線程切換與異步操作"></a>Rxjava的線程切換與異步操作</h2><p>傳統Android開發中，我們可以透過Handler/Thread等方式來做異步操作，那在RxJava中，假設我們想要做Thread的切換我們應該怎麼做呢?基本上是透過 <code>observeOn</code> 與 <code>subscribeOn</code> 這兩個操作符，去實作所謂的線程切換與異步操作。</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="Rxjava的線程切換與異步操作"><a href="#Rxjava的線程切換與異步操作" class="headerlink" title="Rxjava的線程切換與異步操作"></a>Rxjava的線程切換與異步操作</h2><p>傳統Android開發中，我們可以透過Handler&#x2F;Thread等方式來做異步操作，那在RxJava中，假設我們想要做Thread的切換我們應該怎麼做呢?基本上是透過 <code>observeOn</code> 與 <code>subscribeOn</code> 這兩個操作符，去實作所謂的線程切換與異步操作。</p>
 <h3 id="observeOn-與-subscribeOn-。"><a href="#observeOn-與-subscribeOn-。" class="headerlink" title="observeOn 與 subscribeOn 。"></a>observeOn 與 subscribeOn 。</h3><p>什麼是 <code>observeOn</code> : </p>
 <blockquote>
 <p>specify the Scheduler on which an observer will observe this Observable</p>
@@ -235,7 +235,8 @@
 <p>指定這個 Observable 自身在哪一個特定的 Scheduler 上操作。</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Observable.just(<span class="number">1</span>)</span><br><span class="line">    .map(integer -&gt; &#123;</span><br><span class="line">        Log.i(<span class="string">&quot;Rxjava&quot;</span>, <span class="string">&quot;map-1:&quot;</span>+Thread.currentThread().getName());</span><br><span class="line">        <span class="keyword">return</span> integer;</span><br><span class="line">    &#125;)</span><br><span class="line">    .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">    .subscribeOn(Schedulers.newThread())</span><br><span class="line">    .doOnSubscribe(s -&gt; &#123;</span><br><span class="line">        Log.i(<span class="string">&quot;Rxjava&quot;</span>,   <span class="string">&quot;doOnSubscribe:&quot;</span>+Thread.currentThread().getName());</span><br><span class="line">    &#125;)</span><br><span class="line">    .doOnNext(next -&gt; &#123;</span><br><span class="line">        Log.i(<span class="string">&quot;Rxjava&quot;</span>, <span class="string">&quot;doOnNext:&quot;</span>+Thread.currentThread().getName());</span><br><span class="line">    &#125;)</span><br><span class="line">    .subscribe(</span><br><span class="line">    x -&gt; &#123;</span><br><span class="line">        Log.i(<span class="string">&quot;Rxjava&quot;</span>, <span class="string">&quot;next-1:&quot;</span>+Thread.currentThread().getName());</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<p>以上面的代碼為例子，map的操作符會在newThread做操作，doOnSubscribe/doOnNext 都會在 mainThread做操作，透過這樣兩個簡單的操作符可以很簡單的去做Rxjava的線程調度。</p>
+
+<p>以上面的代碼為例子，map的操作符會在newThread做操作，doOnSubscribe&#x2F;doOnNext 都會在 mainThread做操作，透過這樣兩個簡單的操作符可以很簡單的去做Rxjava的線程調度。</p>
 
     </div>
 

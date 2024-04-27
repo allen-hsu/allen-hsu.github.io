@@ -225,41 +225,52 @@
     
     
     <div class="post-body" itemprop="articleBody"><h3 id="關於-RxSwift-的記憶體管理機制"><a href="#關於-RxSwift-的記憶體管理機制" class="headerlink" title="關於 RxSwift 的記憶體管理機制"></a>關於 RxSwift 的記憶體管理機制</h3><blockquote>
-<p>在介紹關於 <a href="&quot;https://allen-hsu.github.io/2017/08/08/rxswift-basic/&quot;">RxSwift 基本入門</a> 中提到了一些 <code>RxSwift</code> 的核心概念 - <code>Observable</code> ，我們描述了事件訊息的種類，分別是 :  <code>next</code> 、<code>error</code> 、 <code>completed</code> ， 當這個 <code>Observable</code> 收到<code>error</code> 跟 <code>completed</code> 事件訊息時，那麼這個 <code>Observable</code>  將不會再接受其他的訂閱事件。 <strong>同時在這邊用來分派給此 <code>Observable</code> 的記憶體資源就一起被釋放掉了</strong>，我們可以將其視為類似 <code>ARC</code> 的自動記憶體釋放。 如果你想立刻將 <code>Observable</code> 關閉且立刻釋放資源，那麼你需要呼叫 <code>dispose</code> 函數，這邊我們可以理解為類似 <code>MRC</code> 的手動釋放。</p>
+<p>在介紹關於 <a href="%22https://allen-hsu.github.io/2017/08/08/rxswift-basic/%22">RxSwift 基本入門</a> 中提到了一些 <code>RxSwift</code> 的核心概念 - <code>Observable</code> ，我們描述了事件訊息的種類，分別是 :  <code>next</code> 、<code>error</code> 、 <code>completed</code> ， 當這個 <code>Observable</code> 收到<code>error</code> 跟 <code>completed</code> 事件訊息時，那麼這個 <code>Observable</code>  將不會再接受其他的訂閱事件。 <strong>同時在這邊用來分派給此 <code>Observable</code> 的記憶體資源就一起被釋放掉了</strong>，我們可以將其視為類似 <code>ARC</code> 的自動記憶體釋放。 如果你想立刻將 <code>Observable</code> 關閉且立刻釋放資源，那麼你需要呼叫 <code>dispose</code> 函數，這邊我們可以理解為類似 <code>MRC</code> 的手動釋放。</p>
 </blockquote>
 <p>如果一個 <code>Observable</code> 在一定的時間內結束，即使不呼叫 <code>dispose</code> 或者使用 <code>DisposeBag</code> 也不會引發 <code>Memory Leak</code>。 如果一個 <code>Observable</code> 因為某些原因</p>
 <p>沒有結束，那記憶體將會永遠的不會被釋放，所以就算 根據 <code>Observable</code> 的運作原理，我們也會希望透過某些記憶體回收機制來確保不會產生 <code>Memory Leak</code> 的問題。</p>
 <p>下面將詳細介紹幾種 <code>RxSwift</code> 的記憶體管理機制。</p>
 <span id="more"></span>
+
 <h4 id="Disposing"><a href="#Disposing" class="headerlink" title="Disposing"></a>Disposing</h4><p>在一開始提到的，我們可以呼叫 <code>dispose</code> 方法，去直接關閉這個 <code>Observable</code>。</p>
 <p>下面是一個簡單的例子 : </p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> subscription <span class="operator">=</span> <span class="type">Observable</span>&lt;<span class="type">Int</span>&gt;.interval(<span class="number">0.3</span>, scheduler: scheduler)</span><br><span class="line">    .subscribe &#123; event <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(event)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="type">NSThread</span>.sleep(forTimeInterval: <span class="number">2.0</span>)</span><br><span class="line">subscription.dispose()</span><br></pre></td></tr></table></figure>
+
 <p>Result : </p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">5</span></span><br></pre></td></tr></table></figure>
+
 <p>不過這並不是一個好方法，手動呼叫 <code>dispose</code> 是一種不太好的編程習慣。更好的方法是使用像是 <code>DisposeBag</code> 或者一些其他的機制。</p>
 <p>如果在<code>dispose</code> 被執行之後，還會繼續執行 <code>subscribe</code> 中的代碼片段嗎 ? 像是在這個範例中，還會繼續  <code>print</code> 東西嗎 ? 答案是 : <strong>不一定</strong> 。</p>
 <blockquote>
 <p><strong>要視 scheduler 被訂閱時所在的執行緒以及 dispose 呼叫的執行緒 而定。</strong></p>
 </blockquote>
 <p>如果 <code>scheduler</code> 是一個  <code>serial scheduler</code> ，例如 : <code>MainScheduler</code> 並且 dispose 在同一個 <code>serial scheduler</code> 被呼叫，答案是<strong>不會</strong>，否則答案是<strong>會的</strong>。</p>
-<p>關於 <code>RxSwift</code> 的 <code>scheduler</code> 我們會在後面做更詳細的討論，假如你真的需要呼叫 <code>dispose</code>  ，那麼我們為了避免出現上述的狀況，我們必須詳細的告訴 <code>Observable</code> 訂閱的 <code>scheduler</code> 執行緒以及確保 <code>dispose</code> 呼叫的方法在同一執行緒。</p>
+<p>關於 <code>RxSwift</code> 的 <code>scheduler</code> 我們會在後面做更詳細的討論，假如你真的需要呼叫 <code>dispose</code>  ，那麼我們為了避免出現上述的狀況，我們必須詳細的告訴 <code> Observable</code> 訂閱的 <code>scheduler</code> 執行緒以及確保 <code>dispose</code> 呼叫的方法在同一執行緒。</p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//observeOn on MainScheduler(main thread)</span></span><br><span class="line"><span class="keyword">let</span> subscription <span class="operator">=</span> <span class="type">Observable</span>&lt;<span class="type">Int</span>&gt;.interval(<span class="number">0.3</span>, scheduler: scheduler)</span><br><span class="line">            .observeOn(<span class="type">MainScheduler</span>.instance)</span><br><span class="line">            .subscribe &#123; event <span class="keyword">in</span></span><br><span class="line">                <span class="built_in">print</span>(event)</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ....</span></span><br><span class="line"></span><br><span class="line">subscription.dispose()<span class="comment">// called from main thread</span></span><br></pre></td></tr></table></figure>
+
 <p>這樣就能確保在 <code>dispose</code> 之後不會在 print 出任何訊息了。</p>
 <h4 id="Dispose-Bags"><a href="#Dispose-Bags" class="headerlink" title="Dispose Bags"></a>Dispose Bags</h4><p><code>Dispose Bag</code> 在 <code>RxSwift</code> 中的作用與 <code>ARC</code> 類似。它就像是一個 <code>autoreleasepool</code> 一樣。當 <code>disposeBag</code> 被銷毀時，同時銷毀被加入這個 <code>disposeBag</code>  的 <code>Observable</code> 。</p>
 <blockquote>
 <p>基本的 disposeBag 使用方法。</p>
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">let disposeBag = DisposeBag()</span><br><span class="line">    </span><br><span class="line">    Observable&lt;Int&gt;.empty()</span><br><span class="line">        .subscribe &#123; event in</span><br><span class="line">            print(event)</span><br><span class="line">        &#125;</span><br><span class="line">        .disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+
 <p>當 <code>disposeBag</code> 的 <code>scope</code> 結束時，就會呼叫解構子，當 <code>Dispose Bag</code> 的解構子被呼叫的時候，他會對每個 <code>Observable</code> 呼叫 <code>dispose</code>  方法。</p>
 <blockquote>
 <p>如果你需要馬上清除記憶體，你可以立刻創建一個新的 <code>DisposeBag</code></p>
 </blockquote>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">self</span>.disposeBag <span class="operator">=</span> <span class="type">DisposeBag</span>()</span><br></pre></td></tr></table></figure>
+
+
+
 <blockquote>
 <p>如果需要顯式的手動清理資源，那麼需要使用 <code>CompositeDisposable</code> 。</p>
 </blockquote>
 <h4 id="Take-until"><a href="#Take-until" class="headerlink" title="Take until"></a>Take until</h4><p>另外一種自動管理機制則是使用 <code>takeUntil</code> </p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sequence</span><br><span class="line">    .takeUntil(<span class="keyword">self</span>.rx.deallocated)</span><br><span class="line">    .subscribe &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="variable">$0</span>)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <p>以上就是關於 <code>RxSwift</code> 的記憶體管理機制。這次介紹就到這邊結束，希望能讓大家對於 <code>RxSwift</code> 有更深一步的認識。</p>
 
     </div>

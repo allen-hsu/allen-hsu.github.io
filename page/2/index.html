@@ -225,7 +225,7 @@
 </li>
 <li><p>private : 只有合約能夠呼叫這個函式。</p>
 </li>
-<li><p>view/constant : 只會回傳資料，函式也不能修改任何變數或合約資料 </p>
+<li><p>view&#x2F;constant : 只會回傳資料，函式也不能修改任何變數或合約資料 </p>
 </li>
 <li><p>pure: 不能修改，也不能讀取合約內的資料。</p>
 </li>
@@ -329,17 +329,16 @@
 <th></th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td><a href="https://zh.wikipedia.org/wiki/%E7%B6%B2%E7%AB%99">網站</a></td>
-<td><a href="http://github.com/ethereum/solidity">github.com/ethereum/solidity</a></td>
+<td><a href="http://github.com/ethereum/solidity">github.com&#x2F;ethereum&#x2F;solidity</a></td>
 </tr>
 <tr>
-<td>啟發語言<a href="https://zh.wikipedia.org/wiki/JavaScript">JavaScript</a>, <a href="https://zh.wikipedia.org/wiki/C%2B%2B">C++</a>, <a href="https://zh.wikipedia.org/w/index.php?title=Python_(programming_language">Python</a>&amp;action=edit&amp;redlink=1), <a href="https://zh.wikipedia.org/wiki/PowerShell">PowerShell</a></td>
+<td>啟發語言<a href="https://zh.wikipedia.org/wiki/JavaScript">JavaScript</a>, <a href="https://zh.wikipedia.org/wiki/C%2B%2B">C++</a>, <a href="https://zh.wikipedia.org/w/index.php?title=Python_(programming_language)&action=edit&redlink=1">Python</a>, <a href="https://zh.wikipedia.org/wiki/PowerShell">PowerShell</a></td>
+<td></td>
 </tr>
-</tbody>
-</table>
-<p><strong>Solidity</strong>是一種合約導向式語言，可被應用於各種不同的區塊鏈平台上<a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-IBTimes12AUG2016-1">[1]</a>，其主要開發者為Gavin Wood，Christian Reitwiessner，Alex Beregszaszi，Liana Husikyan，Yoichi Hirai和其他幾位早期以太坊核心貢獻者。<a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-:CoinDesk14Dec2016-2">[2]</a><a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-:CCN09062016-3">[3]</a>Solidity 可使程式開發人員能在區塊鏈上（例如以太坊）編寫智能合約</p>
+</tbody></table>
+<p><strong>Solidity</strong>是一種合約導向式語言，可被應用於各種不同的區塊鏈平台上[<a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-IBTimes12AUG2016-1">1]</a>，其主要開發者為Gavin Wood，Christian Reitwiessner，Alex Beregszaszi，Liana Husikyan，Yoichi Hirai和其他幾位早期以太坊核心貢獻者。[<a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-:CoinDesk14Dec2016-2">2]</a>[<a href="https://zh.wikipedia.org/wiki/Solidity#cite_note-:CCN09062016-3">3]</a>Solidity 可使程式開發人員能在區塊鏈上（例如以太坊）編寫智能合約</p>
 <ul>
 <li>Strongly Typed - 屬於一門強型別語言</li>
 <li>Similar to Javascript - 與Javascript非常類似(指的是syntax部分)。</li>
@@ -354,6 +353,7 @@
 <p>###Solidity IDE - Remix</p>
 <p><a href="https://ethereum.github.io/browser-solidity/">Remix</a> 是一個 Solidity Online的 Editor，可以用來編寫與測試 Solidity，也可以在上面直接發佈智能合約。</p>
 <h3 id="第一個智能合約-使用-Solidity"><a href="#第一個智能合約-使用-Solidity" class="headerlink" title="第一個智能合約 - 使用 Solidity"></a>第一個智能合約 - 使用 Solidity</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//每一個智能合約都必須定義，這邊指的是使用0.4.17或更高的編譯器版本</span></span><br><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.17</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//contract的修飾符關鍵字就像class一樣，定義這是一個合約</span></span><br><span class="line">contract <span class="title class_">Inbox</span> &#123;</span><br><span class="line">    <span class="comment">//在這個合約裡面儲存一個string，並且是public，任何人都可以知道這個變量</span></span><br><span class="line">    string public message;</span><br><span class="line">    <span class="comment">//建構子，當這個合約被部署到區塊鏈上，會執行這個函式。</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">Inbox</span>(<span class="params">string initialMessage</span>) public &#123;</span><br><span class="line">        message = initialMessage;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//改變這個合約中的message變量。</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">setMessage</span>(<span class="params">string newMessage</span>) public &#123;</span><br><span class="line">        message = newMessage;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//取得這個合約中的message變量。</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">getMessage</span>(<span class="params"></span>) public view <span class="title function_">returns</span>(<span class="params">string</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> message;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
 <p>這樣就完成了一個簡單可以在區塊鏈上儲存字串訊息的智能合約。</p>
 
       
@@ -444,17 +444,18 @@
 <p>用一句最簡單的例子來解釋，<strong>『區塊鏈是一個去中心化的分散式資料庫的技術』</strong>，</p>
 <p>每筆資料都會被寫錄在每個區塊中，而每個區塊中都有完整且相同的資料庫。由於每個區塊節點的資料庫都是相同的，由於上述的特點，所以區塊鏈有幾個最重要的特色。</p>
 <ul>
-<li>去中心化。<ul>
+<li><p>去中心化。</p>
+<ul>
 <li>使用者不需要依賴任何的第三方管理機制或硬體雲端服務器，而是依賴分散在網路上各個完整個區塊節點，每個節點都擁有驗證、傳遞以及管理的能力。</li>
 </ul>
 </li>
-<li>不可竄改性。<ul>
-<li>區塊鏈透過密碼學的方式來保證每個區塊節點上已有的數據都不可能被串改。 </li>
+<li><p>不可竄改性。</p>
+<ul>
+<li>區塊鏈透過密碼學的方式來保證每個區塊節點上已有的數據都不可能被串改。</li>
 </ul>
 </li>
-</ul>
-<ul>
-<li>Merkle Tree。</li>
+<li><p>Merkle Tree。</p>
+</li>
 </ul>
 </blockquote>
           <!--noindex-->
@@ -570,7 +571,7 @@
 <h3 id="人生中最耀眼那一瞬間的情緒「在體內的哪一帶？呈現什麼形狀？顏色？溫度？硬度？」"><a href="#人生中最耀眼那一瞬間的情緒「在體內的哪一帶？呈現什麼形狀？顏色？溫度？硬度？」" class="headerlink" title="人生中最耀眼那一瞬間的情緒「在體內的哪一帶？呈現什麼形狀？顏色？溫度？硬度？」"></a>人生中最耀眼那一瞬間的情緒「在體內的哪一帶？呈現什麼形狀？顏色？溫度？硬度？」</h3><p>重現實現夢想、達成目標時的情緒，經常會產生好結果。</p>
 <p>###「目標是什麼？」「什麼進展順利？」「什麼進展不順利？」「所以該做什麼呢？」「透過這些問題，獲得了什麼呢？」</p>
 <p>光是忽然對自己拋出問題，就能整理心情。</p>
-<p><a href="&quot;https://www.managertoday.com.tw/books/view/47000&quot;">參考出處</a> </p>
+<p><a href="%22https://www.managertoday.com.tw/books/view/47000%22">參考出處</a> </p>
 
       
     </div>
@@ -656,7 +657,7 @@
     
     <div class="post-body" itemprop="articleBody">
           <h2 id="開始與結束"><a href="#開始與結束" class="headerlink" title="開始與結束"></a>開始與結束</h2><p>轉眼間2017年又要過了，過去每年嘗試著盡量在一個月寫一次的技術Blog，不管是給自己或者給別人看，中間也參考許多別人的技術Blog，希望可以透過寫作的方式提升自己對於技術的理解跟提升自身的技術、閱讀、寫作的能力，雖然還是很懶，不過總算是有了個開始，所以這篇是2017年對自己的年度回顧與檢討，希望在2018年可以再讓自己不管在工作、學業、感情、各方面都能更有成長。所以透過<code>想做的事情</code>、<code>已完成的事情</code>、<code>沒有完成的事情</code>來做個總檢討與2018年的展望。</p>
-<h3 id="2017想做的事情-已完成的事情-沒有完成的事情"><a href="#2017想做的事情-已完成的事情-沒有完成的事情" class="headerlink" title="2017想做的事情/已完成的事情/沒有完成的事情"></a>2017想做的事情/已完成的事情/沒有完成的事情</h3><ul>
+<h3 id="2017想做的事情-已完成的事情-沒有完成的事情"><a href="#2017想做的事情-已完成的事情-沒有完成的事情" class="headerlink" title="2017想做的事情&#x2F;已完成的事情&#x2F;沒有完成的事情"></a>2017想做的事情&#x2F;已完成的事情&#x2F;沒有完成的事情</h3><ul>
 <li>刺青 - 完成 </li>
 <li>學會斜跑(衝浪的技巧) - 沒有完成</li>
 <li>考上北科在職專班 - 完成</li>
@@ -668,7 +669,7 @@
 <p>回顧來看，除了最後兩項沒做到之外，前面的事情都做完了，沒有想到的事情是竟然10本書沒有看完，40部電影不出意料的都看完了，但是沒想到留在我腦海印象中的卻不多，刺青算是對自己身體與心靈上的一種特別意義，主要還是 <code>學會斜跑</code>  、 <code>北科在職專班</code>、這兩件事情特別仔細來回顧一下好了，先從斜跑這項運動 - <code>衝浪</code> 開始談起好了。</p>
 <h4 id="關於衝浪"><a href="#關於衝浪" class="headerlink" title="關於衝浪"></a>關於衝浪</h4><p>很有趣在2016年因緣際會接觸了衝浪這項運動，當初其實並不是真心對於這項運動的熱愛，而是某些需要轉換心境的原因，而衝浪是非常耗費體力的一項極限運動，所以剛好就成了一個發洩的出口，然後一開始又被周遭同好推坑，所以變成一開始就挑戰難度極高的短板，這邊就不詳述衝浪活動要幹嘛了，有興趣的人在自己google了，從一開始的連在板子上都無法平衡，也不會 <code>潛越越浪</code> 一直被浪打回來，到能夠划水到 <code>outside</code> 區，然後在板子上努力學著如何 <code>坐板</code> 平衡，然後努力的划水<code>追浪</code> ， 到可以<code>起乘</code>站到浪板上 ，這中間看起很簡單的過程，但是卻整整花了我一整年(2016年9月到2017年9月)，中間一度有想放棄過這項運動，但是衝著衝著卻發現，我喜愛台灣的海洋，它可以很美麗，也可以很凶險，與衝浪同好坐在海上觀浪邊聊天，看著海平面上陽光與海洋彼此襯托，從每次越浪嚐到的海水苦鹹，到坐板觀浪的耐心等待，至最後的划水追浪至起乘衝浪，這樣子的一次又一次嘗試，一次又一次的失敗，讓我能夠感覺到自己好像真正的活著，雖然我現在還是衝得很爛，不太會觀浪，滑水不夠快，但是我還是希望能夠去用身體感受這片土地與海洋帶給我們的美好。</p>
 <h4 id="關於在職專班"><a href="#關於在職專班" class="headerlink" title="關於在職專班"></a>關於在職專班</h4><p>這項也是很有趣，當初只是想讓自己忙碌一點，沒想到到最後變成工作學業蠟燭兩頭燒，在北科大中，認識了很多業界的同學，更讓自己感到自己的渺小，與自己唸書方式的不足，雖然是完成了考上，但是要到畢業可能還需要一段努力，這邊給我最大的收穫算是要去如何<code>學習跟管理自己的時間</code>，如何好好分配工作與學業的比例，以及上課時的吸收，由於是碩班，還有閱讀英文文章論文的能耐，我想都是在2018年非常好的課題。</p>
-<h3 id="2018年想做的事情"><a href="#2018年想做的事情" class="headerlink" title="2018年想做的事情"></a>2018年想做的事情</h3><p>還是回歸到這個Blog的本質，<code>技術</code>，在2017年算是轉換了一個不小的跑道，在管理方面也第一次嘗試管理15個人，這邊大概只能給自己打個60分，技術方面也碰觸了很多，像是 Android/iOS 更深一步的原生開發，新型的框架實現(MVVM)，FRP(RXJava)等，算是對自己一個不小的挑戰，在這邊給自己2018年的期許。</p>
+<h3 id="2018年想做的事情"><a href="#2018年想做的事情" class="headerlink" title="2018年想做的事情"></a>2018年想做的事情</h3><p>還是回歸到這個Blog的本質，<code>技術</code>，在2017年算是轉換了一個不小的跑道，在管理方面也第一次嘗試管理15個人，這邊大概只能給自己打個60分，技術方面也碰觸了很多，像是 Android&#x2F;iOS 更深一步的原生開發，新型的框架實現(MVVM)，FRP(RXJava)等，算是對自己一個不小的挑戰，在這邊給自己2018年的期許。</p>
 <ul>
 <li>技術方面 :<ul>
 <li>iOS : RxSwift、如何讓iOS與Android共用類似框架開發、ReactNative的學習。</li>
@@ -777,7 +778,7 @@
     
     <div class="post-body" itemprop="articleBody">
           <h2 id="MVVM是什麼-能吃嗎"><a href="#MVVM是什麼-能吃嗎" class="headerlink" title="MVVM是什麼 ? 能吃嗎 ?"></a>MVVM是什麼 ? 能吃嗎 ?</h2><blockquote>
-<p>在做軟體開發的時候，常常會使用一些設計模式去做系統架構的開發與設計，像是常見 <code>Model-View-Controller</code> (簡稱 <a href="&quot;https://zh.wikipedia.org/wiki/MVC&quot;">MVC</a> )、觀察者模式、代理模式等等，透過這些設計模式，更能有效的使我們的軟體架構增加可讀性以及擴充性。</p>
+<p>在做軟體開發的時候，常常會使用一些設計模式去做系統架構的開發與設計，像是常見 <code>Model-View-Controller</code> (簡稱 <a href="%22https://zh.wikipedia.org/wiki/MVC%22">MVC</a> )、觀察者模式、代理模式等等，透過這些設計模式，更能有效的使我們的軟體架構增加可讀性以及擴充性。</p>
 </blockquote>
 <p>那 <code>MVVM</code> 又是什麼呢 ? 在 <code>iOS/Android</code> 的開發中，我們遵循的是最常見的 <code>MVC</code> 開發模式，在 <code>iOS/Android</code> 中，通常 <code>Stroyboard/Xib/Xml</code> 為我們的 View 層級，負責作為顯示跟介面上的邏輯，<code>ViewController/Activity/Fragment</code> 做為 <code>Controller</code> 層級，<code>Model</code> 則為存取資料的層級。</p>
 <p>不過常常我們會需要在 <code>ViewController/Activity/Fragment</code> 當中去操作對 <code>View</code> 的相關處理，而不光是只控制 App 的流程及邏輯，那是因為不管在 <code>iOS/Android</code> 的設計中，<code>ViewController/Activity/Fragment</code> 也被用來當成 <code>View</code> 的一部分，由於模糊不清的權責，讓我們常常寫出一個極致複雜的 <code>Controller</code> 類別 - <code>Massive ViewControler</code> 。</p>
