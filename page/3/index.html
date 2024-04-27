@@ -123,7 +123,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-count">41</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -134,7 +134,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -151,6 +151,100 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/android-recycleview-bug/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2017/09/03/android-recycleview-bug/" class="post-title-link" itemprop="url">RecyclerView-IndxeOutOfBoundsException</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-09-03 16:59:17" itemprop="dateCreated datePublished" datetime="2017-09-03T16:59:17+08:00">2017-09-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android-%E9%96%8B%E7%99%BC/" itemprop="url" rel="index"><span itemprop="name">Android 開發</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="RecycleView的Bug-java-lang-IndexOutOfBoundsException-Inconsistency-detected-Invalid-item-position"><a href="#RecycleView的Bug-java-lang-IndexOutOfBoundsException-Inconsistency-detected-Invalid-item-position" class="headerlink" title="RecycleView的Bug : java.lang.IndexOutOfBoundsException: Inconsistency detected. Invalid item position"></a>RecycleView的Bug : java.lang.IndexOutOfBoundsException: Inconsistency detected. Invalid item position</h2><p>最近在工作上，因為某些原因，需要很快速地刷新RecycleView內的元素，但是很常出現閃退，追了一下log，發現是下列的原因:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">java.lang.IndexOutOfBoundsException: Inconsistency detected. Invalid item position <span class="number">150</span>(offset:<span class="number">150</span>).state:<span class="number">153</span></span><br><span class="line">    at android.support.v7.widget.RecyclerView$Recycler.tryGetViewHolderForPositionByDeadline(RecyclerView.java:<span class="number">5504</span>)</span><br><span class="line">    at android.support.v7.widget.RecyclerView$Recycler.getViewForPosition(RecyclerView.java:<span class="number">5440</span>)</span><br><span class="line">    at android.support.v7.widget.RecyclerView$Recycler.getViewForPosition(RecyclerView.java:<span class="number">5436</span>)</span><br><span class="line">    at android.support.v7.widget.LinearLayoutManager$LayoutState.next(LinearLayoutManager.java:<span class="number">2224</span>)</span><br><span class="line">    at android.support.v7.widget.LinearLayoutManager.layoutChunk(LinearLayoutManager.java:<span class="number">1551</span>)</span><br><span class="line">    at android.support.v7.widget.LinearLayoutManager.fill(LinearLayoutManager.java:<span class="number">1511</span>)</span><br><span class="line">    at android.support.v7.widget.LinearLayoutManager.onLayoutChildren(LinearLayoutManager.java:<span class="number">595</span>)</span><br><span class="line">    at android.support.v7.widget.RecyclerView.dispatchLayoutStep2(RecyclerView.java:<span class="number">3583</span>)</span><br><span class="line">    at android.support.v7.widget.RecyclerView.dispatchLayout(RecyclerView.java:<span class="number">3312</span>)</span><br><span class="line">    at android.support.v7.widget.RecyclerView.consumePendingUpdateOperations(RecyclerView.java:<span class="number">1618</span>)</span><br><span class="line">    at android.support.v7.widget.RecyclerView$ViewFlinger.run(RecyclerView.java:<span class="number">4702</span>)</span><br><span class="line">    at android.view.Choreographer$CallbackRecord.run(Choreographer.java:<span class="number">911</span>)</span><br><span class="line">    at android.view.Choreographer.doCallbacks(Choreographer.java:<span class="number">686</span>)</span><br><span class="line">    at android.view.Choreographer.doFrame(Choreographer.java:<span class="number">619</span>)</span><br><span class="line">    at android.view.Choreographer$FrameDisplayEventReceiver.run(Choreographer.java:<span class="number">897</span>)</span><br><span class="line">    at android.os.Handler.handleCallback(Handler.java:<span class="number">739</span>)</span><br><span class="line">    at android.os.Handler.dispatchMessage(Handler.java:<span class="number">95</span>)</span><br><span class="line">    at android.os.Looper.loop(Looper.java:<span class="number">148</span>)</span><br><span class="line">    at android.app.ActivityThread.main(ActivityThread.java:<span class="number">7409</span>)</span><br><span class="line">    at java.lang.reflect.Method.invoke(Native Method)</span><br><span class="line">    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:<span class="number">1230</span>)</span><br><span class="line">    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:<span class="number">1120</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="Bug-出現原因"><a href="#Bug-出現原因" class="headerlink" title="Bug 出現原因 :"></a>Bug 出現原因 :</h3><p>再進行數據變動時，務必要保證 Adapter 中的數據和移除的數據保持一致，就是當你更新你的集合後，呼叫 notify 方法時， adapter 的更新預期結果和實際集合更新結果不同，就會出現此異常。</p>
+<p>例如: 增加了兩條數據，但是 Adapter 的 notify 只增加 5 條數據，這種情況就屬於不一致，簡單來說 Apapter 有個 Size，你的資料結構集合也有 Size，這兩個 Size 在呼叫 notify 方法時必須保持相同。</p>
+<h3 id="解決方法"><a href="#解決方法" class="headerlink" title="解決方法 :"></a>解決方法 :</h3><p>覆寫 xxxxLayoutManager(看你使用的是 LinearLayoutManager 或是 GridLayoutManager或其他)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RecyclerViewLinearLayoutManager</span> <span class="keyword">extends</span> <span class="title class_">LinearLayoutManager</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">RecyclerViewLinearLayoutManager</span><span class="params">(Context context)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>( context );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">RecyclerViewLinearLayoutManager</span><span class="params">(Context context, <span class="type">int</span> orientation, <span class="type">boolean</span> reverseLayout)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>( context, orientation, reverseLayout );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">RecyclerViewLinearLayoutManager</span><span class="params">(Context context, AttributeSet attrs, <span class="type">int</span> defStyleAttr, <span class="type">int</span> defStyleRes)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>( context, attrs, defStyleAttr, defStyleRes );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onLayoutChildren</span><span class="params">(RecyclerView.Recycler recycler, RecyclerView.State state)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//主要在這邊加入 try catch</span></span><br><span class="line">            <span class="built_in">super</span>.onLayoutChildren( recycler, state );</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IndexOutOfBoundsException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>主要是在添加集合的時候，增加了一層 try catch去解決。</p>
+<p>參考 :</p>
+<p><a href="https://stackoverflow.com/questions/30458640/recyclerview-java-lang-indexoutofboundsexception-inconsistency-detected-inval">https://stackoverflow.com/questions/30458640/recyclerview-java-lang-indexoutofboundsexception-inconsistency-detected-inval</a></p>
+<p><a href="http://www.cnblogs.com/fuyaozhishang/p/6991221.html">http://www.cnblogs.com/fuyaozhishang/p/6991221.html</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1006,107 +1100,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/12/android-layout-3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Allen Hsu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="AllenHsu的技術手扎">
-      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | AllenHsu的技術手扎">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2017/06/12/android-layout-3/" class="post-title-link" itemprop="url">Android Layout 佈局 (三)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2017-06-12 22:58:32" itemprop="dateCreated datePublished" datetime="2017-06-12T22:58:32+08:00">2017-06-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Android-%E9%96%8B%E7%99%BC/" itemprop="url" rel="index"><span itemprop="name">Android 開發</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Android-TableLayout-佈局"><a href="#Android-TableLayout-佈局" class="headerlink" title="Android TableLayout 佈局"></a>Android TableLayout 佈局</h2><blockquote>
-<p>TableLayout ，適用於多行多列的佈局格式，每個 TableLayout 是由多個 TableRow 組成， 一個 TableRow 就表示 TableLayout 中的每一行，這一行可以由多個子元素組成。TableLayout 和 TableRow 都是 LineLayout 的子類別。</p>
-</blockquote>
-<blockquote>
-<p>但是 TableRow 的參數 <code>android:orientation</code> 屬性值固定為 <code>horizontal</code> ，且  <code>android:layout_width=MATCH_PARENT</code>，<code>android:layout_height=WRAP_CONTENT</code> 。 </p>
-<p>所以 <code>TableRow</code> 實際是一個橫向的線性佈局，所以子元素寬度和高度一致。</p>
-</blockquote>
-<p><img src="http://i.imgur.com/XZwH6wL.png" alt="Imgur"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/06/12/android-layout-3/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

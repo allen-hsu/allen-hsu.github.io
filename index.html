@@ -123,7 +123,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-count">41</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -134,7 +134,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -151,6 +151,122 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2024/04/27/to-android-dev-flutter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/27/to-android-dev-flutter/" class="post-title-link" itemprop="url">給 Android 開發者的 Flutter 入門 - StatelessWidget 與 StatefulWidget</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2024-04-27 22:15:33 / Modified: 23:17:22" itemprop="dateCreated datePublished" datetime="2024-04-27T22:15:33+08:00">2024-04-27</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="TLDR"><a href="#TLDR" class="headerlink" title="TLDR"></a>TLDR</h2><p>最近想要打造一些自己的小 App，由於工作上使用的是 React Native，之前又比較專注於 Android 開發，所以想要找一個可以跨平台的框架，<br>在 Flutter 剛釋出的時候有嘗試了一下，經過了多年 Flutter 變得穩定且有許多套件，嘗試了一下覺得開發體驗非常棒，這篇文章主要是想要分享一下我在學習 Flutter 過程中的一些心得，希望可以幫助到有興趣的人。</p>
+<h2 id="Flutter-是什麼？"><a href="#Flutter-是什麼？" class="headerlink" title="Flutter 是什麼？"></a>Flutter 是什麼？</h2><p>Flutter 是 Google 開發的一個跨平台框架，可以讓開發者使用一套程式碼同時開發 Android 與 iOS App，這幾年更可以開發 Web 以及桌面 App, Flutter 使用 Dart 這個程式語言，Dart 是 Google 開發的程式語言，它的特色是 JIT(Just In Time) 與 AOT(Ahead Of Time) 編譯，這讓 Dart 在開發時可以快速的編譯，並且在發布時可以編譯成 Native Code，這讓 Flutter 在執行時有著非常好的效能。</p>
+<h2 id="近幾年的-Mobile-與前端開發"><a href="#近幾年的-Mobile-與前端開發" class="headerlink" title="近幾年的 Mobile 與前端開發"></a>近幾年的 Mobile 與前端開發</h2><p>在近年的 Mobile 以及前端開發來說，從 React 到 Android 的 Compose ，以及 iOS 的 SwiftUI，<br>還有今天這篇文章所說的 Flutter，都從原本的 Xml、Xib、Storyboard 轉變成了一個以描述式 UI 或稱宣告式的 UI，讓我們可以很快速的將 UI 的元件用 Code 的方式描述出來，在下面貼下四個平台的 UI Code，讓大家可以感受一下。</p>
+<h3 id="Android-Compose"><a href="#Android-Compose" class="headerlink" title="Android Compose"></a>Android Compose</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">MyApp</span><span class="params">()</span></span> &#123;</span><br><span class="line">    Column(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .fillMaxSize()</span><br><span class="line">            .background(Color.Blue)</span><br><span class="line">    ) &#123;</span><br><span class="line">        Text(</span><br><span class="line">            text = <span class="string">&quot;Hello World&quot;</span>,</span><br><span class="line">            modifier = Modifier</span><br><span class="line">                .padding(<span class="number">16.</span>dp)</span><br><span class="line">                .background(Color.Red)</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="iOS-SwiftUI"><a href="#iOS-SwiftUI" class="headerlink" title="iOS SwiftUI"></a>iOS SwiftUI</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">ContentView</span>: <span class="title class_">View</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> body: <span class="keyword">some</span> <span class="type">View</span> &#123;</span><br><span class="line">        <span class="type">VStack</span> &#123;</span><br><span class="line">            <span class="type">Text</span>(<span class="string">&quot;Hello World&quot;</span>)</span><br><span class="line">                .padding(<span class="number">16</span>)</span><br><span class="line">                .background(<span class="type">Color</span>.red)</span><br><span class="line">        &#125;</span><br><span class="line">        .background(<span class="type">Color</span>.blue)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="React-Native"><a href="#React-Native" class="headerlink" title="React Native"></a>React Native</h3><figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">App</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">View</span> <span class="attr">style</span>=<span class="string">&#123;&#123;</span> <span class="attr">flex:</span> <span class="attr">1</span>, <span class="attr">backgroundColor:</span> &quot;<span class="attr">blue</span>&quot; &#125;&#125;&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Text</span> <span class="attr">style</span>=<span class="string">&#123;&#123;</span> <span class="attr">padding:</span> <span class="attr">16</span>, <span class="attr">backgroundColor:</span> &quot;<span class="attr">red</span>&quot; &#125;&#125;&gt;</span>Hello World<span class="tag">&lt;/<span class="name">Text</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">View</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Flutter"><a href="#Flutter" class="headerlink" title="Flutter"></a>Flutter</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Container(</span><br><span class="line">      color: Colors.blue,</span><br><span class="line">      child: Column(</span><br><span class="line">        children: [</span><br><span class="line">          Container(</span><br><span class="line">            color: Colors.red,</span><br><span class="line">            padding: EdgeInsets.all(<span class="number">16</span>),</span><br><span class="line">            child: Text(<span class="string">&#x27;Hello World&#x27;</span>),</span><br><span class="line">          ),</span><br><span class="line">        ],</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>大家可以發現，即使在不同平台上，都是用一樣的方式，宣告組件，用巢狀的方式來描述 UI，這讓我們可以很快速的將 UI 的元件用 Code 的方式描述出來，</p>
+<h3 id="Flutter-環境安裝"><a href="#Flutter-環境安裝" class="headerlink" title="Flutter 環境安裝"></a>Flutter 環境安裝</h3><p>Flutter 也提供了非常強大的工具，以及良好的開發體驗，這點 React Native 真的跟屎一樣 (個人感受)，以下是 Flutter 的環境安裝方式，可以在官方網站的說明參考一下 : <a href="https://flutter.dev/docs/get-started/install">Flutter 官方網站</a></p>
+<p>Flutter 可以選擇兩種 VSCode，以及 Android Studio 這兩種 IDE 來開發，我之前偏好 VSCode，因為他更輕量，但是在 Android Studio 升級到最新版本之後，整個 UI 變得更加的好用，所以我目前是使用 Android Studio 來開發 Flutter。這邊看個人喜好就好了</p>
+<h3 id="進入正題-Widget"><a href="#進入正題-Widget" class="headerlink" title="進入正題 - Widget"></a>進入正題 - Widget</h3><p>在 Flutter 中，所有的一切皆是 Widget， Widget 是 Flutter 的基本元件，所有的 UI 都是由 Widget 來組成的，Flutter 提供了許多的 Widget，我們可以透過這些 Widget 來建構我們的 UI，這邊先來看一下 StatelessWidget 與 StatefulWidget 的差異。</p>
+<h4 id="StatelessWidget"><a href="#StatelessWidget" class="headerlink" title="StatelessWidget"></a>StatelessWidget</h4><p>StatelessWidget 是一個無狀態的 Widget，這代表這個 Widget 在生命週期中不會改變，這個 Widget 通常用來顯示靜態的 UI，例如一個 Text Widget，一個 Icon Widget，這些 Widget 在生命週期中不會改變，這邊我們來看一下一個簡單的 StatelessWidget。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Container(</span><br><span class="line">      color: Colors.blue,</span><br><span class="line">      child: Column(</span><br><span class="line">        children: [</span><br><span class="line">          Container(</span><br><span class="line">            color: Colors.red,</span><br><span class="line">            padding: EdgeInsets.all(<span class="number">16</span>),</span><br><span class="line">            child: Text(<span class="string">&#x27;Hello World&#x27;</span>),</span><br><span class="line">          ),</span><br><span class="line">        ],</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="StatefulWidget"><a href="#StatefulWidget" class="headerlink" title="StatefulWidget"></a>StatefulWidget</h4><p>StatefulWidget 是一個有狀態的 Widget，這代表這個 Widget 在生命週期中會改變，這個 Widget 通常用來顯示動態的 UI，例如一個計數器，一個下拉更新的 Widget，這些 Widget 在生命週期中會改變，這邊我們來看一下一個簡單的 StatefulWidget。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CounterApp</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  _CounterAppState createState() =&gt; _CounterAppState();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_CounterAppState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">CounterApp</span>&gt; </span>&#123;</span><br><span class="line">    <span class="built_in">int</span> _counter = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> _incrementCounter() &#123;</span><br><span class="line">        setState(() &#123;</span><br><span class="line">        _counter++;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@override</span></span><br><span class="line">    Widget build(BuildContext context) &#123;</span><br><span class="line">        <span class="keyword">return</span> Scaffold(</span><br><span class="line">        appBar: AppBar(</span><br><span class="line">            title: Text(<span class="string">&#x27;Counter App&#x27;</span>),</span><br><span class="line">        ),</span><br><span class="line">        body: Center(</span><br><span class="line">            child: Column(</span><br><span class="line">            mainAxisAlignment: MainAxisAlignment.center,</span><br><span class="line">            children: &lt;Widget&gt;[</span><br><span class="line">                Text(</span><br><span class="line">                <span class="string">&#x27;You have pushed the button this many times:&#x27;</span>,</span><br><span class="line">                ),</span><br><span class="line">                Text(</span><br><span class="line">                <span class="string">&#x27;<span class="subst">$_counter</span>&#x27;</span>,</span><br><span class="line">                style: Theme.of(context).textTheme.headline4,</span><br><span class="line">                ),</span><br><span class="line">            ],</span><br><span class="line">            ),</span><br><span class="line">        ),</span><br><span class="line">        floatingActionButton: FloatingActionButton(</span><br><span class="line">            onPressed: _incrementCounter,</span><br><span class="line">            tooltip: <span class="string">&#x27;Increment&#x27;</span>,</span><br><span class="line">            child: Icon(Icons.add),</span><br><span class="line">        ),</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="生命週期"><a href="#生命週期" class="headerlink" title="生命週期"></a>生命週期</h3><p>在 Android 開發中，不管是 Activity&#x2F;Fragments&#x2F;View 都有自己的生命週期，Flutter 也是一樣，每個 Widget 都有自己的生命週期，這邊簡單的介紹一下 StatelessWidget 與 StatefulWidget 的生命週期。</p>
+<h4 id="StatelessWidget-1"><a href="#StatelessWidget-1" class="headerlink" title="StatelessWidget"></a>StatelessWidget</h4><p>StatelessWidget 是一個無狀態的 Widget，代表狀態創建後沒有改變，所以它的生命週期只有一個 build 方法，這個方法是用來建立 Widget 的 UI，當這個 Widget 被繪製到畫面上時，這個方法就會被呼叫，這個方法會回傳一個 Widget，這個 Widget 就是這個 StatelessWidget 的 UI。</p>
+<h4 id="StatefulWidget-1"><a href="#StatefulWidget-1" class="headerlink" title="StatefulWidget"></a>StatefulWidget</h4><p>StatefulWidget 是一個有狀態的 Widget，代表狀態創建後會改變，所以他有相關的生命週期方法，更多詳細的介紹可以參閱官方文件，下面列出幾個比較重要的方法。</p>
+<ul>
+<li>createState: 該函數為 StatefulWidget 創建一個 State 對象，當 StatefulWidget 被調用時，會立刻執行 createState。</li>
+<li>initState: 該函數為 State 初始化調用，所以可以在這邊做變量的初始化等操作。</li>
+<li>setState: 這個方法是用來通知 Flutter 這個 Widget 的狀態有改變，需要重新繪製，這個方法會觸發 build 方法。</li>
+<li>didChangeDependencies: 當 State 對象的依賴發生變化時，會被調用。</li>
+<li>build: 主要建立 StatefulWidget 的 UI，build 會被調用多次，所以要確保在該函數中只能返回 Widget UI 相關邏輯。</li>
+<li>reassemble: debug 模式下， hot reload 時會被調用。所以在 debug 階段可以增加一些 debug code 來做一些排查。</li>
+<li>didUpdateWidget: 當 Widget 重建時，會調用 Widget.canUpdate 來檢查 Widget Tree 中同一位置的新舊節點，來決定是否更新，如果<br>Widget.canUpdate 返回 true，則會調用 didUpdateWidget。</li>
+<li>deactivate: 當 Widget 被移除時，會被調用，如果該 Widget 被移除，且未插入到新的 Widget Tree 中，則會調用 dispose。</li>
+<li>dispose: 當 Widget 被銷毀時，會被調用，這個方法通常用來釋放一些資源，例如一些監聽器的移除。</li>
+</ul>
+<!-- insert image -->
+
+<p><img src="https://imgur.com/r6TjTPP.png" alt="alt Lifecycle"></p>
+<p>生命週期整個過程可以分成四個階段</p>
+<ul>
+<li>初始化階段 : createState -&gt; initState</li>
+<li>組件構建階段 : didChangeDependencies -&gt; build</li>
+<li>更新組件重建 : didChangeDependencies、setState 或者 didUpdateWidget 都會引發組件重繪</li>
+<li>組件銷毀 : deactivate -&gt; dispose</li>
+</ul>
+<p>由於效能的關係，如果沒有需要狀態的變更，都是靜態資料，可以盡可能的使用 StatelessWidget，這樣可以減少不必要的重繪。StatefulWidget 盡量不要放在越上層級使用，只放在有需要變更狀態的地方使用，這點跟 React 是很相似的。</p>
+<h3 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h3><p>這篇文章主要是想要分享一下我在學習 Flutter 過程中的一些心得，希望可以幫助到有興趣的人 Flutter 的 Widget 非常多，這邊只是簡單的介紹了 StatelessWidget 與 StatefulWidget 這兩個核心 Widget，未來會持續分享更多的心得，希望大家可以一起來學習 Flutter。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -995,109 +1111,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/05/solidity-function-type/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Allen Hsu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="AllenHsu的技術手扎">
-      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | AllenHsu的技術手扎">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/04/05/solidity-function-type/" class="post-title-link" itemprop="url">solidity_function_type</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-04-05 12:35:29" itemprop="dateCreated datePublished" datetime="2018-04-05T12:35:29+08:00">2018-04-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%8D%80%E5%A1%8A%E9%8F%88/" itemprop="url" rel="index"><span itemprop="name">區塊鏈</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Solidity函式常見修飾符"><a href="#Solidity函式常見修飾符" class="headerlink" title="Solidity函式常見修飾符"></a>Solidity函式常見修飾符</h2><p>在Solidity中有幾個常見的函示修飾符，這邊就來簡單介紹一下</p>
-<p><img src="https://i.imgur.com/mRuZF3l.png" alt="Imgur"></p>
-<ul>
-<li><p>public : 所有人都可以呼叫這個函式。</p>
-</li>
-<li><p>private : 只有合約能夠呼叫這個函式。</p>
-</li>
-<li><p>view/constant : 只會回傳資料，函式也不能修改任何變數或合約資料 </p>
-</li>
-<li><p>pure: 不能修改，也不能讀取合約內的資料。</p>
-</li>
-<li><p>payable: 當有人呼叫該函式，他們可能會發送 Ether。</p>
-</li>
-<li><p>returns (type) : 指該函式需要返回值，type為返回值的類型 。</p>
-<p>​</p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

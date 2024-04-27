@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="TLDR最近想要打造一些自己的小 App，由於工作上使用的是 React Native，之前又比較專注於 Android 開發，所以想要找一個可以跨平台的框架，在 Flutter 剛釋出的時候有嘗試了一下，經過了多年 Flutter 變得穩定且有許多套件，嘗試了一下覺得開發體驗非常棒，這篇文章主要是想要分享一下我在學習 Flutter 過程中的一些心得，希望可以幫助到有興趣的人。 Flutter">
+<meta property="og:type" content="article">
+<meta property="og:title" content="給 Android 開發者的 Flutter 入門 - StatelessWidget 與 StatefulWidget">
+<meta property="og:url" content="http://yoursite.com/2024/04/27/to-android-dev-flutter/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="TLDR最近想要打造一些自己的小 App，由於工作上使用的是 React Native，之前又比較專注於 Android 開發，所以想要找一個可以跨平台的框架，在 Flutter 剛釋出的時候有嘗試了一下，經過了多年 Flutter 變得穩定且有許多套件，嘗試了一下覺得開發體驗非常棒，這篇文章主要是想要分享一下我在學習 Flutter 過程中的一些心得，希望可以幫助到有興趣的人。 Flutter">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://imgur.com/r6TjTPP.png">
+<meta property="article:published_time" content="2024-04-27T14:15:33.094Z">
+<meta property="article:modified_time" content="2024-04-27T15:17:22.638Z">
+<meta property="article:author" content="Allen Hsu">
+<meta property="article:tag" content="Flutter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://imgur.com/r6TjTPP.png">
+
+
+<link rel="canonical" href="http://yoursite.com/2024/04/27/to-android-dev-flutter/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-tw","comments":true,"permalink":"http://yoursite.com/2024/04/27/to-android-dev-flutter/","path":"2024/04/27/to-android-dev-flutter/","title":"給 Android 開發者的 Flutter 入門 - StatelessWidget 與 StatefulWidget"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>給 Android 開發者的 Flutter 入門 - StatelessWidget 與 StatefulWidget | AllenHsu的技術手扎</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">AllenHsu的技術手扎</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">學海無涯，努力做個永遠年輕的人</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TLDR"><span class="nav-number">1.</span> <span class="nav-text">TLDR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Flutter-%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">Flutter 是什麼？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%91%E5%B9%BE%E5%B9%B4%E7%9A%84-Mobile-%E8%88%87%E5%89%8D%E7%AB%AF%E9%96%8B%E7%99%BC"><span class="nav-number">3.</span> <span class="nav-text">近幾年的 Mobile 與前端開發</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android-Compose"><span class="nav-number">3.1.</span> <span class="nav-text">Android Compose</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS-SwiftUI"><span class="nav-number">3.2.</span> <span class="nav-text">iOS SwiftUI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React-Native"><span class="nav-number">3.3.</span> <span class="nav-text">React Native</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Flutter"><span class="nav-number">3.4.</span> <span class="nav-text">Flutter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Flutter-%E7%92%B0%E5%A2%83%E5%AE%89%E8%A3%9D"><span class="nav-number">3.5.</span> <span class="nav-text">Flutter 環境安裝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%B2%E5%85%A5%E6%AD%A3%E9%A1%8C-Widget"><span class="nav-number">3.6.</span> <span class="nav-text">進入正題 - Widget</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#StatelessWidget"><span class="nav-number">3.6.1.</span> <span class="nav-text">StatelessWidget</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#StatefulWidget"><span class="nav-number">3.6.2.</span> <span class="nav-text">StatefulWidget</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E5%91%BD%E9%80%B1%E6%9C%9F"><span class="nav-number">3.7.</span> <span class="nav-text">生命週期</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#StatelessWidget-1"><span class="nav-number">3.7.1.</span> <span class="nav-text">StatelessWidget</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#StatefulWidget-1"><span class="nav-number">3.7.2.</span> <span class="nav-text">StatefulWidget</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">3.8.</span> <span class="nav-text">結論</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Allen Hsu</p>
+  <div class="site-description" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2024/04/27/to-android-dev-flutter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="給 Android 開發者的 Flutter 入門 - StatelessWidget 與 StatefulWidget | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          給 Android 開發者的 Flutter 入門 - StatelessWidget 與 StatefulWidget
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2024-04-27 22:15:33 / Modified: 23:17:22" itemprop="dateCreated datePublished" datetime="2024-04-27T22:15:33+08:00">2024-04-27</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="TLDR"><a href="#TLDR" class="headerlink" title="TLDR"></a>TLDR</h2><p>最近想要打造一些自己的小 App，由於工作上使用的是 React Native，之前又比較專注於 Android 開發，所以想要找一個可以跨平台的框架，<br>在 Flutter 剛釋出的時候有嘗試了一下，經過了多年 Flutter 變得穩定且有許多套件，嘗試了一下覺得開發體驗非常棒，這篇文章主要是想要分享一下我在學習 Flutter 過程中的一些心得，希望可以幫助到有興趣的人。</p>
+<h2 id="Flutter-是什麼？"><a href="#Flutter-是什麼？" class="headerlink" title="Flutter 是什麼？"></a>Flutter 是什麼？</h2><p>Flutter 是 Google 開發的一個跨平台框架，可以讓開發者使用一套程式碼同時開發 Android 與 iOS App，這幾年更可以開發 Web 以及桌面 App, Flutter 使用 Dart 這個程式語言，Dart 是 Google 開發的程式語言，它的特色是 JIT(Just In Time) 與 AOT(Ahead Of Time) 編譯，這讓 Dart 在開發時可以快速的編譯，並且在發布時可以編譯成 Native Code，這讓 Flutter 在執行時有著非常好的效能。</p>
+<h2 id="近幾年的-Mobile-與前端開發"><a href="#近幾年的-Mobile-與前端開發" class="headerlink" title="近幾年的 Mobile 與前端開發"></a>近幾年的 Mobile 與前端開發</h2><p>在近年的 Mobile 以及前端開發來說，從 React 到 Android 的 Compose ，以及 iOS 的 SwiftUI，<br>還有今天這篇文章所說的 Flutter，都從原本的 Xml、Xib、Storyboard 轉變成了一個以描述式 UI 或稱宣告式的 UI，讓我們可以很快速的將 UI 的元件用 Code 的方式描述出來，在下面貼下四個平台的 UI Code，讓大家可以感受一下。</p>
+<h3 id="Android-Compose"><a href="#Android-Compose" class="headerlink" title="Android Compose"></a>Android Compose</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">MyApp</span><span class="params">()</span></span> &#123;</span><br><span class="line">    Column(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .fillMaxSize()</span><br><span class="line">            .background(Color.Blue)</span><br><span class="line">    ) &#123;</span><br><span class="line">        Text(</span><br><span class="line">            text = <span class="string">&quot;Hello World&quot;</span>,</span><br><span class="line">            modifier = Modifier</span><br><span class="line">                .padding(<span class="number">16.</span>dp)</span><br><span class="line">                .background(Color.Red)</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="iOS-SwiftUI"><a href="#iOS-SwiftUI" class="headerlink" title="iOS SwiftUI"></a>iOS SwiftUI</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">ContentView</span>: <span class="title class_">View</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> body: <span class="keyword">some</span> <span class="type">View</span> &#123;</span><br><span class="line">        <span class="type">VStack</span> &#123;</span><br><span class="line">            <span class="type">Text</span>(<span class="string">&quot;Hello World&quot;</span>)</span><br><span class="line">                .padding(<span class="number">16</span>)</span><br><span class="line">                .background(<span class="type">Color</span>.red)</span><br><span class="line">        &#125;</span><br><span class="line">        .background(<span class="type">Color</span>.blue)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="React-Native"><a href="#React-Native" class="headerlink" title="React Native"></a>React Native</h3><figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">App</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">View</span> <span class="attr">style</span>=<span class="string">&#123;&#123;</span> <span class="attr">flex:</span> <span class="attr">1</span>, <span class="attr">backgroundColor:</span> &quot;<span class="attr">blue</span>&quot; &#125;&#125;&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">Text</span> <span class="attr">style</span>=<span class="string">&#123;&#123;</span> <span class="attr">padding:</span> <span class="attr">16</span>, <span class="attr">backgroundColor:</span> &quot;<span class="attr">red</span>&quot; &#125;&#125;&gt;</span>Hello World<span class="tag">&lt;/<span class="name">Text</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">View</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Flutter"><a href="#Flutter" class="headerlink" title="Flutter"></a>Flutter</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Container(</span><br><span class="line">      color: Colors.blue,</span><br><span class="line">      child: Column(</span><br><span class="line">        children: [</span><br><span class="line">          Container(</span><br><span class="line">            color: Colors.red,</span><br><span class="line">            padding: EdgeInsets.all(<span class="number">16</span>),</span><br><span class="line">            child: Text(<span class="string">&#x27;Hello World&#x27;</span>),</span><br><span class="line">          ),</span><br><span class="line">        ],</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>大家可以發現，即使在不同平台上，都是用一樣的方式，宣告組件，用巢狀的方式來描述 UI，這讓我們可以很快速的將 UI 的元件用 Code 的方式描述出來，</p>
+<h3 id="Flutter-環境安裝"><a href="#Flutter-環境安裝" class="headerlink" title="Flutter 環境安裝"></a>Flutter 環境安裝</h3><p>Flutter 也提供了非常強大的工具，以及良好的開發體驗，這點 React Native 真的跟屎一樣 (個人感受)，以下是 Flutter 的環境安裝方式，可以在官方網站的說明參考一下 : <a href="https://flutter.dev/docs/get-started/install">Flutter 官方網站</a></p>
+<p>Flutter 可以選擇兩種 VSCode，以及 Android Studio 這兩種 IDE 來開發，我之前偏好 VSCode，因為他更輕量，但是在 Android Studio 升級到最新版本之後，整個 UI 變得更加的好用，所以我目前是使用 Android Studio 來開發 Flutter。這邊看個人喜好就好了</p>
+<h3 id="進入正題-Widget"><a href="#進入正題-Widget" class="headerlink" title="進入正題 - Widget"></a>進入正題 - Widget</h3><p>在 Flutter 中，所有的一切皆是 Widget， Widget 是 Flutter 的基本元件，所有的 UI 都是由 Widget 來組成的，Flutter 提供了許多的 Widget，我們可以透過這些 Widget 來建構我們的 UI，這邊先來看一下 StatelessWidget 與 StatefulWidget 的差異。</p>
+<h4 id="StatelessWidget"><a href="#StatelessWidget" class="headerlink" title="StatelessWidget"></a>StatelessWidget</h4><p>StatelessWidget 是一個無狀態的 Widget，這代表這個 Widget 在生命週期中不會改變，這個 Widget 通常用來顯示靜態的 UI，例如一個 Text Widget，一個 Icon Widget，這些 Widget 在生命週期中不會改變，這邊我們來看一下一個簡單的 StatelessWidget。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Container(</span><br><span class="line">      color: Colors.blue,</span><br><span class="line">      child: Column(</span><br><span class="line">        children: [</span><br><span class="line">          Container(</span><br><span class="line">            color: Colors.red,</span><br><span class="line">            padding: EdgeInsets.all(<span class="number">16</span>),</span><br><span class="line">            child: Text(<span class="string">&#x27;Hello World&#x27;</span>),</span><br><span class="line">          ),</span><br><span class="line">        ],</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="StatefulWidget"><a href="#StatefulWidget" class="headerlink" title="StatefulWidget"></a>StatefulWidget</h4><p>StatefulWidget 是一個有狀態的 Widget，這代表這個 Widget 在生命週期中會改變，這個 Widget 通常用來顯示動態的 UI，例如一個計數器，一個下拉更新的 Widget，這些 Widget 在生命週期中會改變，這邊我們來看一下一個簡單的 StatefulWidget。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CounterApp</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  _CounterAppState createState() =&gt; _CounterAppState();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_CounterAppState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">CounterApp</span>&gt; </span>&#123;</span><br><span class="line">    <span class="built_in">int</span> _counter = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> _incrementCounter() &#123;</span><br><span class="line">        setState(() &#123;</span><br><span class="line">        _counter++;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@override</span></span><br><span class="line">    Widget build(BuildContext context) &#123;</span><br><span class="line">        <span class="keyword">return</span> Scaffold(</span><br><span class="line">        appBar: AppBar(</span><br><span class="line">            title: Text(<span class="string">&#x27;Counter App&#x27;</span>),</span><br><span class="line">        ),</span><br><span class="line">        body: Center(</span><br><span class="line">            child: Column(</span><br><span class="line">            mainAxisAlignment: MainAxisAlignment.center,</span><br><span class="line">            children: &lt;Widget&gt;[</span><br><span class="line">                Text(</span><br><span class="line">                <span class="string">&#x27;You have pushed the button this many times:&#x27;</span>,</span><br><span class="line">                ),</span><br><span class="line">                Text(</span><br><span class="line">                <span class="string">&#x27;<span class="subst">$_counter</span>&#x27;</span>,</span><br><span class="line">                style: Theme.of(context).textTheme.headline4,</span><br><span class="line">                ),</span><br><span class="line">            ],</span><br><span class="line">            ),</span><br><span class="line">        ),</span><br><span class="line">        floatingActionButton: FloatingActionButton(</span><br><span class="line">            onPressed: _incrementCounter,</span><br><span class="line">            tooltip: <span class="string">&#x27;Increment&#x27;</span>,</span><br><span class="line">            child: Icon(Icons.add),</span><br><span class="line">        ),</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="生命週期"><a href="#生命週期" class="headerlink" title="生命週期"></a>生命週期</h3><p>在 Android 開發中，不管是 Activity&#x2F;Fragments&#x2F;View 都有自己的生命週期，Flutter 也是一樣，每個 Widget 都有自己的生命週期，這邊簡單的介紹一下 StatelessWidget 與 StatefulWidget 的生命週期。</p>
+<h4 id="StatelessWidget-1"><a href="#StatelessWidget-1" class="headerlink" title="StatelessWidget"></a>StatelessWidget</h4><p>StatelessWidget 是一個無狀態的 Widget，代表狀態創建後沒有改變，所以它的生命週期只有一個 build 方法，這個方法是用來建立 Widget 的 UI，當這個 Widget 被繪製到畫面上時，這個方法就會被呼叫，這個方法會回傳一個 Widget，這個 Widget 就是這個 StatelessWidget 的 UI。</p>
+<h4 id="StatefulWidget-1"><a href="#StatefulWidget-1" class="headerlink" title="StatefulWidget"></a>StatefulWidget</h4><p>StatefulWidget 是一個有狀態的 Widget，代表狀態創建後會改變，所以他有相關的生命週期方法，更多詳細的介紹可以參閱官方文件，下面列出幾個比較重要的方法。</p>
+<ul>
+<li>createState: 該函數為 StatefulWidget 創建一個 State 對象，當 StatefulWidget 被調用時，會立刻執行 createState。</li>
+<li>initState: 該函數為 State 初始化調用，所以可以在這邊做變量的初始化等操作。</li>
+<li>setState: 這個方法是用來通知 Flutter 這個 Widget 的狀態有改變，需要重新繪製，這個方法會觸發 build 方法。</li>
+<li>didChangeDependencies: 當 State 對象的依賴發生變化時，會被調用。</li>
+<li>build: 主要建立 StatefulWidget 的 UI，build 會被調用多次，所以要確保在該函數中只能返回 Widget UI 相關邏輯。</li>
+<li>reassemble: debug 模式下， hot reload 時會被調用。所以在 debug 階段可以增加一些 debug code 來做一些排查。</li>
+<li>didUpdateWidget: 當 Widget 重建時，會調用 Widget.canUpdate 來檢查 Widget Tree 中同一位置的新舊節點，來決定是否更新，如果<br>Widget.canUpdate 返回 true，則會調用 didUpdateWidget。</li>
+<li>deactivate: 當 Widget 被移除時，會被調用，如果該 Widget 被移除，且未插入到新的 Widget Tree 中，則會調用 dispose。</li>
+<li>dispose: 當 Widget 被銷毀時，會被調用，這個方法通常用來釋放一些資源，例如一些監聽器的移除。</li>
+</ul>
+<!-- insert image -->
+
+<p><img src="https://imgur.com/r6TjTPP.png" alt="alt Lifecycle"></p>
+<p>生命週期整個過程可以分成四個階段</p>
+<ul>
+<li>初始化階段 : createState -&gt; initState</li>
+<li>組件構建階段 : didChangeDependencies -&gt; build</li>
+<li>更新組件重建 : didChangeDependencies、setState 或者 didUpdateWidget 都會引發組件重繪</li>
+<li>組件銷毀 : deactivate -&gt; dispose</li>
+</ul>
+<p>由於效能的關係，如果沒有需要狀態的變更，都是靜態資料，可以盡可能的使用 StatelessWidget，這樣可以減少不必要的重繪。StatefulWidget 盡量不要放在越上層級使用，只放在有需要變更狀態的地方使用，這點跟 React 是很相似的。</p>
+<h3 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h3><p>這篇文章主要是想要分享一下我在學習 Flutter 過程中的一些心得，希望可以幫助到有興趣的人 Flutter 的 Widget 非常多，這邊只是簡單的介紹了 StatelessWidget 與 StatefulWidget 這兩個核心 Widget，未來會持續分享更多的心得，希望大家可以一起來學習 Flutter。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Flutter/" rel="tag"># Flutter</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/30/android-performance/" rel="prev" title="Android View渲染效能優化">
+                  <i class="fa fa-angle-left"></i> Android View渲染效能優化
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
