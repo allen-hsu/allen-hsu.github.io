@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://imgur.com/r6TjTPP.png">
 <meta property="article:published_time" content="2024-04-27T14:15:33.094Z">
-<meta property="article:modified_time" content="2024-04-27T15:17:22.638Z">
+<meta property="article:modified_time" content="2024-04-27T16:07:51.086Z">
 <meta property="article:author" content="Allen Hsu">
 <meta property="article:tag" content="Flutter">
 <meta name="twitter:card" content="summary">
@@ -195,9 +195,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2024-04-27 22:15:33 / Modified: 23:17:22" itemprop="dateCreated datePublished" datetime="2024-04-27T22:15:33+08:00">2024-04-27</time>
+      <time title="Created: 2024-04-27 22:15:33" itemprop="dateCreated datePublished" datetime="2024-04-27T22:15:33+08:00">2024-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-04-28 00:07:51" itemprop="dateModified" datetime="2024-04-28T00:07:51+08:00">2024-04-28</time>
     </span>
 
   
@@ -209,7 +215,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="TLDR"><a href="#TLDR" class="headerlink" title="TLDR"></a>TLDR</h2><p>最近想要打造一些自己的小 App，由於工作上使用的是 React Native，之前又比較專注於 Android 開發，所以想要找一個可以跨平台的框架，<br>在 Flutter 剛釋出的時候有嘗試了一下，經過了多年 Flutter 變得穩定且有許多套件，嘗試了一下覺得開發體驗非常棒，這篇文章主要是想要分享一下我在學習 Flutter 過程中的一些心得，希望可以幫助到有興趣的人。</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="TLDR"><a href="#TLDR" class="headerlink" title="TLDR"></a>TLDR</h2><p>最近想要打造一些自己的小 App，由於工作上使用的是 React Native，之前又比較專注於 Android 開發，所以想要找一個可以跨平台的框架，在 Flutter 剛釋出的時候有嘗試了一下，經過了多年 Flutter 變得穩定且有許多套件，嘗試了一下覺得開發體驗非常棒，這篇文章主要是想要分享一下我在學習 Flutter 過程中的一些心得，希望可以幫助到有興趣的人。</p>
 <h2 id="Flutter-是什麼？"><a href="#Flutter-是什麼？" class="headerlink" title="Flutter 是什麼？"></a>Flutter 是什麼？</h2><p>Flutter 是 Google 開發的一個跨平台框架，可以讓開發者使用一套程式碼同時開發 Android 與 iOS App，這幾年更可以開發 Web 以及桌面 App, Flutter 使用 Dart 這個程式語言，Dart 是 Google 開發的程式語言，它的特色是 JIT(Just In Time) 與 AOT(Ahead Of Time) 編譯，這讓 Dart 在開發時可以快速的編譯，並且在發布時可以編譯成 Native Code，這讓 Flutter 在執行時有著非常好的效能。</p>
 <h2 id="近幾年的-Mobile-與前端開發"><a href="#近幾年的-Mobile-與前端開發" class="headerlink" title="近幾年的 Mobile 與前端開發"></a>近幾年的 Mobile 與前端開發</h2><p>在近年的 Mobile 以及前端開發來說，從 React 到 Android 的 Compose ，以及 iOS 的 SwiftUI，<br>還有今天這篇文章所說的 Flutter，都從原本的 Xml、Xib、Storyboard 轉變成了一個以描述式 UI 或稱宣告式的 UI，讓我們可以很快速的將 UI 的元件用 Code 的方式描述出來，在下面貼下四個平台的 UI Code，讓大家可以感受一下。</p>
 <h3 id="Android-Compose"><a href="#Android-Compose" class="headerlink" title="Android Compose"></a>Android Compose</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">MyApp</span><span class="params">()</span></span> &#123;</span><br><span class="line">    Column(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .fillMaxSize()</span><br><span class="line">            .background(Color.Blue)</span><br><span class="line">    ) &#123;</span><br><span class="line">        Text(</span><br><span class="line">            text = <span class="string">&quot;Hello World&quot;</span>,</span><br><span class="line">            modifier = Modifier</span><br><span class="line">                .padding(<span class="number">16.</span>dp)</span><br><span class="line">                .background(Color.Red)</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
