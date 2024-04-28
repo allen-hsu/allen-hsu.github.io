@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="TLDR這篇主要是介紹如何透過 GetIt 和 Injectable 兩個套件，來完成 Flutter Dependency Injection 依賴注入(簡稱 DI)的功能。 這邊不多說明 DI 的概念，如果有興趣可以參考之前寫的文章 Android 的依賴注入框架-Dagger2(一)。有稍微提到什麼是 DI。 在過往 Android 開發中，一開始早期使用 Dagger2，到後來的 Koin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="給 Mobile 開發者的 Flutter 入門 - 如何使用 GetIt 和 Injectable 來做 DI">
+<meta property="og:url" content="http://yoursite.com/2024/04/28/flutter-di/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="TLDR這篇主要是介紹如何透過 GetIt 和 Injectable 兩個套件，來完成 Flutter Dependency Injection 依賴注入(簡稱 DI)的功能。 這邊不多說明 DI 的概念，如果有興趣可以參考之前寫的文章 Android 的依賴注入框架-Dagger2(一)。有稍微提到什麼是 DI。 在過往 Android 開發中，一開始早期使用 Dagger2，到後來的 Koin">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2024-04-28T08:32:11.137Z">
+<meta property="article:modified_time" content="2024-04-28T09:32:11.551Z">
+<meta property="article:author" content="Allen Hsu">
+<meta property="article:tag" content="Dependency Injection">
+<meta property="article:tag" content="Flutter">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://yoursite.com/2024/04/28/flutter-di/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-tw","comments":true,"permalink":"http://yoursite.com/2024/04/28/flutter-di/","path":"2024/04/28/flutter-di/","title":"給 Mobile 開發者的 Flutter 入門 - 如何使用 GetIt 和 Injectable 來做 DI"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>給 Mobile 開發者的 Flutter 入門 - 如何使用 GetIt 和 Injectable 來做 DI | AllenHsu的技術手扎</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">AllenHsu的技術手扎</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">學海無涯，努力做個永遠年輕的人</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TLDR"><span class="nav-number">1.</span> <span class="nav-text">TLDR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GetIt"><span class="nav-number">2.</span> <span class="nav-text">GetIt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Injectable"><span class="nav-number">3.</span> <span class="nav-text">Injectable</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#koin"><span class="nav-number">3.1.</span> <span class="nav-text">koin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hilt"><span class="nav-number">3.2.</span> <span class="nav-text">Hilt</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Allen Hsu</p>
+  <div class="site-description" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2024/04/28/flutter-di/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="給 Mobile 開發者的 Flutter 入門 - 如何使用 GetIt 和 Injectable 來做 DI | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          給 Mobile 開發者的 Flutter 入門 - 如何使用 GetIt 和 Injectable 來做 DI
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2024-04-28 16:32:11 / Modified: 17:32:11" itemprop="dateCreated datePublished" datetime="2024-04-28T16:32:11+08:00">2024-04-28</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="TLDR"><a href="#TLDR" class="headerlink" title="TLDR"></a>TLDR</h2><p>這篇主要是介紹如何透過 GetIt 和 Injectable 兩個套件，來完成 Flutter Dependency Injection 依賴注入(簡稱 DI)的功能。 這邊不多說明 DI 的概念，如果有興趣可以參考之前寫的文章 <a href="/2017/10/30/android-dagger2/">Android 的依賴注入框架-Dagger2(一)</a>。有稍微提到什麼是 DI。</p>
+<p>在過往 Android 開發中，一開始早期使用 Dagger2，到後來的 Koin，以及最近的 Hilt，所以在這邊也會把做法以及相似的部分做一個比較，也能讓 Android 開發者更容易理解。</p>
+<p>以下我們會用一個簡單的例子來說明如何使用 GetIt 和 Injectable 來完成 DI 的功能。</p>
+<h2 id="GetIt"><a href="#GetIt" class="headerlink" title="GetIt"></a>GetIt</h2><p>首先可以到 GetIt 的網站 <a href="https://pub.dev/packages/get_it">GetIt</a> 去將 GetIt 套件安裝至專案中，這邊不做多餘的贅述。GetIt 是一個簡單的 Service Locator，可以用來管理依賴的實例，這邊先來看一下 GetIt 的基本用法。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:get_it/get_it.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> getIt = GetIt.instance;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> setup() &#123;</span><br><span class="line">  &lt;!-- DI provider --&gt;</span><br><span class="line">  getIt.registerSingleton&lt;CounterService&gt;(CounterService());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main() &#123;</span><br><span class="line">    setup();</span><br><span class="line">    runApp(MyApp());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">    <span class="meta">@override</span></span><br><span class="line">    Widget build(BuildContext context) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> counterService = getIt&lt;CounterService&gt;();</span><br><span class="line">        <span class="keyword">return</span> MaterialApp(</span><br><span class="line">            home: Scaffold(</span><br><span class="line">                body: Center(</span><br><span class="line">                    child: Text(counterService.count.toString()),</span><br><span class="line">                ),</span><br><span class="line">            ),</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這邊我們先註冊一個 <code>CounterService</code> 的實例，然後在 <code>App</code> 的 <code>build</code> 方法中，透過 <code>getIt&lt;CounterService&gt;()</code> 來取得 <code>CounterService</code> 的實例，這樣就完成了一個簡單的 DI。</p>
+<p>在這個簡單的例子中，可以想像一下我們的 setup 是一個 DI Provider，在 App 初始化之前提供了許多我們需要的物件實例，然後在 App 初始化的時候，透過 getIt 來取得這些實例，讓我們的代碼可以更加地解除耦合，那 get_it 也提供了更多的功能，像是我們在範例中，使用 registerSingleton 來註冊一個 Singleton 的實例，但有時候我們不是一開始就需要這些物件實例，而是希望等到後續有相關的業務代碼呼叫到的時候再去實例化，這時候我們可以使用 registerLazySingleton 來註冊一個 Lazy Singleton 的實例。</p>
+<p>但是你會發現，當我們如果有很多的依賴，這樣的寫法會讓我們的 setup 方法變得很大，所以這時候我們可以使用 Injectable 來幫助我們更好的管理我們的依賴。這邊也會將加入 Injectable 來改寫上面的例子，以及比較一下跟 Koin, Heilt 的差異。</p>
+<h2 id="Injectable"><a href="#Injectable" class="headerlink" title="Injectable"></a>Injectable</h2><p>Injectable 是一個 透過 Annotation 來生成 GetIt 的 相關代碼，讓我們可以更好的管理我們的依賴，這邊先來看一下 Injectable 的基本用法。</p>
+<p>首先可以到 Injectable 的網站 <a href="https://pub.dev/packages/injectable">Injectable</a> 去將 Injectable 套件安裝至專案中，這邊不做多餘的贅述。</p>
+<p>首先我們建立一個 injection.dart</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:injectable/injectable.dart&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;inject.config.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> getIt = GetIt.instance;</span><br><span class="line"></span><br><span class="line"><span class="meta">@InjectableInit</span>(</span><br><span class="line">    initializerName: <span class="string">&#x27;init&#x27;</span>,</span><br><span class="line">    preferRelativeImports: <span class="keyword">true</span>,</span><br><span class="line">    asExtension: <span class="keyword">false</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">Future&lt;<span class="keyword">void</span>&gt; configureDependencies() =&gt; $init(getIt);</span><br></pre></td></tr></table></figure>
+
+<p>然後我們建立一個 service_module.dart</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:injectable/injectable.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@module</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceModule</span> </span>&#123;</span><br><span class="line">  <span class="meta">@singleton</span></span><br><span class="line">  CounterService <span class="keyword">get</span> counterService =&gt; CounterService();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下來其實只要執行一下 <code>flutter pub run build_runner build</code> 就可以生成相關的代碼，然後我們就可以在我們的 App 中使用了。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> main() <span class="keyword">async</span> &#123;</span><br><span class="line">  WidgetsFlutterBinding.ensureInitialized();</span><br><span class="line">  <span class="keyword">await</span> configureDependencies();</span><br><span class="line">  runApp(MyApp());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>生成後的代碼我們可以發現，在 injection.config.dart 中，會生成一個 GetItInjectableX 的 Extension，這個 Extension 會幫助我們初始化我們的依賴。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extension</span> GetItInjectableX <span class="keyword">on</span> _i1.GetIt &#123;</span><br><span class="line"><span class="comment">// initializes the registration of main-scope dependencies inside of GetIt</span></span><br><span class="line">  Future&lt;_i1.GetIt&gt; init(&#123;</span><br><span class="line">    <span class="built_in">String?</span> environment,</span><br><span class="line">    _i2.EnvironmentFilter? environmentFilter,</span><br><span class="line">  &#125;) <span class="keyword">async</span> &#123;</span><br><span class="line">    <span class="keyword">final</span> gh = _i2.GetItHelper(</span><br><span class="line">      <span class="keyword">this</span>,</span><br><span class="line">      environment,</span><br><span class="line">      environmentFilter,</span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">final</span> serviceModule = _$ServiceModule();</span><br><span class="line">    gh.singleton&lt;_i3.CounterService&gt;(serviceModule.counterService);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_</span>$<span class="title">ServiceModule</span> <span class="keyword">extends</span> <span class="title">_i7</span>.<span class="title">ServiceModule</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>熟悉 koin 跟 Hilt 的朋友應該會發現，這邊的 <code>@module</code> 跟 <code>@singleton</code> 跟 <code>koin</code> &#x2F; <code>Hlit</code> 的 provider module 實作非常類似。</p>
+<h3 id="koin"><a href="#koin" class="headerlink" title="koin"></a>koin</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> myModule = module &#123;</span><br><span class="line">    single &#123; CounterService() &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    startKoin &#123;</span><br><span class="line">        modules(myModule)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Hilt"><a href="#Hilt" class="headerlink" title="Hilt"></a>Hilt</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="meta">@InstallIn(SingletonComponent::class)</span></span><br><span class="line"><span class="keyword">object</span> ServiceModule &#123;</span><br><span class="line">    <span class="meta">@Singleton</span></span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">provideCounterService</span><span class="params">()</span></span> = CounterService()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由上面的案例可能不覺得 Injectable 帶來什麼好處，那我們接下來來看一下這個複雜一點的案例，如果我們只使用 GetIt，我有一個 ServiceA 以及 ServiceB，然後 ServiceB 依賴 ServiceA，這時候我們可以這樣寫。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ServiceA</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ServiceB</span> </span>&#123;</span><br><span class="line">    ServiceB(ServiceA serviceA);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> setup() &#123;</span><br><span class="line">  getIt.<span class="keyword">factory</span>&lt;ServiceA&gt;(() =&gt; ServiceA());</span><br><span class="line">  getIt.<span class="keyword">factory</span>&lt;ServiceB&gt;(ServiceB(getIt&lt;ServiceA&gt;()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果今天有更多依賴，我們必須手動去維護這些關係在 getIt 的 setup 中，透過 Injectable，可以透過註解快速的生成這些依賴關係。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@module</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceModule</span> </span>&#123;</span><br><span class="line">  <span class="meta">@singleton</span></span><br><span class="line">  ServiceA <span class="keyword">get</span> serviceA =&gt; ServiceA();</span><br><span class="line"></span><br><span class="line">  <span class="meta">@singleton</span></span><br><span class="line">  ServiceB getServiceB(ServiceA serviceA) =&gt; ServiceB(serviceA);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其他 Injectable 還有更多類似 Koin&#x2F;Hlit 的功能，像是 Binding abstract class to implementation class、name、scope 等相關功能, 這邊就不多做贅述，有興趣的朋友可以參考 Injectable 的官方文件。</p>
+<p>以上就是一些在 Flutter 中使用 GetIt 以及 Injectable 來完成 DI 的功能，這邊也有提到一些跟 Android 開發中的 DI 框架的比較，希望這篇文章對大家有所幫助。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Dependency-Injection/" rel="tag"># Dependency Injection</a>
+              <a href="/tags/Flutter/" rel="tag"># Flutter</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/27/to-android-dev-flutter/" rel="prev" title="給 Mobile 開發者的 Flutter 入門 - StatelessWidget 與 StatefulWidget">
+                  <i class="fa fa-angle-left"></i> 給 Mobile 開發者的 Flutter 入門 - StatelessWidget 與 StatefulWidget
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

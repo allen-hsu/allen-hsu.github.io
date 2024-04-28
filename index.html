@@ -123,7 +123,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -151,6 +151,111 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2024/04/28/flutter-di/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/28/flutter-di/" class="post-title-link" itemprop="url">給 Mobile 開發者的 Flutter 入門 - 如何使用 GetIt 和 Injectable 來做 DI</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2024-04-28 16:32:11 / Modified: 17:32:11" itemprop="dateCreated datePublished" datetime="2024-04-28T16:32:11+08:00">2024-04-28</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="TLDR"><a href="#TLDR" class="headerlink" title="TLDR"></a>TLDR</h2><p>這篇主要是介紹如何透過 GetIt 和 Injectable 兩個套件，來完成 Flutter Dependency Injection 依賴注入(簡稱 DI)的功能。 這邊不多說明 DI 的概念，如果有興趣可以參考之前寫的文章 <a href="/2017/10/30/android-dagger2/">Android 的依賴注入框架-Dagger2(一)</a>。有稍微提到什麼是 DI。</p>
+<p>在過往 Android 開發中，一開始早期使用 Dagger2，到後來的 Koin，以及最近的 Hilt，所以在這邊也會把做法以及相似的部分做一個比較，也能讓 Android 開發者更容易理解。</p>
+<p>以下我們會用一個簡單的例子來說明如何使用 GetIt 和 Injectable 來完成 DI 的功能。</p>
+<h2 id="GetIt"><a href="#GetIt" class="headerlink" title="GetIt"></a>GetIt</h2><p>首先可以到 GetIt 的網站 <a href="https://pub.dev/packages/get_it">GetIt</a> 去將 GetIt 套件安裝至專案中，這邊不做多餘的贅述。GetIt 是一個簡單的 Service Locator，可以用來管理依賴的實例，這邊先來看一下 GetIt 的基本用法。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:get_it/get_it.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> getIt = GetIt.instance;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> setup() &#123;</span><br><span class="line">  &lt;!-- DI provider --&gt;</span><br><span class="line">  getIt.registerSingleton&lt;CounterService&gt;(CounterService());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main() &#123;</span><br><span class="line">    setup();</span><br><span class="line">    runApp(MyApp());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">    <span class="meta">@override</span></span><br><span class="line">    Widget build(BuildContext context) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> counterService = getIt&lt;CounterService&gt;();</span><br><span class="line">        <span class="keyword">return</span> MaterialApp(</span><br><span class="line">            home: Scaffold(</span><br><span class="line">                body: Center(</span><br><span class="line">                    child: Text(counterService.count.toString()),</span><br><span class="line">                ),</span><br><span class="line">            ),</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這邊我們先註冊一個 <code>CounterService</code> 的實例，然後在 <code>App</code> 的 <code>build</code> 方法中，透過 <code>getIt&lt;CounterService&gt;()</code> 來取得 <code>CounterService</code> 的實例，這樣就完成了一個簡單的 DI。</p>
+<p>在這個簡單的例子中，可以想像一下我們的 setup 是一個 DI Provider，在 App 初始化之前提供了許多我們需要的物件實例，然後在 App 初始化的時候，透過 getIt 來取得這些實例，讓我們的代碼可以更加地解除耦合，那 get_it 也提供了更多的功能，像是我們在範例中，使用 registerSingleton 來註冊一個 Singleton 的實例，但有時候我們不是一開始就需要這些物件實例，而是希望等到後續有相關的業務代碼呼叫到的時候再去實例化，這時候我們可以使用 registerLazySingleton 來註冊一個 Lazy Singleton 的實例。</p>
+<p>但是你會發現，當我們如果有很多的依賴，這樣的寫法會讓我們的 setup 方法變得很大，所以這時候我們可以使用 Injectable 來幫助我們更好的管理我們的依賴。這邊也會將加入 Injectable 來改寫上面的例子，以及比較一下跟 Koin, Heilt 的差異。</p>
+<h2 id="Injectable"><a href="#Injectable" class="headerlink" title="Injectable"></a>Injectable</h2><p>Injectable 是一個 透過 Annotation 來生成 GetIt 的 相關代碼，讓我們可以更好的管理我們的依賴，這邊先來看一下 Injectable 的基本用法。</p>
+<p>首先可以到 Injectable 的網站 <a href="https://pub.dev/packages/injectable">Injectable</a> 去將 Injectable 套件安裝至專案中，這邊不做多餘的贅述。</p>
+<p>首先我們建立一個 injection.dart</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:injectable/injectable.dart&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;inject.config.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> getIt = GetIt.instance;</span><br><span class="line"></span><br><span class="line"><span class="meta">@InjectableInit</span>(</span><br><span class="line">    initializerName: <span class="string">&#x27;init&#x27;</span>,</span><br><span class="line">    preferRelativeImports: <span class="keyword">true</span>,</span><br><span class="line">    asExtension: <span class="keyword">false</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">Future&lt;<span class="keyword">void</span>&gt; configureDependencies() =&gt; $init(getIt);</span><br></pre></td></tr></table></figure>
+
+<p>然後我們建立一個 service_module.dart</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:injectable/injectable.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@module</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceModule</span> </span>&#123;</span><br><span class="line">  <span class="meta">@singleton</span></span><br><span class="line">  CounterService <span class="keyword">get</span> counterService =&gt; CounterService();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下來其實只要執行一下 <code>flutter pub run build_runner build</code> 就可以生成相關的代碼，然後我們就可以在我們的 App 中使用了。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> main() <span class="keyword">async</span> &#123;</span><br><span class="line">  WidgetsFlutterBinding.ensureInitialized();</span><br><span class="line">  <span class="keyword">await</span> configureDependencies();</span><br><span class="line">  runApp(MyApp());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>生成後的代碼我們可以發現，在 injection.config.dart 中，會生成一個 GetItInjectableX 的 Extension，這個 Extension 會幫助我們初始化我們的依賴。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extension</span> GetItInjectableX <span class="keyword">on</span> _i1.GetIt &#123;</span><br><span class="line"><span class="comment">// initializes the registration of main-scope dependencies inside of GetIt</span></span><br><span class="line">  Future&lt;_i1.GetIt&gt; init(&#123;</span><br><span class="line">    <span class="built_in">String?</span> environment,</span><br><span class="line">    _i2.EnvironmentFilter? environmentFilter,</span><br><span class="line">  &#125;) <span class="keyword">async</span> &#123;</span><br><span class="line">    <span class="keyword">final</span> gh = _i2.GetItHelper(</span><br><span class="line">      <span class="keyword">this</span>,</span><br><span class="line">      environment,</span><br><span class="line">      environmentFilter,</span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">final</span> serviceModule = _$ServiceModule();</span><br><span class="line">    gh.singleton&lt;_i3.CounterService&gt;(serviceModule.counterService);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_</span>$<span class="title">ServiceModule</span> <span class="keyword">extends</span> <span class="title">_i7</span>.<span class="title">ServiceModule</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>熟悉 koin 跟 Hilt 的朋友應該會發現，這邊的 <code>@module</code> 跟 <code>@singleton</code> 跟 <code>koin</code> &#x2F; <code>Hlit</code> 的 provider module 實作非常類似。</p>
+<h3 id="koin"><a href="#koin" class="headerlink" title="koin"></a>koin</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> myModule = module &#123;</span><br><span class="line">    single &#123; CounterService() &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    startKoin &#123;</span><br><span class="line">        modules(myModule)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Hilt"><a href="#Hilt" class="headerlink" title="Hilt"></a>Hilt</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="meta">@InstallIn(SingletonComponent::class)</span></span><br><span class="line"><span class="keyword">object</span> ServiceModule &#123;</span><br><span class="line">    <span class="meta">@Singleton</span></span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">provideCounterService</span><span class="params">()</span></span> = CounterService()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由上面的案例可能不覺得 Injectable 帶來什麼好處，那我們接下來來看一下這個複雜一點的案例，如果我們只使用 GetIt，我有一個 ServiceA 以及 ServiceB，然後 ServiceB 依賴 ServiceA，這時候我們可以這樣寫。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ServiceA</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ServiceB</span> </span>&#123;</span><br><span class="line">    ServiceB(ServiceA serviceA);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> setup() &#123;</span><br><span class="line">  getIt.<span class="keyword">factory</span>&lt;ServiceA&gt;(() =&gt; ServiceA());</span><br><span class="line">  getIt.<span class="keyword">factory</span>&lt;ServiceB&gt;(ServiceB(getIt&lt;ServiceA&gt;()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果今天有更多依賴，我們必須手動去維護這些關係在 getIt 的 setup 中，透過 Injectable，可以透過註解快速的生成這些依賴關係。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@module</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceModule</span> </span>&#123;</span><br><span class="line">  <span class="meta">@singleton</span></span><br><span class="line">  ServiceA <span class="keyword">get</span> serviceA =&gt; ServiceA();</span><br><span class="line"></span><br><span class="line">  <span class="meta">@singleton</span></span><br><span class="line">  ServiceB getServiceB(ServiceA serviceA) =&gt; ServiceB(serviceA);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其他 Injectable 還有更多類似 Koin&#x2F;Hlit 的功能，像是 Binding abstract class to implementation class、name、scope 等相關功能, 這邊就不多做贅述，有興趣的朋友可以參考 Injectable 的官方文件。</p>
+<p>以上就是一些在 Flutter 中使用 GetIt 以及 Injectable 來完成 DI 的功能，這邊也有提到一些跟 Android 開發中的 DI 框架的比較，希望這篇文章對大家有所幫助。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1004,104 +1109,6 @@
     
     <div class="post-body" itemprop="articleBody">
           
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/22/rxjava-scheduler/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Allen Hsu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="AllenHsu的技術手扎">
-      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | AllenHsu的技術手扎">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/04/22/rxjava-scheduler/" class="post-title-link" itemprop="url">Rxjava的線程切換與異步操作</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-04-22 16:35:26" itemprop="dateCreated datePublished" datetime="2018-04-22T16:35:26+08:00">2018-04-22</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Rxjava/" itemprop="url" rel="index"><span itemprop="name">Rxjava</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Rxjava的線程切換與異步操作"><a href="#Rxjava的線程切換與異步操作" class="headerlink" title="Rxjava的線程切換與異步操作"></a>Rxjava的線程切換與異步操作</h2><p>傳統Android開發中，我們可以透過Handler&#x2F;Thread等方式來做異步操作，那在RxJava中，假設我們想要做Thread的切換我們應該怎麼做呢?基本上是透過 <code>observeOn</code> 與 <code>subscribeOn</code> 這兩個操作符，去實作所謂的線程切換與異步操作。</p>
-<h3 id="observeOn-與-subscribeOn-。"><a href="#observeOn-與-subscribeOn-。" class="headerlink" title="observeOn 與 subscribeOn 。"></a>observeOn 與 subscribeOn 。</h3><p>什麼是 <code>observeOn</code> : </p>
-<blockquote>
-<p>specify the Scheduler on which an observer will observe this Observable</p>
-<p>指定一個觀察者在特定的 Scheduler 上觀察這個 Observable 。</p>
-</blockquote>
-<p>什麼是 <code>subscribeOn</code> :</p>
-<blockquote>
-<p>specify the Scheduler on which an Observable will operate</p>
-<p>指定這個 Observable 自身在哪一個特定的 Scheduler 上操作。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Observable.just(<span class="number">1</span>)</span><br><span class="line">    .map(integer -&gt; &#123;</span><br><span class="line">        Log.i(<span class="string">&quot;Rxjava&quot;</span>, <span class="string">&quot;map-1:&quot;</span>+Thread.currentThread().getName());</span><br><span class="line">        <span class="keyword">return</span> integer;</span><br><span class="line">    &#125;)</span><br><span class="line">    .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">    .subscribeOn(Schedulers.newThread())</span><br><span class="line">    .doOnSubscribe(s -&gt; &#123;</span><br><span class="line">        Log.i(<span class="string">&quot;Rxjava&quot;</span>,   <span class="string">&quot;doOnSubscribe:&quot;</span>+Thread.currentThread().getName());</span><br><span class="line">    &#125;)</span><br><span class="line">    .doOnNext(next -&gt; &#123;</span><br><span class="line">        Log.i(<span class="string">&quot;Rxjava&quot;</span>, <span class="string">&quot;doOnNext:&quot;</span>+Thread.currentThread().getName());</span><br><span class="line">    &#125;)</span><br><span class="line">    .subscribe(</span><br><span class="line">    x -&gt; &#123;</span><br><span class="line">        Log.i(<span class="string">&quot;Rxjava&quot;</span>, <span class="string">&quot;next-1:&quot;</span>+Thread.currentThread().getName());</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<p>以上面的代碼為例子，map的操作符會在newThread做操作，doOnSubscribe&#x2F;doOnNext 都會在 mainThread做操作，透過這樣兩個簡單的操作符可以很簡單的去做Rxjava的線程調度。</p>
-
       
     </div>
 
