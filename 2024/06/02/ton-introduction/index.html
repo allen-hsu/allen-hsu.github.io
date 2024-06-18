@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="什麼是 TON BlockchainTON 早期是由 Telegram 開發的一個區塊鏈項目，2018 年由 Telegram 的創辦人 Pavel 和 Nikolai Durov 兄弟探索適用 Telegram 的區塊鏈技術，但他們發現當時的 L1 區塊鏈，並沒有辦法滿滿足支撐Telegram 的億級用戶群，所以他們開始設計自己的 L1 區塊鏈，並且將其命名為 TON（Telegram Open">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ton_introduction">
+<meta property="og:url" content="http://yoursite.com/2024/06/02/ton-introduction/index.html">
+<meta property="og:site_name" content="AllenHsu的技術手扎">
+<meta property="og:description" content="什麼是 TON BlockchainTON 早期是由 Telegram 開發的一個區塊鏈項目，2018 年由 Telegram 的創辦人 Pavel 和 Nikolai Durov 兄弟探索適用 Telegram 的區塊鏈技術，但他們發現當時的 L1 區塊鏈，並沒有辦法滿滿足支撐Telegram 的億級用戶群，所以他們開始設計自己的 L1 區塊鏈，並且將其命名為 TON（Telegram Open">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/00c012q.png">
+<meta property="article:published_time" content="2024-06-02T02:41:05.122Z">
+<meta property="article:modified_time" content="2024-06-18T11:17:58.340Z">
+<meta property="article:author" content="Allen Hsu">
+<meta property="article:tag" content="TON">
+<meta property="article:tag" content="Blockchain">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/00c012q.png">
+
+
+<link rel="canonical" href="http://yoursite.com/2024/06/02/ton-introduction/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-tw","comments":true,"permalink":"http://yoursite.com/2024/06/02/ton-introduction/","path":"2024/06/02/ton-introduction/","title":"ton_introduction"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ton_introduction | AllenHsu的技術手扎</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">AllenHsu的技術手扎</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">學海無涯，努力做個永遠年輕的人</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-TON-Blockchain"><span class="nav-number">1.</span> <span class="nav-text">什麼是 TON Blockchain</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TON-%E7%9A%84%E6%8C%96%E7%A4%A6%E6%AD%B7%E5%8F%B2"><span class="nav-number">2.</span> <span class="nav-text">TON 的挖礦歷史</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TON-%E7%9A%84%E6%8A%80%E8%A1%93%E6%9E%B6%E6%A7%8B%E7%89%B9%E9%BB%9E"><span class="nav-number">3.</span> <span class="nav-text">TON 的技術架構特點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TON-%E9%8C%A2%E5%8C%85"><span class="nav-number">4.</span> <span class="nav-text">TON 錢包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TON-%E6%99%BA%E8%83%BD%E5%90%88%E7%B4%84%E5%9C%B0%E5%9D%80%E6%A0%BC%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">TON 智能合約地址格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">6.</span> <span class="nav-text">總結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Allen Hsu</p>
+  <div class="site-description" itemprop="description">多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2024/06/02/ton-introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ton_introduction | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ton_introduction
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-06-02 10:41:05" itemprop="dateCreated datePublished" datetime="2024-06-02T10:41:05+08:00">2024-06-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-06-18 19:17:58" itemprop="dateModified" datetime="2024-06-18T19:17:58+08:00">2024-06-18</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="什麼是-TON-Blockchain"><a href="#什麼是-TON-Blockchain" class="headerlink" title="什麼是 TON Blockchain"></a>什麼是 TON Blockchain</h2><p>TON 早期是由 Telegram 開發的一個區塊鏈項目，2018 年由 Telegram 的創辦人 Pavel 和 Nikolai Durov 兄弟探索適用 Telegram 的區塊鏈技術，但他們發現當時的 L1 區塊鏈，並沒有辦法滿滿足支撐<br>Telegram 的億級用戶群，所以他們開始設計自己的 L1 區塊鏈，並且將其命名為 TON（Telegram Open Network)。當時出售 TON 的代幣 GRAM(一開始代幣的名字)，也是一度成為了 ICO 的熱門項目。並募集了 17 億美元，<br>2019 年，TON 的測試網如期上線，但美國 SEC 認為 TON 是一種證券，且初期有 10 億的代幣向美國的投資者出售，違反了美國的證卷法，所以 Telegram 被迫取消了 TON 的項目。但 TON 並沒有因此而消失，<br>而是改用社群的方式繼續運作下去，由核心開發者 Tolya 帶領，並將 TON 的開發工作委託給了 Telegram 的 Open Source 社群。</p>
+<p>更多的關於 TON 的歷史可以參考這篇文章：<a href="https://ton.org/en/roadmap">TON 歷史和路線圖</a></p>
+<h2 id="TON-的挖礦歷史"><a href="#TON-的挖礦歷史" class="headerlink" title="TON 的挖礦歷史"></a>TON 的挖礦歷史</h2><p>由於上面的轉變，在 2020 年 6 月，經過社群的決策，決定使用傳統的 PoW 模式進行代幣分發，由於 TON 區塊鏈的底層是使用了 PoS 的共識機制，所以這次的 PoW 分發是為了讓更多的人參與到 TON 的生態中。為了<br>實現這一個目標，核心團隊在 TON 上開發了一個名為 Giveaway 的智能合約，這個智能合約可以讓用戶通過 PoW 的方式來獲得 TON 代幣。初始流動數量為 50 億顆，可流通的 98.55% 開放挖礦，剩下的 1.45%<br>用於團隊和社群建設。最後的一顆 TON 已經在 2022 年 6 月挖出，這也意味著 TON 的 PoW 挖礦已經結束。</p>
+<h2 id="TON-的技術架構特點"><a href="#TON-的技術架構特點" class="headerlink" title="TON 的技術架構特點"></a>TON 的技術架構特點</h2><p>在講述 TON 的技術架構之前，我們可以先看 TON 的幾個區塊鏈關鍵指標 :</p>
+<ul>
+<li>TON 的出塊時間 : 2-5s</li>
+<li>TON 的 TPS : 100k (是的，你沒看錯，100K，這是一個非常驚人的數字)</li>
+<li>TON 的 平均區塊大小 2mb</li>
+<li>TON 的 區塊確認時間 &lt; 6s (只需要一個區塊確認)</li>
+</ul>
+<p>更多的 Performance 指標可以參考這個網站：<a href="https://live.ton.org/">TON Performance Test</a></p>
+<p>這些指標讓 TON 在技術上有了很大的優勢，這也是為什麼 TON 能夠支撐 Telegram 這樣的大型應用的原因。那麼 TON 是如何實現這些指標的呢？這就要從 TON 的技術架構來講起了。<br>首先我們可以先看 TON 白皮書內提到的與其他區塊鏈的比較 :</p>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>Year</th>
+<th>G.</th>
+<th>Cons.</th>
+<th>Sm.</th>
+<th>Ch.</th>
+<th>R.</th>
+<th>Sh.</th>
+<th>Int.</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Bitcoin</td>
+<td>2009</td>
+<td>1</td>
+<td>PoW</td>
+<td>no</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Ethereum</td>
+<td>2013, 2015</td>
+<td>2</td>
+<td>PoW</td>
+<td>yes</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>NXT</td>
+<td>2014</td>
+<td>2+</td>
+<td>PoS</td>
+<td>no</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Tezos</td>
+<td>2017,?</td>
+<td>2+</td>
+<td>PoS</td>
+<td>yes</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Casper</td>
+<td>2015, (2017)</td>
+<td>3</td>
+<td>PoW&#x2F;PoS</td>
+<td>yes</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>BitShares</td>
+<td>2013, 2014</td>
+<td>3’</td>
+<td>DPoS</td>
+<td>no</td>
+<td>m</td>
+<td>ht.</td>
+<td>no</td>
+<td>L</td>
+</tr>
+<tr>
+<td>EOS</td>
+<td>2016, (2018)</td>
+<td>4</td>
+<td>DPoS</td>
+<td>yes</td>
+<td>m</td>
+<td>ht.</td>
+<td>no</td>
+<td>L</td>
+</tr>
+<tr>
+<td>PolkaDot</td>
+<td>2016, (2019)</td>
+<td>4</td>
+<td>PoS BFT</td>
+<td>yes</td>
+<td>m</td>
+<td>ht.</td>
+<td>no</td>
+<td>L</td>
+</tr>
+<tr>
+<td>Cosmos</td>
+<td>2017, ?</td>
+<td>4</td>
+<td>PoS BFT</td>
+<td>yes</td>
+<td>m</td>
+<td>ht.</td>
+<td>no</td>
+<td>L</td>
+</tr>
+<tr>
+<td>TON</td>
+<td>2017, (2018)</td>
+<td>5</td>
+<td>PoS BFT</td>
+<td>yes</td>
+<td>m</td>
+<td>mix</td>
+<td>dyn.</td>
+<td>T</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>G. - Generation, (世代)<br>Cons. - Consensus, (共識演算法)<br>Sm. - Smart contracts, (是否具備圖靈完善的智能合約)<br>Ch. - Sharding, (單鏈&#x2F;多鏈&#x2F;混合架構)<br>R. - Rollups, (同質&#x2F;異質架構)<br>Sh. - Sharding, (是否支持分片)<br>Int. - Interoperability, (區塊鏈間交互, L 鬆耦合, T 緊耦合)</p>
+</blockquote>
+<p>TON 本身在區塊鏈擴容機制上，採用了一種稱做無限分片的機制，這種機制可以讓 TON 的區塊鏈在需要的時候，可以無限的擴容，分片其實是來自資料庫設計的概念，將一個超大的 Dataset 分割，並且分布在多個不同的資料庫當中，實現水平擴展的能力。TON 在區塊鏈分片上，分為下列四種類型的分片鏈:</p>
+<ul>
+<li>MasterChain: TON 上的主鏈，用來儲存基礎訊息，主要包含協議的參數、驗證者集合，以及對應的分片鏈的資訊。紀錄當前活躍的 WorkChains 和它們的分片 (shards) 組，以及最重要的是所有 WorkChains 和 ShardChains 裡最新的區塊 Hash，這條鏈是唯一一條，且確定了系統的全局狀態</li>
+<li>WorkChain: 最多可達 2^32 條，但目前只有一條，理論上每個人可以構建自己的 WorkChain，不同的 WorkChain 可以有不同的規則，不同的帳戶格式、交易格式、VMs。</li>
+<li>ShardChain: 最多可達 2^60 條，是屬於 AccountChain 的集合</li>
+<li>AccountChain: 最低層級，按理想情況，每個帳戶都有自己的 ShardChain，但實際上，一個 ShardChain 可能包含多個帳戶。AccountChain 則包含帳戶一系列的交易。</li>
+</ul>
+<p><img src="https://i.imgur.com/00c012q.png" alt="img"></p>
+<h2 id="TON-錢包"><a href="#TON-錢包" class="headerlink" title="TON 錢包"></a>TON 錢包</h2><p>在 TON 上面的錢包帳戶，跟傳統以太坊的 EOA 帳戶非常不一樣，在 TON 上面，每個錢包都是一個智能合約，這代表著 TON 的錢包帳戶一開始就支持了帳戶抽象化，同一套註記詞可以根據不同合約類型建立不同的帳戶，根據合約類型不同，可以支持不同的版本，當前最新的版本為 Wallet V5 (Beta)，由 TonKeeper 推出，下列是幾個不同版本的錢包合約比對</p>
+<table>
+<thead>
+<tr>
+<th>錢包合約版本</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Wallet V1</td>
+<td>一次只能發送一筆交易</td>
+</tr>
+<tr>
+<td>Wallet V2</td>
+<td>加入交易時間限制，防止交易長時間未被確認</td>
+</tr>
+<tr>
+<td>Wallet V3</td>
+<td>加入 SubWalletId 功能，可以創建子錢包</td>
+</tr>
+<tr>
+<td>Wallet V4</td>
+<td>加入插件和訂閱功能，且兼容 V3 所有功能</td>
+</tr>
+<tr>
+<td>Wallet V5(Beta)</td>
+<td><li>減少 25% gas fee </li> <li>類似 AA 錢包可讓第三方支付 gas (目前 USDT 轉帳減免) </li> <li>更靈活的 plug interface </li></td>
+</tr>
+</tbody></table>
+<h2 id="TON-智能合約地址格式"><a href="#TON-智能合約地址格式" class="headerlink" title="TON 智能合約地址格式"></a>TON 智能合約地址格式</h2><p>TON 的帳戶地址格式基本上分為兩種類型，一種稱為用戶友好類型，另外一種則是原始格式的類型</p>
+<ul>
+<li>用戶友好: EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrH</li>
+<li>原始格式: 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e</li>
+</ul>
+<p>在原始格式的部分，由工作鏈 ID 和帳戶 ID 組成<br>[0] : 工作鏈 ID<br>[ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e] : 帳戶 ID</p>
+<p>原始地址無法在發送交易前驗證地址，所以 TON 有了用戶友好的地址 (但其實對於使用者來說也還是一段亂碼)。但用戶友好地址提供地址驗證功能，可以很好的防止用戶輸入不合法的地址，跟信用卡使用的算法很像，防止用戶輸入不合法的卡號，更多細節可以參考這篇文章：<a href="https://docs.ton.org/mandarin/learn/overviews/addresses">TON Address</a></p>
+<p>其中用戶友好地址最終要的其實是第一個標誌位，開頭的第一個符號，可以代表智能合約收到消息的反應，目前用戶友好地址格式的符號類型包括</p>
+<ul>
+<li>isBounceable: 是否可以回彈，當目標智能合約不存在，或者交易過程中發生某些問題，消息將被彈回給發送者，包含了扣掉 gas 費的資產部分<br>isBounceable&#x3D;false，通常意味著接收者是一個錢包<br>isBounceable&#x3D;true，通常意味著接收者具有自己應用邏輯的自定義智能合約(可能是 Dex)</li>
+<li>isTestnetOnly: 表示僅用於測試網的類型，不應該被主網上的合約所接受</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>isTestnetOnly</th>
+<th>isBounceable</th>
+<th>地址類型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>false</td>
+<td>true</td>
+<td>EQ..</td>
+<td>主網智能合約地址</td>
+</tr>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>UQ..</td>
+<td>主網錢包合約地址</td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>KQ..</td>
+<td>測試網智能合約地址</td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>0Q..</td>
+<td>測試網錢包合約地址</td>
+</tr>
+</tbody></table>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>上面從 TON 的發展歷史，到 TON 的技術特點以及部分技術細節做了一個簡單的通盤介紹，希望可以讓大家更能理解 TON 多一點，之後會深入探討更多 TON 的部分，包括 TON 的智能合約開發，TON 的錢包開發，以及 TON 的生態建設等等。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/TON/" rel="tag"># TON</a>
+              <a href="/tags/Blockchain/" rel="tag"># Blockchain</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/28/flutter-di/" rel="prev" title="給 Mobile 開發者的 Flutter 入門 - 如何使用 GetIt 和 Injectable 來做 DI">
+                  <i class="fa fa-angle-left"></i> 給 Mobile 開發者的 Flutter 入門 - 如何使用 GetIt 和 Injectable 來做 DI
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Allen Hsu</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
