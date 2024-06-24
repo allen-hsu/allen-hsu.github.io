@@ -123,7 +123,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -151,6 +151,108 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/30/android-dagger2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2017/10/30/android-dagger2/" class="post-title-link" itemprop="url">Android的依賴注入框架-Dagger2(一)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-10-30 17:20:45" itemprop="dateCreated datePublished" datetime="2017-10-30T17:20:45+08:00">2017-10-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android-%E9%96%8B%E7%99%BC/" itemprop="url" rel="index"><span itemprop="name">Android 開發</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="關於依賴注入"><a href="#關於依賴注入" class="headerlink" title="關於依賴注入"></a>關於依賴注入</h2><p>在談 <code>Dagger2</code> 之前，我想先簡單介紹一下關於 <code>依賴注入</code> 。什麼是依賴注入? <code>Dependency Injection</code> (依賴注入) 簡稱 DI，用來降低程式碼的耦合度所使用。</p>
+<blockquote>
+<p>當我們今天有一個 Class A 用到了 Class B 的物件，一般情況下，需要在 A 的代碼中顯示的 new 一個 B 的物件。這樣子Class A 的建構就依賴於 Class B了，<br>當我們實現依賴注入之後 A 的代碼只需要定義一個私有的 B 物件，不需要直接<br>New 來獲得這個物件，而是透過相關的容器控制程式來將 B 物件在外部 new出來並注入到 A 類裡的參考中。</p>
+</blockquote>
+<p>依賴注入有如下實現方式：</p>
+<ul>
+<li>基於介面。實現特定介面以供外部容器注入所依值型別的物件。</li>
+<li>基於 set 方法。實現特定屬性的public set方法，來讓外部容器呼叫傳入所依值型別的物件。</li>
+<li>基於建構函式。實現特定參數的建構函式，在新建物件時傳入所依值型別的物件。</li>
+<li>基於註解。基於Java的註解功能，在私有變數前加「@Autowired」等註解，不需要顯式的定義以上三種代碼，便可以讓外部容器傳入對應的物件。該方案相當於定義了public的set方法，但是因為沒有真正的set方法，從而不會為了實現依賴注入導致暴露了不該暴露的介面（因為set方法只想讓容器存取來注入而並不希望其他依賴此類的物件存取）。</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/10/30/android-dagger2/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -980,101 +1082,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2017/06/24/android-layout-listview-performance/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/19/android-layout-custom-listview/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Allen Hsu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="AllenHsu的技術手扎">
-      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | AllenHsu的技術手扎">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2017/06/19/android-layout-custom-listview/" class="post-title-link" itemprop="url">Android 的 ListView (二)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2017-06-19 22:52:46" itemprop="dateCreated datePublished" datetime="2017-06-19T22:52:46+08:00">2017-06-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Android-%E9%96%8B%E7%99%BC/" itemprop="url" rel="index"><span itemprop="name">Android 開發</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="ListView-定製介面"><a href="#ListView-定製介面" class="headerlink" title="ListView - 定製介面"></a>ListView - 定製介面</h2><blockquote>
-<p>上一篇文章中，我們介紹了基本的 ListView 用法， 但是我們在專案中，常常會需要不只是顯示文字，而是圖片或者其他更豐富的 ListView 介面。</p>
-</blockquote>
-<p><img src="http://i.imgur.com/hTw1R7s.jpg" alt="Imgur"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/06/19/android-layout-custom-listview/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>

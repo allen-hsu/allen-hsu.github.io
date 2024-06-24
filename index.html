@@ -123,7 +123,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -151,6 +151,112 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2024/06/23/ton-tx-result/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Allen Hsu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AllenHsu的技術手扎">
+      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | AllenHsu的技術手扎">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/06/23/ton-tx-result/" class="post-title-link" itemprop="url">在 TON 如何獲取發送交易後的結果 - 使用 TonConnect 為範例</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-06-23 17:35:06" itemprop="dateCreated datePublished" datetime="2024-06-23T17:35:06+08:00">2024-06-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-06-24 12:55:44" itemprop="dateModified" datetime="2024-06-24T12:55:44+08:00">2024-06-24</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>最近在 Telegram Dev Channel 中蠻常看到有人提出這幾種問題，如果我在 TON 上發送了一筆交易，那麼我要如何知道這筆交易的結果呢？或者是使用 TonClient 發送交易後，TonClient 回傳的結果裡面的 Boc 又是什麼，我如何取得更有用的資訊呢？這篇文章就來解答這些問題，讓你更好的了解 TON。</p>
+<h2 id="TON-的-Transaction"><a href="#TON-的-Transaction" class="headerlink" title="TON 的 Transaction"></a>TON 的 Transaction</h2><p>在一開始我們先理解在 TON 的 Transaction 是什麼，TON 的 Transaction 包含了以下幾個部分：</p>
+<ul>
+<li>觸發合約的初始傳入訊息（存在特殊的觸發方式）</li>
+<li>傳入訊息引起的合約行為，例如對合約存儲的更新（可選）</li>
+<li>發送給其他參與者的生成輸出訊息（可選）</li>
+</ul>
+<p><img src="https://i.imgur.com/bOXFksq.png" alt="img"></p>
+<p>從上圖可以得知，如果我要發起一筆 TON 轉帳交易，本質上就是傳送一個 Message 給錢包合約，錢包合約根據這個 Message 內容做出相應的轉帳操作。</p>
+<h2 id="準備交易的-Message-內容"><a href="#準備交易的-Message-內容" class="headerlink" title="準備交易的 Message 內容"></a>準備交易的 Message 內容</h2><p>使用 TonConnect 發送交易前，我們需要定義有效的 Message 內容，使用 JS 版本的 TonConnect SDK 時，可以看到傳入的交易參數如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> declare interface <span class="title class_">SendTransactionRequest</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Sending transaction deadline in unix epoch seconds.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="attr">validUntil</span>: number;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The network (mainnet or testnet) where DApp intends to send the transaction. If not set, the transaction is sent to the network currently set in the wallet, but this is not safe and DApp should always strive to set the network. If the network parameter is set, but the wallet has a different network set, the wallet should show an alert and DO NOT ALLOW TO SEND this transaction.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    network?: <span class="variable constant_">CHAIN</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The sender address in &#x27;&lt;wc&gt;:&lt;hex&gt;&#x27; format from which DApp intends to send the transaction. Current account.address by default.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">from</span>?: string;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Messages to send: min is 1, max is 4.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="attr">messages</span>: &#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Receiver&#x27;s address.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="attr">address</span>: string;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Amount to send in nanoTon.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="attr">amount</span>: string;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Contract specific data to add to the transaction.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        stateInit?: string;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Contract specific data to add to the transaction.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        payload?: string;</span><br><span class="line">    &#125;[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以當我今天想要做一筆簡單的傳送交易時，我只需要構建下列的交易參數即可</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> transaction = &#123;</span><br><span class="line">  <span class="comment">// The transaction is valid for 10 minutes from now, in unix epoch seconds.</span></span><br><span class="line">  <span class="attr">validUntil</span>: <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Date</span>.<span class="title function_">now</span>() / <span class="number">1000</span>) + <span class="number">600</span>,</span><br><span class="line">  <span class="attr">messages</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">address</span>:</span><br><span class="line">        <span class="string">&quot;0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F&quot;</span>, <span class="comment">// destination address</span></span><br><span class="line">      <span class="attr">amount</span>: <span class="string">&quot;20000000&quot;</span>, <span class="comment">//Toncoin in nanotons</span></span><br><span class="line">    &#125;,</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>如果我需要一個附上 Comment 的交易，在 TON 中，對於特定的 Custom Transaction，必須定義特定的 Payload，這個 Payload 必須是一個由 Cell 組成，並轉成 Base64 格式的字串。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; beginCell &#125; <span class="keyword">from</span> <span class="string">&quot;@ton/ton&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> body = <span class="title function_">beginCell</span>()</span><br><span class="line">  .<span class="title function_">storeUint</span>(<span class="number">0</span>, <span class="number">32</span>) <span class="comment">// write 32 zero bits to indicate that a text comment will follow</span></span><br><span class="line">  .<span class="title function_">storeStringTail</span>(<span class="string">&quot;Hello, TON!&quot;</span>) <span class="comment">// write our text comment</span></span><br><span class="line">  .<span class="title function_">endCell</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> transaction = &#123;</span><br><span class="line">  <span class="comment">// The transaction is valid for 10 minutes from now, in unix epoch seconds.</span></span><br><span class="line">  <span class="attr">validUntil</span>: <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Date</span>.<span class="title function_">now</span>() / <span class="number">1000</span>) + <span class="number">600</span>,</span><br><span class="line">  <span class="attr">messages</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">address</span>:</span><br><span class="line">        <span class="string">&quot;0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F&quot;</span>, <span class="comment">// destination address</span></span><br><span class="line">      <span class="attr">amount</span>: <span class="string">&quot;20000000&quot;</span>, <span class="comment">//Toncoin in nanotons,</span></span><br><span class="line">      <span class="attr">payload</span>: body.<span class="title function_">toBoc</span>().<span class="title function_">toString</span>(<span class="string">&quot;base64&quot;</span>), <span class="comment">// payload with comment in body</span></span><br><span class="line">    &#125;,</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>更多的 Message 類型定義與參考，可以參考 <a href="https://docs.ton.org/develop/dapps/ton-connect/message-builders">Message Build</a></p>
+<h2 id="發送交易後的結果"><a href="#發送交易後的結果" class="headerlink" title="發送交易後的結果"></a>發送交易後的結果</h2><p>接下來進入我們的主題，發送交易後，我要怎麼等待交易完成，得到最後的 Transaction Result 呢？<br>首先我們先看一下我們使用 TonConnect 發送交易後，回傳的結果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [tonConnectUi] = <span class="title function_">useTonConnectUI</span>();</span><br><span class="line"><span class="keyword">const</span> result = <span class="keyword">await</span> tonConnectUi.<span class="title function_">sendTransaction</span>(transaction);</span><br></pre></td></tr></table></figure>
+
+<p>這個 <code>sendTransaction</code> 函數會回傳一個 <code>SendTransactionResponse</code> 物件，這個物件包含了一個 <code>boc</code> 字串</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> declare interface <span class="title class_">SendTransactionResponse</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Signed boc</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="attr">boc</span>: string;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這個 boc 其實就是我們前面提到的，他是一個 <code>觸發交易傳入的初始內容</code>，這個 boc 會被用來發送到 TON 網路上，進行交易的驗證與執行。在這中間我們需要等待交易完成，這時候我們可以使用 TonClient 來進行交易的查詢。並且需要去解析目前最新 Transaction 中他的 InMessage 的 Base64 是否與我們發送的 boc 相同，如果相同，則代表這筆交易是我們發送的交易，代表這筆交易已經完成，我們也可以取得這筆交易的內容，包含 TxHash 等。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> waitForTransaction = <span class="keyword">async</span> (</span><br><span class="line">  <span class="attr">options</span>: <span class="title class_">WaitForTransactionOptions</span>,</span><br><span class="line">  <span class="attr">client</span>: <span class="title class_">TonClient</span></span><br><span class="line">): <span class="title class_">Promise</span>&lt;<span class="title class_">Transaction</span> | <span class="literal">null</span>&gt; =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; hash, refetchInterval = <span class="number">1000</span>, refetchLimit, address &#125; = options;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> refetches = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> walletAddress = <span class="title class_">Address</span>.<span class="title function_">parse</span>(address);</span><br><span class="line">    <span class="keyword">const</span> interval = <span class="built_in">setInterval</span>(<span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">      refetches += <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;waiting transaction...&quot;</span>);</span><br><span class="line">      <span class="keyword">const</span> state = <span class="keyword">await</span> client.<span class="title function_">getContractState</span>(walletAddress);</span><br><span class="line">      <span class="keyword">if</span> (!state || !state.<span class="property">lastTransaction</span>) &#123;</span><br><span class="line">        <span class="built_in">clearInterval</span>(interval);</span><br><span class="line">        <span class="title function_">resolve</span>(<span class="literal">null</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">const</span> lastLt = state.<span class="property">lastTransaction</span>.<span class="property">lt</span>;</span><br><span class="line">      <span class="keyword">const</span> lastHash = state.<span class="property">lastTransaction</span>.<span class="property">hash</span>;</span><br><span class="line">      <span class="keyword">const</span> lastTx = <span class="keyword">await</span> client.<span class="title function_">getTransaction</span>(</span><br><span class="line">        walletAddress,</span><br><span class="line">        lastLt,</span><br><span class="line">        lastHash</span><br><span class="line">      );</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (lastTx &amp;&amp; lastTx.<span class="property">inMessage</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> msgCell = <span class="title function_">beginCell</span>()</span><br><span class="line">          .<span class="title function_">store</span>(<span class="title function_">storeMessage</span>(lastTx.<span class="property">inMessage</span>))</span><br><span class="line">          .<span class="title function_">endCell</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> inMsgHash = msgCell.<span class="title function_">hash</span>().<span class="title function_">toString</span>(<span class="string">&quot;base64&quot;</span>);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;InMsgHash&quot;</span>, inMsgHash);</span><br><span class="line">        <span class="keyword">if</span> (inMsgHash === hash) &#123;</span><br><span class="line">          <span class="built_in">clearInterval</span>(interval);</span><br><span class="line">          <span class="title function_">resolve</span>(lastTx);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (refetchLimit &amp;&amp; refetches &gt;= refetchLimit) &#123;</span><br><span class="line">        <span class="built_in">clearInterval</span>(interval);</span><br><span class="line">        <span class="title function_">resolve</span>(<span class="literal">null</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;, refetchInterval);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>首先裡面的 getContractState 是為了獲取最後一筆的 txHash 以及 txLt，接著使用 getTransaction 去查詢最後一筆的交易內容，並且解析這筆交易的 InMessage，取得 InMessage 的 Hash，最後比對這個 Hash 是否與我們發送的交易相同，如果相同，則代表這筆交易已經完成，我們可以取得這筆交易的內容。當然你也可以使用其他方法，像是 getTransactions 等方式，去監聽鏈上交易的變化，然後根據最新結果的 InMessage 去比對是否是我們發送的交易。</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>相關代碼範例可以參考 <a href="https://github.com/allen-hsu/demo-waiting-tx">Github</a>，這個是我 fork 官方 tonconnect sdk 的範例之上做了修改，Demo 可以訪問 <a href="https://demo-waiting-tx.vercel.app/">Demo</a>。</p>
+<p>Ton 身為一個以消息通訊為基礎的區塊鏈，且是異步的，所以我們在實作相關 dApp 的功能時，需要以一個不同於之前開發以太方的思維去思考，這篇文章希望能夠幫助你更好的了解 TON 的交易機制，以及如何獲取交易後的結果。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1231,108 +1337,6 @@
     
     <div class="post-body" itemprop="articleBody">
           <h2 id="演算法練習-快慢指針"><a href="#演算法練習-快慢指針" class="headerlink" title="演算法練習 - 快慢指針"></a>演算法練習 - 快慢指針</h2>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/28/continuous-integration-continuous-delivery/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Allen Hsu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="AllenHsu的技術手扎">
-      <meta itemprop="description" content="多年軟體開發經驗，熟悉移動端開發、設計模式、CI/CD搭建等。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | AllenHsu的技術手扎">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/28/continuous-integration-continuous-delivery/" class="post-title-link" itemprop="url">關於CI/CD的兩三事</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-28 21:26:21" itemprop="dateCreated datePublished" datetime="2018-10-28T21:26:21+08:00">2018-10-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-27 21:32:04" itemprop="dateModified" datetime="2024-04-27T21:32:04+08:00">2024-04-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8C%81%E7%BA%8C%E9%9B%86%E6%88%90/" itemprop="url" rel="index"><span itemprop="name">持續集成</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>CI&#x2F;CD，全名叫做Continuous Integration &#x2F; Continuous Delivery，中文名叫持續集成與持續交付，從2014年開始，得以有幸接觸了從零開始的CI&#x2F;CD的搭建以及流程梳理，也有在一個已經既有的開發體系中，如何去逐步導入CI&#x2F;CD的相關經驗，透過這篇文章分享一下自己多年以來對於CI&#x2F;CD的經驗與心路歷程。</p>
-</blockquote>
-<h2 id="關於持續集成與持續交付"><a href="#關於持續集成與持續交付" class="headerlink" title="關於持續集成與持續交付"></a>關於持續集成與持續交付</h2><p>在目前軟體業界普遍以敏捷開發作為精神，必須透過連續的小型的開發循環(Sprint)來迭代我們的產品以及驗證需求，以這樣為前提之下，我們必須不斷地從需求、研發、測試、交付，中多個階段不斷地循環迭代。所以我們為了上述的概念，我們必須有了持續集成與持續交付。</p>
-<p>持續集成與持續交付，對於我個人的理解來說有以下來幾個重點。</p>
-<ul>
-<li>讓開發團隊可以在一個不斷提升開發品質的體系當中。</li>
-<li>從**<u>需求</u><strong>、</strong><u>研發</u><strong>、</strong><u>測試</u><strong>、</strong><u>交付</u>**四個階段中能夠有一套完整且嚴格的體系及框架。</li>
-<li>自動化節省時間 - 讓開發團隊從一些瑣事的泥沼中解放出來。</li>
-<li>減少風險 - 因為有了上述幾點，所以可以有效提升軟體品質，而不會因為迭代過快造成軟體工程的不穩定。</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/28/continuous-integration-continuous-delivery/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
       
     </div>
 
